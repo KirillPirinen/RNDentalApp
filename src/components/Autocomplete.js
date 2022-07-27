@@ -42,7 +42,8 @@ export default () => {
 
   const onChangeSearch = query => {
     if(query) {
-      setResult(DATA.filter((patient) => patient.name.includes(query)))
+      const prepQuery = query.toLowerCase()
+      setResult(DATA.filter((patient) => patient.name.toLowerCase().includes(prepQuery)))
     } else {
       setResult()
     }
@@ -62,7 +63,7 @@ export default () => {
         value={searchQuery}
       />
       {result && <ListWrapper elevation={3}>
-        { result.length ? <FlatList
+        {result.length ? <FlatList
           data={result}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={onSelect(item)}>
@@ -85,7 +86,7 @@ const ListItemContent = styled(Text)`
 
 const ListWrapper = styled(Surface)`
   position: absolute;
-  top:49px;
+  top: 49px;
   width: 100%;
   padding: 15px 20px;
   z-index: 2;

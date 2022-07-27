@@ -1,6 +1,6 @@
 import { View, TouchableHighlight } from 'react-native'
 import styled from 'styled-components/native'
-
+import { Avatar } from 'react-native-paper';
 import GrayText from '../GrayText'
 import Badge from '../Badge'
 
@@ -8,15 +8,7 @@ const Appointment = ({ onLongPress }) => {
   return (
     <TouchableHighlight onLongPress={onLongPress}>
       <GroupItem>
-        <Avatar
-          style={{
-            backgroundColor: 'lightblue'
-          }}
-        >
-          <Letter style={{ color: 'blue' }}>
-            {'А'}
-          </Letter>
-        </Avatar>
+        <Avatar.Text style={{ marginRight: 16 }} size={40} label="XD" />
         <View style={{ flex: 1 }}>
           <FullName>Анжела Матиева</FullName>
           <GrayText>пульпит, удаление зуба</GrayText>
@@ -27,24 +19,9 @@ const Appointment = ({ onLongPress }) => {
   )
 }
 
-const Letter = styled.Text`
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: -1px;
-`
-
 const FullName = styled.Text`
   font-weight: 600;
   font-size: 16px;
-`
-
-const Avatar = styled.View`
-  align-items: center;
-  justify-content: center;
-  border-radius: 50px;
-  width: 40px;
-  height: 40px;
-  margin-right: 15px;
 `
 
 const GroupItem = styled.View`

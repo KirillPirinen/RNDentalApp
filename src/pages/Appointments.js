@@ -14,7 +14,7 @@ const Separator = styled.View`
   width: 80%;
 `
 
-export const Patients = () => {
+export const Appointments = () => {
   const days = useSelector(getAppointmentsByDay)
   const navigation = useNavigation()
   return (

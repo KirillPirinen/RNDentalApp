@@ -1,9 +1,9 @@
-import { Patients } from "./Patients"
+import { Appointments } from "./Appointments"
 import PatientDetail from "./PatientDetail"
 import AddAppointment from "./AddAppointment"
 
 export {
-  Patients,
+  Appointments,
   PatientDetail,
   AddAppointment
 }

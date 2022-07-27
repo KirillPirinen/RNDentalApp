@@ -15,7 +15,7 @@ const getColor = ({ active, color }) => {
       background: '#E9F5FF',
       color: '#4294ff'
     }
-  };
+  }
 
   let result;
   if (active) {
@@ -27,7 +27,7 @@ const getColor = ({ active, color }) => {
   }
 
   return result;
-};
+}
 
 export default styled.Text`
   background: ${props => getColor(props).background};

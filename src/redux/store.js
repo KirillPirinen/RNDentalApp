@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import themeReducer from './themeSlice'
 import appointmentSlice from './appointmentSlice'
+import patientSlice from './patientSlice'
 
 export const store = configureStore({
   reducer: {
     appTheme: themeReducer,
-    appointments: appointmentSlice
+    appointments: appointmentSlice,
+    patients: patientSlice
   },
 })

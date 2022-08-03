@@ -4,15 +4,20 @@ import styled from 'styled-components'
 import DatePicker from '@react-native-community/datetimepicker'
 import { Container, Autocomplete } from '../components'
 import { Button, TextInput as Input, Surface, Text, useTheme } from 'react-native-paper'
+import { useSelector } from 'react-redux'
+import { getPatients } from '../redux/patientSlice'
 
 const AddAppointment = () => {
   const [calendar, setCalendar] = useState(false)
   const [time, setTime] = useState(false)
   const theme = useTheme()
+  const patients = useSelector(getPatients)
+
+  const onChange = (query) => patients.filter(patient => patient.name.toLowerCase().includes(query))
 
   return (
     <Container>
-      <Autocomplete />
+      <Autocomplete onChange={onChange}/>
       <View style={{ marginTop: 20, marginLeft: 0 }} floatingLabel>
         <Text>Цена</Text>
         <Input

@@ -1,9 +1,9 @@
 import { Appbar } from 'react-native-paper'
 
-const AppHeader = ({ navigation, back, route }) => {
+const AppHeader = ({ navigation, route }) => {
   return (
     <Appbar.Header>
-      {back && <Appbar.BackAction onPress={navigation.goBack} />}
+      {navigation.canGoBack() && <Appbar.BackAction onPress={navigation.goBack} />}
       <Appbar.Content title={route.name} />
     </Appbar.Header>
   )

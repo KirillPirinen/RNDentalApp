@@ -16,7 +16,7 @@ const renderList = ({ result }) => (
   />
 )
 
-export const PatientsList = ({ patients, navigation }) => {
+export const PatientsList = ({ patients, navigation, database }) => {
 
   const onChange = (query) => patients.filter(patient => {
     return patient.lname.toLowerCase().includes(query) && patient.name.toLowerCase().includes(query)

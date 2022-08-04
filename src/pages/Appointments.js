@@ -20,7 +20,6 @@ const Separator = styled.View`
 
 const Appointments = ({ patients, navigation }) => {
   const days = []
-  console.log(patients)
   return (
     <Container>
       <StatusBar />
@@ -47,6 +46,6 @@ const Appointments = ({ patients, navigation }) => {
 
 export default withDatabase(
   withObservables([], ({ database }) => ({
-    patients: database.collections.get('patients').query().observe(),
+    patients: database.collections.get('patients').query().observeCount(),
   }))(Appointments),
 );

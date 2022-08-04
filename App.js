@@ -7,14 +7,25 @@ import { database } from './src/db'
 
 const App = () => {
   return (
-    <Provider store={store}>
-      <ThemeAdapter>
-        <DatabaseProvider database={database}>
+    <ThemeAdapter>
+      <DatabaseProvider database={database}>
           <Router />
-        </DatabaseProvider>
-      </ThemeAdapter>
-    </Provider>
+      </DatabaseProvider>
+    </ThemeAdapter>
   )
 }
 
 export default App
+
+/* <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          header: (props) => <CustomNavigationBar {...props} />
+        }}
+      >
+        <Stack.Screen name="Home" component={BottomTabs} />
+        <Stack.Screen name="Detail" component={PatientDetail} />
+        <Stack.Screen name="AddAppointment" component={AddAppointment} />
+        <Stack.Screen name="AddPatient" component={AddPatient} />
+      </Stack.Navigator>
+    </NavigationContainer> */

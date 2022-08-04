@@ -1,20 +1,20 @@
 import { database } from '../'
 
-export const createPatient = async (data) => {
+export const createPatient = async (fname, lname) => {
   try {
-    await database.get('patients').addNew(data)
+    await database.addNew(fname, lname)
   } finally {
     console.log('ok')
   }
 }
 
-export const createPatients2 = async (data) => {
+export const createPatients2 = async (fname, lname, phone) => {
   const newPost = await database.write(async () => {
     const post = await database.get('patients').create(patient => {
-      patient.fname = data.fname
-      patient.lname = data.lname
+      patient.fname = fname
+      patient.lname = lname
+      patient.phone = phone
     })  
-    // Note: Value returned from the wrapped function will be returned to `database.write` caller
     return post
   })
 }

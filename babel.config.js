@@ -5,8 +5,8 @@ module.exports = function(api) {
     env: {
       production: {
         plugins: [
-        'react-native-paper/babel', 
-        '@babel/plugin-proposal-decorators', { "legacy": true }
+        ['react-native-paper/babel'], 
+        ['@babel/plugin-proposal-decorators', { "legacy": true }]
         ],
       },
     },

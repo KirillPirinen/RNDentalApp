@@ -3,6 +3,7 @@ import { Searchbar, Surface, Divider, Text } from 'react-native-paper'
 import styled from 'styled-components/native'
 import { TouchableOpacity } from 'react-native'
 import { FlatList, View } from 'react-native'
+import { useEffect } from 'react'
 
 const DefaultList = ({ result, onSelect }) => (
     <>
@@ -28,12 +29,16 @@ export default ({ placeholder, renderList, onChange, onSelect, initState }) => {
   const [result, setResult] = useState(initState);
   const [searchQuery, setSearchQuery] = useState('');
 
+  useEffect(() => {
+    setResult(initState)
+  }, [initState])
+
   const onChangeSearch = query => {
     if(query) {
       const prepQuery = query.toLowerCase()
       setResult(onChange(prepQuery))
     } else {
-      setResult()
+      setResult(initState)
     }
     setSearchQuery(query)
   }

@@ -2,13 +2,13 @@ import { View, TouchableHighlight } from 'react-native'
 import styled from 'styled-components/native'
 import { Avatar } from 'react-native-paper';
 
-export const Patient = ({ onLongPress, name }) => {
+export const Patient = ({ patient, onLongPress, onPress }) => {
   return (
-    <TouchableHighlight onLongPress={onLongPress}>
+    <TouchableHighlight onLongPress={onLongPress} onPress={onPress}>
       <GroupItem>
         <Avatar.Text style={{ marginRight: 16 }} size={40} label="XD" />
         <View style={{ flex: 1 }}>
-          <FullName>{name}</FullName>
+          <FullName>{patient.fullName}</FullName>
         </View>
       </GroupItem>
     </TouchableHighlight>

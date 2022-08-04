@@ -1,30 +1,42 @@
-import { Divider } from 'react-native-paper';
-import { FlatList, View } from 'react-native';
+import { Divider, Text, Surface, Avatar } from 'react-native-paper';
+import { FlatList } from 'react-native';
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import withObservables from '@nozbe/with-observables';
 import { Container, Autocomplete, Patient, PlusButton } from '../components'
+import { useNavigation } from '@react-navigation/native';
 
-const renderList = ({ result }) => (
-  <FlatList
-    data={result}
-    keyExtractor={(item) => item.id}
-    renderItem={({ item }) => <Patient 
-    {...item}
-    onPress={() => navigation.navigate('Detail')}
-    />}
-    ItemSeparatorComponent={Divider}
-  />
+const Empty = () => (
+  <Surface elevation={5} style={{ padding: 12, alignItems:'center', justifyContent:'center' }}>
+    <Avatar.Icon size={30} style={{ backgroundColor: 'red', marginBottom: 10 }} icon="exclamation-thick" />
+    <Text variant="labelLarge">Ничего не найдено</Text>
+  </Surface>
 )
 
-export const PatientsList = ({ patients, navigation, database }) => {
+const renderList = ({ result }) => {
+  const navigation = useNavigation()
+  return (
+    <FlatList
+      data={result}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => <Patient 
+        patient={item}
+        onPress={() => navigation.navigate('Detail', item)}
+      />}
+      ItemSeparatorComponent={Divider}
+      style={{ marginVertical: 12 }}
+      ListFooterComponent={!result.length && Empty}
+    />
+  )
+}
 
-  const onChange = (query) => patients.filter(patient => {
-    return patient.lname.toLowerCase().includes(query) && patient.name.toLowerCase().includes(query)
-  })
+export const PatientsList = ({ patients, navigation }) => {
+
+  const onChange = (query) => 
+    patients.filter(patient => patient.fullName.toLowerCase().includes(query))
 
   return (
     <Container>
-      <Autocomplete 
+      <Autocomplete
         onChange={onChange}
         renderList={renderList}
         initState={patients}
@@ -36,6 +48,6 @@ export const PatientsList = ({ patients, navigation, database }) => {
 
 export default withDatabase(
   withObservables([], ({ database }) => ({
-    patients: database.collections.get('patients').query().observe(),
-  }))(PatientsList),
+    patients: database.get('patients').query()
+  }))(PatientsList), 
 );

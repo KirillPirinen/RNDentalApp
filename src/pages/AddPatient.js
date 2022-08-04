@@ -11,8 +11,9 @@ export default () => {
   const [phone, setPhone] = useState('')
 
   const onClick = () => {
-    createPatients2({ fname, lname })
+    createPatients2(fname, lname, phone)
   }
+
   return (
     <Container>
       <View style={{ marginTop: 20, marginLeft: 0 }} floatingLabel>
@@ -20,7 +21,7 @@ export default () => {
           mode="outlined"
           label="Имя"
           style={{ marginTop: 12 }}
-          onChange={setFirst}
+          onChangeText={setFirst}
           value={fname}
         />
       </View>
@@ -29,7 +30,7 @@ export default () => {
           mode="outlined"
           label="Фамилия"
           style={{ marginTop: 12 }}
-          onChange={setLast}
+          onChangeText={setLast}
           value={lname}
         />
       </View>
@@ -39,7 +40,7 @@ export default () => {
           label="Телефон"
           style={{ marginTop: 12 }}
           keyboardType="phone-pad"
-          onChange={setPhone}
+          onChangeText={setPhone}
           value={phone}
         />
       </View>

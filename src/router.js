@@ -5,23 +5,12 @@ import { Appointments, PatientDetail, AddAppointment, PatientsList,
   AddPatient } from './pages'
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { StatusBar } from 'react-native';
+import { useTheme } from 'react-native-paper';
+
 
 const Stack = createNativeStackNavigator();
-
 const Tab = createBottomTabNavigator();
-
-const HeadNav = () => (
-  <Stack.Navigator
-        screenOptions={{
-          header: (props) => <CustomNavigationBar {...props} />
-        }}
-      >
-        <Stack.Screen name="Home" component={BottomTabs} />
-        <Stack.Screen name="Detail" component={PatientDetail} />
-        <Stack.Screen name="AddAppointment" component={AddAppointment} />
-        <Stack.Screen name="AddPatient" component={AddPatient} />
-      </Stack.Navigator>
-)
 
 function BottomTabs() {
   return (
@@ -32,11 +21,26 @@ function BottomTabs() {
   );
 }
 
-const Router = () => (
+const Router = () => {
+  const theme = useTheme()
+  return (
     <NavigationContainer>
-      <HeadNav/>
+      <StatusBar
+        backgroundColor={theme.colors.primary}
+      />
+      <Stack.Navigator
+        screenOptions={{
+          header: (props) => <CustomNavigationBar {...props} />
+        }}
+      >
+        <Stack.Screen name="Home" component={BottomTabs} />
+        <Stack.Screen name="Detail" component={PatientDetail} />
+        <Stack.Screen name="AddAppointment" component={AddAppointment} />
+        <Stack.Screen name="AddPatient" component={AddPatient} />
+      </Stack.Navigator>
     </NavigationContainer>
   )
+}
 
 export default Router
 

@@ -11,15 +11,16 @@ import {
   PlusButton
 } from '../components'
 
-const PatientDetail = ({ navigation }) => {
+const PatientDetail = ({ navigation, route: { params: patient } }) => {
+
   return (
     <View style={{ flex: 1 }}>
       <PatientDetails>
         <PatientFullname>
-          Марина Алмазова
+          {patient.fullName}
         </PatientFullname>
         <GrayText>
-          +7 (999) 200-66-55
+          {patient.phone}
         </GrayText>
 
         <PatientButtons>

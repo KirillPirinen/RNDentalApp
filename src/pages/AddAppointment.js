@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { View, FlatList, Divider } from 'react-native'
-import { Surface } from 'react-native-paper'
 import styled from 'styled-components'
 import DatePicker from '@react-native-community/datetimepicker'
 import { Container, Autocomplete, Patient, EmptyList } from '../components'
@@ -8,7 +7,8 @@ import { Button, TextInput as Input, Text, useTheme, IconButton } from 'react-na
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { Q } from '@nozbe/watermelondb';
 import { useNavigation } from '@react-navigation/native'
-import { useEffect } from 'react'
+import formatRu from '../utils/formatRu'
+import { createAppointment } from '../db/actions'
 
 const onSearch = (db) => async (query) => {
   const sanitized = Q.sanitizeLikeString(query)
@@ -38,16 +38,22 @@ const renderList = ({ result, onChoose }) => {
   )
 }
 
+const initState = { mode: null, сurrent: new Date() }
+
 const AddAppointment = () => {
-  const [dateMeta, setDateMeta] = useState({ mode: null, сurrent: new Date() })
-  const [choosed, setChoosed] = useState(null)
-  
   const theme = useTheme()
   const db = useDatabase()
 
-  //useEffect(() => console.log(dateMeta), [dateMeta])
+  const [dateMeta, setDateMeta] = useState(initState)
+  const [choosed, setChoosed] = useState(null)
+  const [diagnosis, setDiagnosis] = useState('')
+  const [notes, setNotes] = useState('')
+  const [buttonColor, setButtonColor] = useState(theme.colors.primary)
+  
+  const onReset = () => (setChoosed(false), setDateMeta(initState))
   
   const setDate = (event, date) => {
+    setButtonColor('green')
     setDateMeta((prev) => {
       const isDate = prev.mode === 'date'
       return {
@@ -56,6 +62,21 @@ const AddAppointment = () => {
         mode: isDate ? 'time' : null
       }
     })
+  }
+
+  const onSubmit = () => {
+
+    if (dateMeta.date) {
+      return createAppointment({
+        patientId: choosed.id,
+        date: dateMeta.date,
+        diagnosis,
+        notes
+      })
+    } 
+
+    setButtonColor('red')
+
   }
 
   return (
@@ -71,34 +92,40 @@ const AddAppointment = () => {
           <Button 
             icon="reload" 
             mode="contained"
-            color="white"
-            onPress={() => setChoosed(false)}
+            onPress={onReset}
           >
             Выбрать другого
           </Button>
           <Button 
-            style={{ marginTop: 40 }} 
+            style={{ marginTop: 40, borderColor: buttonColor }} 
             icon="calendar" 
-            mode="contained" 
-            color={theme.colors.primary} 
+            mode="outlined" 
+            color={buttonColor}
             onPress={() => setDateMeta(prev => ({ ...prev, mode: 'date' }))}
           >
-            {dateMeta.date && 'Выбрать дату'}
+            {dateMeta.date ? formatRu(dateMeta.date, 'PPpp') : 'Выбрать дату'}
           </Button>
           <View style={{ marginTop: 20, marginLeft: 0 }}>
             <Input
               mode="outlined"
               label="Планируемые операции"
-              keyboardType="numeric"
               style={{ marginTop: 12 }}
+              onChangeText={setDiagnosis}
+              value={diagnosis}
+              multiline
             />
           </View>
           <View style={{ marginTop: 20, marginLeft: 0 }}>
-          <IconButton
-            icon="camera"
-            size={20}
-            onPress={() => setDateMeta(prev => ({ ...prev, mode: 'date' }))}
-          />
+            <Input
+              mode="outlined"
+              label="Заметки"
+              style={{ marginTop: 12 }}
+              onChangeText={setNotes}
+              value={notes}
+              multiline
+            />
+          </View>
+          <View style={{ marginTop: 20, marginLeft: 0 }}>
             <TimeRow>
               <View style={{ flex: 1 }}>
                 {dateMeta.mode && <DatePicker
@@ -106,13 +133,17 @@ const AddAppointment = () => {
                   minimumDate={dateMeta.сurrent}
                   value={dateMeta.date || dateMeta.сurrent}
                   onChange={setDate}
-                  timeZoneOffsetInMinutes={0}
                 />}
               </View>
             </TimeRow>
           </View>
           <ButtonView>
-            <Button icon="plus-thick" mode="contained" color={theme.colors.primary} onPress={() => console.log('Pressed')}>
+            <Button 
+              icon="plus-thick" 
+              mode="contained" 
+              color={theme.colors.primary} 
+              onPress={onSubmit}
+            >
               Добавить прием
             </Button>
           </ButtonView>
@@ -130,19 +161,5 @@ const ButtonView = styled.View`
 const TimeRow = styled.View`
   flex-direction: row;
 `;
-
-const ListItemContent = styled(Text)`
-  width:100%;
-  padding-bottom: 10px;
-  padding-top: 10px;
-`
-
-const ListWrapper = styled(Surface)`
-  position: absolute;
-  top: 49px;
-  width: 100%;
-  padding: 15px 20px;
-  z-index: 100;
-`
 
 export default AddAppointment;

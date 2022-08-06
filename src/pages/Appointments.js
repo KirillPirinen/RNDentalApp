@@ -3,6 +3,10 @@ import { SafeAreaView, StatusBar, FlatList } from 'react-native'
 import styled from 'styled-components/native'
 import { PlusButton, SwipeableAppointment, SectionTitle } from '../components'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
+import { Q } from '@nozbe/watermelondb';
+import { reduce } from 'rxjs/operators'
+import { groupAppointments } from '../utils/groupAppointments'
+import formatRu from '../utils/formatRu'
 
 const Container = styled.View`
   flex: 1;
@@ -14,20 +18,24 @@ const Separator = styled.View`
 `
 
 const Appointments = ({ appointments, navigation }) => {
+  
+  const grouped = groupAppointments(appointments)
+  
+  console.log(grouped.length)
+
   return (
     <Container>
       <StatusBar />
       <SafeAreaView>
-          {appointments?.map(day => (
+          {grouped?.map(day => (
             <>
-              <SectionTitle>{day.date}</SectionTitle>
+              <SectionTitle>{formatRu(day[0].date, 'do MMMM, EEEE')}</SectionTitle>
               <FlatList
-                data={day.appointments}
+                data={day}
                 keyExtractor={(item) => item.id}
-                renderItem={({ item }) => <SwipeableAppointment 
-                {...item}
+                renderItem={({ item }) => <SwipeableAppointment
                 onLongPress={() => navigation.navigate('Detail')}
-                />}
+                />} 
                 ItemSeparatorComponent={() => <Separator />}
               />
             </>
@@ -38,9 +46,10 @@ const Appointments = ({ appointments, navigation }) => {
   )
 }
 
-export default Appointments
-// export default withDatabase(
-//   withObservables([], ({ database }) => ({
-//     appointments: database.get('appointments').query()
-//   }))(Appointments),
-// );
+export default withDatabase(
+  withObservables([], ({ database }) => ({
+    appointments: database.get('appointments').query(
+      //Q.unsafeSqlQuery(`select * from appointments`)
+    ).observe()
+  }))(Appointments),
+);

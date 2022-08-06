@@ -1,4 +1,4 @@
-import Appointment from "./Appointment"
+import { Appointment } from "./Appointment"
 import Swipeable from "react-native-gesture-handler/Swipeable"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { Ionicons } from '@expo/vector-icons'
@@ -15,12 +15,12 @@ const rightSwipeActions = () => (
   </>
 )
 
-export const SwipeableAppointment = (props) => (
+export const SwipeableAppointment = () => (
   <GestureHandlerRootView>
     <Swipeable
       renderRightActions={rightSwipeActions}
     >
-      <Appointment {...props} />
+      <Appointment />
     </Swipeable>
   </GestureHandlerRootView>
 )

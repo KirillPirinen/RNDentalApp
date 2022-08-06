@@ -4,7 +4,7 @@ import { Avatar } from 'react-native-paper';
 import GrayText from '../GrayText'
 import Badge from '../Badge'
 
-const Appointment = ({ onLongPress }) => {
+export const Appointment = ({ onLongPress }) => {
   return (
     <TouchableHighlight onLongPress={onLongPress}>
       <GroupItem>
@@ -32,5 +32,3 @@ const GroupItem = styled.View`
   border-bottom-color: #f3f3f3;
   background-color: white;
 `
-
-export default Appointment;

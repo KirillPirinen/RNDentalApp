@@ -6,7 +6,11 @@ export const Patient = ({ patient, onLongPress, onPress }) => {
   return (
     <TouchableHighlight onLongPress={onLongPress} onPress={onPress}>
       <GroupItem>
-        <Avatar.Text style={{ marginRight: 16 }} size={40} label="XD" />
+        <Avatar.Text 
+          style={{ marginRight: 16 }} 
+          size={40} 
+          label={patient.fname[0] + (patient.lname[0] || '')} 
+        />
         <View style={{ flex: 1 }}>
           <FullName>{patient.fullName}</FullName>
         </View>

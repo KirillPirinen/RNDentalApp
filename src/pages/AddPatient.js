@@ -2,16 +2,24 @@ import { useState } from "react"
 import { View } from "react-native"
 import { TextInput, Button } from "react-native-paper"
 import { Container } from "../components"
-import { createPatient, createPatients2 } from "../db/actions/patient.actions"
+import { createPatient } from "../db/actions"
 
-export default () => {
-  
-  const [fname, setFirst] = useState('')
-  const [lname, setLast] = useState('')
-  const [phone, setPhone] = useState('')
+export default ({ navigation, route: { params } }) => {
+
+  const patient = params?.patient || {}
+  const isEditMode = Boolean(params?.patient)
+
+  const [fname, setFirst] = useState(patient.fname || '')
+  const [lname, setLast] = useState(patient.lname || '')
+  const [phone, setPhone] = useState(patient.phone || '')
 
   const onClick = () => {
-    createPatients2(fname, lname, phone)
+    if(isEditMode) {
+      return patient.updateInstance({ fname, lname, phone }).then(navigation.goBack)
+    }
+    createPatient({ fname, lname, phone }).then(patient => {
+      navigation.replace('Detail', { patient })
+    })
   }
 
   return (
@@ -44,14 +52,15 @@ export default () => {
           value={phone}
         />
       </View>
-      <Button 
-        style={{ marginTop: 30 }} 
-        icon="plus-thick" 
-        mode="contained" 
-        onPress={onClick}
-      >
-        Добавить прием
-      </Button>
+        <Button 
+          style={{ marginTop: 30 }} 
+          icon="plus-thick" 
+          mode="contained" 
+          onPress={onClick}
+          color={isEditMode && 'green'}
+        >
+          {isEditMode ? 'Редактировать данные' : 'Добавить пациента'}
+        </Button>
     </Container>
   )
 }

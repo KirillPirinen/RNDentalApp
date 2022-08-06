@@ -2,15 +2,8 @@ import { Divider, Text, Surface, Avatar } from 'react-native-paper';
 import { FlatList } from 'react-native';
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import withObservables from '@nozbe/with-observables';
-import { Container, Autocomplete, Patient, PlusButton } from '../components'
+import { Container, Autocomplete, Patient, PlusButton, EmptyList } from '../components'
 import { useNavigation } from '@react-navigation/native';
-
-const Empty = () => (
-  <Surface elevation={5} style={{ padding: 12, alignItems:'center', justifyContent:'center' }}>
-    <Avatar.Icon size={30} style={{ backgroundColor: 'red', marginBottom: 10 }} icon="exclamation-thick" />
-    <Text variant="labelLarge">Ничего не найдено</Text>
-  </Surface>
-)
 
 const renderList = ({ result }) => {
   const navigation = useNavigation()
@@ -20,11 +13,11 @@ const renderList = ({ result }) => {
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <Patient 
         patient={item}
-        onPress={() => navigation.navigate('Detail', item)}
+        onPress={() => navigation.navigate('Detail', { patient: item })}
       />}
       ItemSeparatorComponent={Divider}
       style={{ marginVertical: 12 }}
-      ListFooterComponent={!result.length && Empty}
+      ListFooterComponent={!result.length && EmptyList}
     />
   )
 }

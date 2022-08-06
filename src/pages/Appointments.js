@@ -2,11 +2,6 @@ import withObservables from '@nozbe/with-observables'
 import { SafeAreaView, StatusBar, FlatList } from 'react-native'
 import styled from 'styled-components/native'
 import { PlusButton, SwipeableAppointment, SectionTitle } from '../components'
-import { getAppointmentsByDay } from '../redux/appointmentSlice'
-import { useNavigation } from '@react-navigation/native'
-import { database } from '../db'
-import { useEffect } from 'react'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 
 const Container = styled.View`
@@ -18,13 +13,12 @@ const Separator = styled.View`
   width: 80%;
 `
 
-const Appointments = ({ patients, navigation }) => {
-  const days = []
+const Appointments = ({ appointments, navigation }) => {
   return (
     <Container>
       <StatusBar />
       <SafeAreaView>
-          {days.map(day => (
+          {appointments?.map(day => (
             <>
               <SectionTitle>{day.date}</SectionTitle>
               <FlatList
@@ -44,8 +38,9 @@ const Appointments = ({ patients, navigation }) => {
   )
 }
 
-export default withDatabase(
-  withObservables([], ({ database }) => ({
-    patients: database.collections.get('patients').query().observeCount(),
-  }))(Appointments),
-);
+export default Appointments
+// export default withDatabase(
+//   withObservables([], ({ database }) => ({
+//     appointments: database.get('appointments').query()
+//   }))(Appointments),
+// );

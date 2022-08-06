@@ -1,28 +1,49 @@
-import { Text, View, ActivityIndicator, Linking } from 'react-native'
+import { View, Linking } from 'react-native'
 import styled from 'styled-components/native'
-import { Foundation, Ionicons } from '@expo/vector-icons'
+import { Foundation } from '@expo/vector-icons'
+import { IconButton, Button as PaperButton } from 'react-native-paper'
+import withObservables from '@nozbe/with-observables';
+import { GrayText, Button, Container, Confirm, PlusButton, PatientAppointment } from '../components'
+import { useState, useCallback } from 'react'
 
-import {
-  GrayText,
-  Button,
-  Badge,
-  Container,
-  Appointment,
-  PlusButton
-} from '../components'
+const inverse = (prev) => !prev
 
-const PatientDetail = ({ navigation, route: { params: patient } }) => {
+const PatientDetail = ({ navigation, patient }) => {
+  const [visible, setVisible] = useState(false)
+
+  const handleToggle = useCallback(() => setVisible(inverse), [])
+  const onDelete = () => patient.deleteInstance().then(navigation.popToTop)
+  const onCall = () => Linking.openURL(`tel:${patient.phone}`)
 
   return (
     <View style={{ flex: 1 }}>
       <PatientDetails>
-        <PatientFullname>
-          {patient.fullName}
-        </PatientFullname>
-        <GrayText>
-          {patient.phone}
-        </GrayText>
-
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View>
+            <PatientFullname>
+              {patient.fullName}
+            </PatientFullname>
+            <GrayText>
+              {patient.phone}
+            </GrayText>
+          </View>
+          <View style={{ flexDirection:'row' }}>
+            <IconButton
+                icon="pencil-circle"
+                color="gray"
+                size={30}
+                onPress={() => navigation.navigate('AddPatient', { patient })}
+                style={{ padding: 0 }}
+            />
+            <IconButton
+                icon="delete"
+                color="red"
+                size={30}
+                onPress={handleToggle}
+                style={{ padding: 0 }}
+            />
+          </View>
+        </View>
         <PatientButtons>
           <FormulaButtonView>
             <Button>Формула зубов</Button>
@@ -30,94 +51,44 @@ const PatientDetail = ({ navigation, route: { params: patient } }) => {
           <PhoneButtonView>
             <Button
               color="#84D269"
+              onPress={onCall}
             >
               <Foundation name="telephone" size={22} color="white" />
             </Button>
           </PhoneButtonView>
         </PatientButtons>
       </PatientDetails>
-
-      <PatientAppointments>
-        <Container>
-              <AppointmentCard>
-                <MoreButton>
-                  <Ionicons
-                    name="md-more"
-                    size={24}
-                    color="rgba(0, 0, 0, 0.4)"
-                  />
-                </MoreButton>
-                <AppointmentCardRow>
-                  <Ionicons name="md-medical" size={16} color="#A3A3A3" />
-                  <AppointmentCardLabel>
-                    Зуб:{' '}
-                    <Text style={{ fontWeight: '600' }}>
-                      32
-                    </Text>
-                  </AppointmentCardLabel>
-                </AppointmentCardRow>
-                <AppointmentCardRow>
-                  <Foundation
-                    name="clipboard-notes"
-                    size={16}
-                    color="#A3A3A3"
-                  />
-                  <AppointmentCardLabel>
-                    Диагноз:{' '}
-                    <Text style={{ fontWeight: '600' }}>
-                      чет полечила
-                    </Text>
-                  </AppointmentCardLabel>
-                </AppointmentCardRow>
-                <AppointmentCardRow
-                  style={{ marginTop: 15, justifyContent: 'space-between' }}
-                >
-                  <Badge style={{ width: 155 }} active>
-                    11 июля
-                  </Badge>
-                  <Badge color="green">3 500 Р</Badge>
-                </AppointmentCardRow>
-              </AppointmentCard>
-        </Container>
-      </PatientAppointments>
+      <PatientAppointment />
       <PlusButton/>
+      <Confirm 
+        visible={visible} 
+        title={`Удаление ${patient.fullName}`}
+        question="Вы действительно хотите удалить пациента?"
+        onClose={handleToggle}
+      > 
+        <PaperButton
+          icon="delete"
+          color="red"
+          size={30}
+          onPress={onDelete}
+          style={{ padding: 0 }}
+        > 
+          удалить 
+        </PaperButton>
+        <PaperButton
+          icon="window-close"
+          color="gray"
+          size={30}
+          onPress={handleToggle}
+          style={{ padding: 0 }}
+        > 
+          отмена 
+        </PaperButton>
+      </Confirm>
     </View>
   )
 }
 
-const MoreButton = styled.TouchableOpacity`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  height: 32px;
-  width: 32px;
-`;
-
-const AppointmentCardLabel = styled.Text`
-  font-size: 16px;
-  margin-left: 10px;
-`;
-
-const AppointmentCardRow = styled.View`
-  flex-direction: row;
-  align-items: center;
-  margin-top: 3.5px;
-  margin-bottom: 3.5px;
-`;
-
-const AppointmentCard = styled.View`
-  shadow-color: gray;
-  elevation: 0.5;
-  shadow-opacity: 0.4;
-  shadow-radius: 10;
-  padding: 20px 25px;
-  border-radius: 10px;
-  background: white;
-  margin-bottom: 20px;
-`;
 
 const PatientDetails = styled(Container)`
   flex: 0.3;
@@ -150,4 +121,6 @@ const PatientFullname = styled.Text`
   margin-bottom: 3px;
 `;
 
-export default PatientDetail;
+export default withObservables(['route'], ({ route }) => ({
+    patient: route.params.patient
+}))(PatientDetail);

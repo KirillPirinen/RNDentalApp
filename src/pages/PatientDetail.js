@@ -1,4 +1,4 @@
-import { View, Linking } from 'react-native'
+import { View, Linking, FlatList } from 'react-native'
 import styled from 'styled-components/native'
 import { Foundation } from '@expo/vector-icons'
 import { IconButton, Button as PaperButton } from 'react-native-paper'
@@ -8,7 +8,7 @@ import { useState, useCallback } from 'react'
 
 const inverse = (prev) => !prev
 
-const PatientDetail = ({ navigation, patient }) => {
+const PatientDetail = ({ navigation, patient, appointments }) => {
   const [visible, setVisible] = useState(false)
 
   const handleToggle = useCallback(() => setVisible(inverse), [])
@@ -16,7 +16,7 @@ const PatientDetail = ({ navigation, patient }) => {
   const onCall = () => Linking.openURL(`tel:${patient.phone}`)
 
   return (
-    <View style={{ flex: 1 }}>
+    <>
       <PatientDetails>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View>
@@ -58,7 +58,15 @@ const PatientDetail = ({ navigation, patient }) => {
           </PhoneButtonView>
         </PatientButtons>
       </PatientDetails>
-      <PatientAppointment />
+      <Container>
+      <FlatList
+          data={appointments}
+          renderItem={({ item }) => (
+            <PatientAppointment appointment={item} />
+          )}
+          keyExtractor={item => item.id}
+        />
+      </Container>
       <PlusButton/>
       <Confirm 
         visible={visible} 
@@ -85,18 +93,13 @@ const PatientDetail = ({ navigation, patient }) => {
           отмена 
         </PaperButton>
       </Confirm>
-    </View>
+    </>
   )
 }
 
 
 const PatientDetails = styled(Container)`
   flex: 0.3;
-`;
-
-const PatientAppointments = styled.View`
-  flex: 1;
-  background: #f8fafd;
 `;
 
 const FormulaButtonView = styled.View`
@@ -122,5 +125,6 @@ const PatientFullname = styled.Text`
 `;
 
 export default withObservables(['route'], ({ route }) => ({
-    patient: route.params.patient
+    patient: route.params.patient,
+    appointments: route.params.patient.appointments,
 }))(PatientDetail);

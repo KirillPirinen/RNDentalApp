@@ -83,6 +83,17 @@ export default schemaMigrations({
           ]
         })
       ]
+    },
+    {
+      toVersion: 7,
+      steps: [
+        addColumns({
+          table: 'appointments',
+          columns: [
+            { name: 'duration', type: 'number' },
+          ]
+        })
+      ]
     }
   ],
 })

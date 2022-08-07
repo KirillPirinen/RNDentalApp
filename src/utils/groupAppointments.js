@@ -1,17 +1,41 @@
 import { isSameDay } from "date-fns"
+import { APPOINTMENT_STATUS } from "./constants"
 import formatRu from "./formatRu"
+import { getAppointmentStatus } from "./getAppointmentStatus"
+
+const getDayContent = (appointment) => ({
+    day: formatRu(appointment.date, 'do MMMM, EEEE'),
+    data: [appointment]
+  })
 
 export const groupAppointments = (appointments) => {
+
   const res = []
-  let temp = [appointments[0]]
+
+  let prepearedStatus = false
+  
+  const injectAppointmentStatus = (appointment) => {
+    appointment.status = prepearedStatus || getAppointmentStatus(appointment)
+
+    if(appointment.status === APPOINTMENT_STATUS.future) {
+      prepearedStatus = 'future'
+    }
+
+    return appointment
+  }
+
+  let temp = getDayContent(injectAppointmentStatus(appointments[0]))
 
   for (let i = 1; i < appointments.length; i++) {
-    const prev = temp[temp.length - 1]
+    const prev = temp.data[temp.data.length - 1]
+
+    injectAppointmentStatus(appointments[i])
+
     if(isSameDay(prev.date, appointments[i].date)) {
-      temp.push(appointments[i])
+      temp.data.push(appointments[i])
     } else {
       res.push(temp)
-      temp = [appointments[i]]
+      temp = getDayContent(appointments[i])
     }
   }
 

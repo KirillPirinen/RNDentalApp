@@ -3,12 +3,13 @@ import { View, FlatList, Divider } from 'react-native'
 import styled from 'styled-components'
 import DatePicker from '@react-native-community/datetimepicker'
 import { Container, Autocomplete, Patient, EmptyList } from '../components'
-import { Button, TextInput as Input, Text, useTheme, IconButton } from 'react-native-paper'
+import { Button, TextInput as Input, Text, useTheme } from 'react-native-paper'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { Q } from '@nozbe/watermelondb';
 import { useNavigation } from '@react-navigation/native'
 import formatRu from '../utils/formatRu'
 import { createAppointment } from '../db/actions'
+import Slider from '@react-native-community/slider';
 
 const onSearch = (db) => async (query) => {
   const sanitized = Q.sanitizeLikeString(query)
@@ -48,6 +49,7 @@ const AddAppointment = () => {
   const [choosed, setChoosed] = useState(null)
   const [diagnosis, setDiagnosis] = useState('')
   const [notes, setNotes] = useState('')
+  const [duration, setDuration] = useState(5)
   const [buttonColor, setButtonColor] = useState(theme.colors.primary)
   
   const onReset = () => (setChoosed(false), setDateMeta(initState))
@@ -71,7 +73,8 @@ const AddAppointment = () => {
         patientId: choosed.id,
         date: dateMeta.date,
         diagnosis,
-        notes
+        notes,
+        duration
       })
     } 
 
@@ -105,6 +108,20 @@ const AddAppointment = () => {
           >
             {dateMeta.date ? formatRu(dateMeta.date, 'PPpp') : 'Выбрать дату'}
           </Button>
+          <View style={{ marginTop: 20, marginLeft: 0 }}>
+            <Text variant="headlineMedium">{`Длительность приема: ${duration} минут`}</Text>
+            <Slider
+              style={{width: '100%', height: 40}}
+              onValueChange={setDuration}
+              value={duration}
+              step={5}
+              minimumValue={5}
+              maximumValue={120}
+              minimumTrackTintColor={theme.colors.primary}
+              thumbTintColor={theme.colors.primary}
+              maximumTrackTintColor="#000000"
+            />
+          </View>
           <View style={{ marginTop: 20, marginLeft: 0 }}>
             <Input
               mode="outlined"

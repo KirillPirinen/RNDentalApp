@@ -1,12 +1,19 @@
 import { Model } from '@nozbe/watermelondb'
-import { text, field, writer } from '@nozbe/watermelondb/decorators'
+import { text, field, writer, relation, children } from '@nozbe/watermelondb/decorators'
+import { Q } from '@nozbe/watermelondb';
 
 export default class Patient extends Model {
   static table = 'patients'
 
+  static associations = {
+    appointments: { type: 'has_many', foreignKey: 'patient_id' },
+  }
+  
   @text('first_name') fname
   @text('last_name') lname
   @field('phone') phone
+
+  @children('appointments') appointments
 
   get fullName() {
     return `${this.fname} ${this.lname}`
@@ -25,11 +32,3 @@ export default class Patient extends Model {
   }
 
 }
-
-export const createPatient = async ({ fname, lname, phone }) => await database.write(
-  async () => await database.get('patients').create(patient => {
-        patient.fname = fname
-        patient.lname = lname
-        patient.phone = phone
-      })  
-  )

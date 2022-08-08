@@ -3,15 +3,13 @@ import styled from 'styled-components/native'
 import { Foundation } from '@expo/vector-icons'
 import { IconButton, Button as PaperButton } from 'react-native-paper'
 import withObservables from '@nozbe/with-observables';
-import { GrayText, Button, Container, Confirm, PlusButton, PatientAppointment } from '../components'
-import { useState, useCallback } from 'react'
+import { GrayText, Button, Container, ConfirmDelete, PlusButton, PatientAppointment } from '../components'
+import { useToggle } from '../utils/custom-hooks/useToggle';
 
-const inverse = (prev) => !prev
 
 const PatientDetail = ({ navigation, patient, appointments }) => {
-  const [visible, setVisible] = useState(false)
+  const [visible, handleToggle] = useToggle()
 
-  const handleToggle = useCallback(() => setVisible(inverse), [])
   const onDelete = () => patient.deleteInstance().then(navigation.popToTop)
   const onCall = () => Linking.openURL(`tel:${patient.phone}`)
 
@@ -68,31 +66,13 @@ const PatientDetail = ({ navigation, patient, appointments }) => {
         />
       </Container>
       <PlusButton/>
-      <Confirm 
+      <ConfirmDelete 
         visible={visible} 
         title={`Удаление ${patient.fullName}`}
         question="Вы действительно хотите удалить пациента?"
         onClose={handleToggle}
-      > 
-        <PaperButton
-          icon="delete"
-          color="red"
-          size={30}
-          onPress={onDelete}
-          style={{ padding: 0 }}
-        > 
-          удалить 
-        </PaperButton>
-        <PaperButton
-          icon="window-close"
-          color="gray"
-          size={30}
-          onPress={handleToggle}
-          style={{ padding: 0 }}
-        > 
-          отмена 
-        </PaperButton>
-      </Confirm>
+        onDelete={onDelete}
+      /> 
     </>
   )
 }

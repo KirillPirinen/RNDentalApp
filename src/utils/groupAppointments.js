@@ -9,7 +9,6 @@ const getDayContent = (appointment) => ({
   })
 
 export const groupAppointments = (appointments) => {
-
   const res = []
 
   let prepearedStatus = false
@@ -24,12 +23,11 @@ export const groupAppointments = (appointments) => {
     return appointment
   }
 
-  let temp = getDayContent(injectAppointmentStatus(appointments[0]))
+  let temp = getDayContent(appointments[0])
 
   for (let i = 1; i < appointments.length; i++) {
     const prev = temp.data[temp.data.length - 1]
 
-    injectAppointmentStatus(appointments[i])
 
     if(isSameDay(prev.date, appointments[i].date)) {
       temp.data.push(appointments[i])

@@ -1,5 +1,6 @@
 import { Model } from '@nozbe/watermelondb'
-import { text, field, relation, date, writer } from '@nozbe/watermelondb/decorators'
+import { text, field, relation, date, writer, lazy } from '@nozbe/watermelondb/decorators'
+import { getAppointmentStatus } from '../../utils/getAppointmentStatus'
 
 export default class Appointment extends Model {
   static table = 'appointments'
@@ -21,8 +22,20 @@ export default class Appointment extends Model {
 
   @relation('patients', 'patient_id') patient
 
+  get status() {
+    return getAppointmentStatus(this) 
+  }
+
   @writer async deleteInstance() {
     return await this.markAsDeleted()
+  }
+
+  @writer async updateInstance(fields) {
+    await this.update(instance => {
+        Object.keys(fields).forEach((key) => {
+          instance[key] = fields[key]
+        })
+    })
   }
 
 }

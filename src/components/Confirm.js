@@ -1,4 +1,4 @@
-import { Paragraph, Dialog, Portal } from 'react-native-paper'
+import { Paragraph, Dialog, Portal, Button as PaperButton } from 'react-native-paper'
 
 export const Confirm = ({ title, question, onClose, visible, children }) => (
     <Portal>
@@ -13,3 +13,31 @@ export const Confirm = ({ title, question, onClose, visible, children }) => (
       </Dialog>
     </Portal>
   )
+
+export const ConfirmDelete = ({  title, visible, question, onClose, onDelete }) => (
+    <Confirm 
+        visible={visible} 
+        title={title}
+        question={question}
+        onClose={onClose}
+      > 
+        <PaperButton
+          icon="delete"
+          color="red"
+          size={30}
+          onPress={onDelete}
+          style={{ padding: 0 }}
+        > 
+          удалить 
+        </PaperButton>
+        <PaperButton
+          icon="window-close"
+          color="gray"
+          size={30}
+          onPress={onClose}
+          style={{ padding: 0 }}
+        > 
+          отмена
+        </PaperButton>
+      </Confirm>
+)

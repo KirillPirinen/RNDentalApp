@@ -41,15 +41,22 @@ const renderList = ({ result, onChoose }) => {
 
 const initState = { mode: null, сurrent: new Date() }
 
-const AddAppointment = () => {
+const AddAppointment = ({ navigation, route: { params } }) => {
+
+  const appointment = params?.appointment || {}
+  const patient = params?.patient
+  const isEditMode = Boolean(params?.patient)
+
   const theme = useTheme()
   const db = useDatabase()
 
-  const [dateMeta, setDateMeta] = useState(initState)
-  const [choosed, setChoosed] = useState(null)
-  const [diagnosis, setDiagnosis] = useState('')
-  const [notes, setNotes] = useState('')
-  const [duration, setDuration] = useState(5)
+  const [dateMeta, setDateMeta] = useState(appointment.date ? 
+    {...initState, date: appointment.date } : initState
+  )
+  const [choosed, setChoosed] = useState(patient || null)
+  const [diagnosis, setDiagnosis] = useState(appointment.diagnosis || '')
+  const [notes, setNotes] = useState(appointment.notes || '')
+  const [duration, setDuration] = useState(appointment.duration || 5)
   const [buttonColor, setButtonColor] = useState(theme.colors.primary)
   
   const onReset = () => (setChoosed(false), setDateMeta(initState))
@@ -69,13 +76,14 @@ const AddAppointment = () => {
   const onSubmit = () => {
 
     if (dateMeta.date) {
-      return createAppointment({
-        patientId: choosed.id,
-        date: dateMeta.date,
-        diagnosis,
-        notes,
-        duration
-      })
+
+      const content = { patientId: choosed.id, date: dateMeta.date, diagnosis, notes, duration }
+
+      if(isEditMode) {
+        return appointment.updateInstance(content).then(navigation.goBack)
+      }
+
+      return createAppointment(content).then(navigation.popToTop)
     } 
 
     setButtonColor('red')

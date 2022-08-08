@@ -4,7 +4,6 @@ import { Avatar, Text, Badge as PaperBadge } from 'react-native-paper';
 import GrayText from '../GrayText'
 import Badge from '../Badge'
 import { addMinutes, format } from 'date-fns';
-import { getAppointmentStatus } from '../../utils/getAppointmentStatus';
 import { APPOINTMENT_STATUS } from '../../utils/constants';
 
 export const Appointment = ({ onLongPress, patient, appointment }) => {

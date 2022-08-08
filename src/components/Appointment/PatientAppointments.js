@@ -1,7 +1,7 @@
 import styled from 'styled-components/native'
 import { Foundation, Ionicons, FontAwesome5 } from '@expo/vector-icons'
 import { Text } from 'react-native-paper'
-import { Badge } from '../'
+import Badge from '../Badge'
 import formatRu from '../../utils/formatRu'
 
 export const PatientAppointment = ({ appointment }) => {

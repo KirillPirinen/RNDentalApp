@@ -1,6 +1,5 @@
 import { Model } from '@nozbe/watermelondb'
 import { text, field, writer, relation, children } from '@nozbe/watermelondb/decorators'
-import { Q } from '@nozbe/watermelondb';
 
 export default class Patient extends Model {
   static table = 'patients'
@@ -20,9 +19,9 @@ export default class Patient extends Model {
   }
 
   @writer async updateInstance(fields) {
-    await this.update(patient => {
+    await this.update(instance => {
         Object.keys(fields).forEach((key) => {
-          patient[key] = fields[key]
+          instance[key] = fields[key]
         })
     })
   }

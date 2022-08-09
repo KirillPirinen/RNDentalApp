@@ -4,7 +4,8 @@ import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { Ionicons } from '@expo/vector-icons'
 import { SwipeViewButton } from "../Buttons"
 import withObservables from '@nozbe/with-observables';
-import { interval } from 'rxjs'
+import { Animated } from 'react-native'
+import { useEffect, useRef } from "react"
 
 const enhancer = withObservables(['appointment'], ({ appointment }) => ({
   appointment,
@@ -13,6 +14,21 @@ const enhancer = withObservables(['appointment'], ({ appointment }) => ({
 
 export const SwipeableAppointment = enhancer(({ navigation, appointment, patient, onDelete }) => {
   const onEdit = () => navigation.navigate('AddAppointment', { patient, appointment })
+  
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const status = appointment.status
+
+  useEffect(() => {
+    fadeAnim.setValue(0)
+
+    Animated.timing(
+      fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true
+    }).start()
+
+  }, [status, appointment])
 
   const rightSwipeActions = () => {
     return (
@@ -30,11 +46,14 @@ export const SwipeableAppointment = enhancer(({ navigation, appointment, patient
   return (
     <GestureHandlerRootView>
       <Swipeable renderRightActions={rightSwipeActions}>
-        <Appointment 
-          appointment={appointment} 
-          patient={patient}
-          onLongPress={() => navigation.navigate('Detail', { patient })}
-        />
+        <Animated.View style={{ opacity: fadeAnim }}>
+          <Appointment 
+            appointment={appointment} 
+            patient={patient}
+            onLongPress={() => navigation.navigate('Detail', { patient })}
+            status={status}
+          />
+        </Animated.View>
       </Swipeable>
     </GestureHandlerRootView>
   )

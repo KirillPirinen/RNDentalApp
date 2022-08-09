@@ -1,6 +1,23 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
-export const useForceUpdate = () => {
+const inverse = (s) => !s
+
+export const useForceUpdate = (timer) => {
   const set = useState(false)[1]
-  return () => set((s) => !s)
+  return () => set(inverse)
+}
+
+export const useForceUpdateByInterval = (delay) => {
+  const set = useState(false)[1]
+  const cb = () => set(inverse)
+
+  useEffect(() => {
+
+    const timer = setInterval(() => cb(), delay)
+
+    return () => clearInterval(timer)
+
+  }, [])
+
+  return cb
 }

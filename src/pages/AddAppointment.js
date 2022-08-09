@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { View, FlatList, Divider } from 'react-native'
+import { View, FlatList, Divider, ScrollView } from 'react-native'
 import styled from 'styled-components'
 import DatePicker from '@react-native-community/datetimepicker'
 import { Container, Autocomplete, Patient, EmptyList } from '../components'
@@ -62,7 +62,6 @@ const AddAppointment = ({ navigation, route: { params } }) => {
   const onReset = () => (setChoosed(false), setDateMeta(initState))
   
   const setDate = (event, date) => {
-    setButtonColor('green')
     setDateMeta((prev) => {
       const isDate = prev.mode === 'date'
       return {
@@ -71,6 +70,7 @@ const AddAppointment = ({ navigation, route: { params } }) => {
         mode: isDate ? 'time' : null
       }
     })
+    setButtonColor('green')
   }
 
   const onSubmit = () => {
@@ -98,7 +98,7 @@ const AddAppointment = ({ navigation, route: { params } }) => {
         onChoose={setChoosed}
         placeholder="Поиск пациента"
       /> : (
-        <>
+        <ScrollView keyboardShouldPersistTaps='handled'>
           <Patient patient={choosed} />
           <Button 
             icon="reload" 
@@ -172,7 +172,7 @@ const AddAppointment = ({ navigation, route: { params } }) => {
               Добавить прием
             </Button>
           </ButtonView>
-        </>
+        </ScrollView>
       )}
     </Container>
   );

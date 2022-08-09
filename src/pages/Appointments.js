@@ -5,9 +5,9 @@ import { PlusButton, SwipeableAppointment, SectionTitle, ConfirmDelete } from '.
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import { Q } from '@nozbe/watermelondb';
 import { groupAppointments } from '../utils/groupAppointments'
-import { useEffect, useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import formatRu from '../utils/formatRu'
-import { useForceUpdate } from '../utils/custom-hooks/useForceUpdate'
+import { useForceUpdateByInterval } from '../utils/custom-hooks/useForceUpdate'
 
 const Container = styled.View`
   flex: 1;
@@ -18,20 +18,10 @@ const keyExtractor = (item) => item.id
 
 const Appointments = ({ appointments, navigation }) => {
   const [modalContent, setModalContent] = useState(null)
-
   const grouped = useMemo(() => groupAppointments(appointments), [appointments])
+  useForceUpdateByInterval(10000)
 
-  const forceRerender = useForceUpdate()
-
-  useEffect(() => {
-
-    const timer = setInterval(forceRerender, 30000)
-
-    return () => clearInterval(timer)
-
-  }, [appointments])
-
-  const onDelete = () => (modalContent.appointment.deleteInstance(), setModalContent(null))
+  const deleteHandler = () => (modalContent.appointment.deleteInstance(), setModalContent(null))
   return (
     <Container>
       <StatusBar />
@@ -53,7 +43,7 @@ const Appointments = ({ appointments, navigation }) => {
         title={`Удаление записи пациента ${modalContent.patient.fullName}`}
         question={`Вы действительно хотите удалить запись на ${formatRu(modalContent.appointment.date, 'PPpp')}?`}
         onClose={() => setModalContent(null)}
-        onDelete={onDelete}
+        onDelete={deleteHandler}
       /> }
     </Container>
   )

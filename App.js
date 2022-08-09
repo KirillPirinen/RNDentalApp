@@ -4,7 +4,7 @@ import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
 import { database } from './src/db'
 import { LogBox } from 'react-native'
 
-LogBox.ignoreAllLogs(true)
+//LogBox.ignoreAllLogs(true)
 
 const App = () => {
   return (

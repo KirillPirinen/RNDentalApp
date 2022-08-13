@@ -53,13 +53,14 @@ const AddAppointment = ({ navigation, route: { params } }) => {
   const [dateMeta, setDateMeta] = useState(appointment.date ? 
     {...initState, date: appointment.date } : initState
   )
+
   const [choosed, setChoosed] = useState(patient || null)
   const [diagnosis, setDiagnosis] = useState(appointment.diagnosis || '')
   const [notes, setNotes] = useState(appointment.notes || '')
   const [duration, setDuration] = useState(appointment.duration || 5)
   const [buttonColor, setButtonColor] = useState(theme.colors.primary)
-  
-  const onReset = () => (setChoosed(false), setDateMeta(initState))
+
+  const onReset = () => setChoosed(null)
   
   const setDate = (event, date) => {
     setDateMeta((prev) => {
@@ -121,6 +122,7 @@ const AddAppointment = ({ navigation, route: { params } }) => {
             <Slider
               style={{width: '100%', height: 40}}
               onValueChange={setDuration}
+              onSlidingComplete={setDuration}
               value={duration}
               step={5}
               minimumValue={5}

@@ -13,7 +13,7 @@ const enhancer = withObservables(['appointment'], ({ appointment }) => ({
 }))
 
 export const SwipeableAppointment = enhancer(({ navigation, appointment, patient, onDelete }) => {
-  const onEdit = () => navigation.navigate('AddAppointment', { patient, appointment })
+  const onEdit = () => navigation.navigate('AddAppointment', { patient, appointment, edit: true })
   
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const status = appointment.status

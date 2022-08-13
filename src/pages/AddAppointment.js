@@ -45,8 +45,7 @@ const AddAppointment = ({ navigation, route: { params } }) => {
 
   const appointment = params?.appointment || {}
   const patient = params?.patient
-  const isEditMode = Boolean(params?.patient)
-
+  
   const theme = useTheme()
   const db = useDatabase()
 
@@ -80,11 +79,11 @@ const AddAppointment = ({ navigation, route: { params } }) => {
 
       const content = { patientId: choosed.id, date: dateMeta.date, diagnosis, notes, duration }
 
-      if(isEditMode) {
+      if(params?.edit) {
         return appointment.updateInstance(content).then(navigation.goBack)
       }
 
-      return createAppointment(content).then(navigation.popToTop)
+      return createAppointment(content).then(navigation.goBack)
     } 
 
     setButtonColor('red')

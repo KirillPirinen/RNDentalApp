@@ -1,5 +1,5 @@
 import { Model } from '@nozbe/watermelondb'
-import { text, field, writer, relation, children } from '@nozbe/watermelondb/decorators'
+import { text, field, writer, children } from '@nozbe/watermelondb/decorators'
 
 export default class Patient extends Model {
   static table = 'patients'

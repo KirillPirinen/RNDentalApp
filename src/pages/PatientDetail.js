@@ -1,7 +1,7 @@
 import { View, Linking, FlatList } from 'react-native'
 import styled from 'styled-components/native'
 import { Foundation } from '@expo/vector-icons'
-import { IconButton, Button as PaperButton } from 'react-native-paper'
+import { IconButton } from 'react-native-paper'
 import withObservables from '@nozbe/with-observables';
 import { GrayText, Button, Container, ConfirmDelete, PlusButton, PatientAppointment } from '../components'
 import { useToggle } from '../utils/custom-hooks/useToggle';
@@ -65,7 +65,7 @@ const PatientDetail = ({ navigation, patient, appointments }) => {
           keyExtractor={item => item.id}
         />
       </Container>
-      <PlusButton/>
+      <PlusButton onPress={() => navigation.navigate('AddAppointment', { patient })}/>
       <ConfirmDelete 
         visible={visible} 
         title={`Удаление ${patient.fullName}`}

@@ -1,5 +1,5 @@
 import styled from 'styled-components/native'
-import { Foundation, Ionicons, FontAwesome5 } from '@expo/vector-icons'
+import { Foundation, FontAwesome5 } from '@expo/vector-icons'
 import { Text } from 'react-native-paper'
 import Badge from '../Badge'
 import formatRu from '../../utils/formatRu'
@@ -7,6 +7,15 @@ import formatRu from '../../utils/formatRu'
 export const PatientAppointment = ({ appointment }) => {
   return (
     <AppointmentCard>
+      <AppointmentCardRow>
+        <FontAwesome5 name="clock" size={16} color="#A3A3A3" />
+        <AppointmentCardLabel>
+         {`Длительность: `}
+          <Text style={{ fontWeight: '600' }}>
+            {`${appointment.duration} минут`}
+          </Text>
+        </AppointmentCardLabel>
+      </AppointmentCardRow>
       {Boolean(appointment.teeth) && <Teeth teeth={appointment.teeth} />}
       {Boolean(appointment.diagnosis) && <Diagnosis diagnosis={appointment.diagnosis} />}
       {Boolean(appointment.notes) && <Notes notes={appointment.notes} />}
@@ -21,6 +30,7 @@ export const PatientAppointment = ({ appointment }) => {
     </AppointmentCard>
   )
 }
+
 
 const Teeth = ({ teeth }) => {
   const count = teeth?.split(',')
@@ -45,7 +55,7 @@ const Diagnosis = ({ diagnosis }) => (
       color="#A3A3A3"
     />
     <AppointmentCardLabel>
-      Диагноз:{' '}
+      {`Длительность: `}
       <Text style={{ fontWeight: '600' }}>{diagnosis}</Text>
     </AppointmentCardLabel>
   </AppointmentCardRow>

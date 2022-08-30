@@ -5,46 +5,53 @@ import { PlusButton, SwipeableAppointment, SectionTitle, ConfirmDelete } from '.
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import { Q } from '@nozbe/watermelondb';
 import { groupAppointments } from '../utils/groupAppointments'
-import { useState, useMemo } from 'react'
-import formatRu from '../utils/formatRu'
+import { useMemo, useCallback } from 'react'
 import { useForceUpdateByInterval } from '../utils/custom-hooks/useForceUpdate'
+import { defaultExtractor } from '../utils/defaultExtracror'
+import { useModal } from '../context/modal-context'
 
 const Container = styled.View`
   flex: 1;
 `
 
 const renderSectionHeader = ({ section: { day }}) => <SectionTitle>{day}</SectionTitle>
-const keyExtractor = (item) => item.id
 
 const Appointments = ({ appointments, navigation }) => {
-  const [modalContent, setModalContent] = useState(null)
+
+  const [actions, dispatch] = useModal()
+
   const grouped = useMemo(() => groupAppointments(appointments), [appointments])
+
   useForceUpdateByInterval(10000)
 
-  const deleteHandler = () => (modalContent.appointment.deleteInstance(), setModalContent(null))
+  const onEditAppointment = useCallback((appointment, patient) => 
+    navigation.navigate('AddAppointment', { patient, appointment, edit: true }), [])
+
+  const onConfirmDeleteAppointment = useCallback((appointment, patient) => {
+    const onDelete = () => appointment.deleteInstance().then(dispatch.bind(null, { type: actions.CLEAR }))
+    dispatch({ 
+      type: actions.CONFIRM_DELETE_APPOINTMENT,
+      payload: { patient, appointment, onDelete }
+    })
+  }, [])
+
   return (
     <Container>
       <StatusBar />
       <SafeAreaView>
       <SectionList
         sections={grouped}
-        keyExtractor={keyExtractor}
+        keyExtractor={defaultExtractor}
         renderItem={({ item }) => <SwipeableAppointment
         navigation={navigation}
         appointment={item}
-        onDelete={setModalContent}
+        onEdit={onEditAppointment}
+        onDelete={onConfirmDeleteAppointment}
       />} 
         renderSectionHeader={renderSectionHeader}
       />
       </SafeAreaView>
       <PlusButton onPress={() => navigation.navigate('AddAppointment')}/>
-      {modalContent && <ConfirmDelete 
-        visible={true} 
-        title={`Удаление записи пациента ${modalContent.patient.fullName}`}
-        question={`Вы действительно хотите удалить запись на ${formatRu(modalContent.appointment.date, 'PPpp')}?`}
-        onClose={() => setModalContent(null)}
-        onDelete={deleteHandler}
-      /> }
     </Container>
   )
 }

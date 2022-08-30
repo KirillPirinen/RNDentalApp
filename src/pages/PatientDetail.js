@@ -1,20 +1,32 @@
-import { View, Linking, FlatList } from 'react-native'
+import { View, Linking } from 'react-native'
 import styled from 'styled-components/native'
 import { Foundation } from '@expo/vector-icons'
 import { IconButton } from 'react-native-paper'
 import withObservables from '@nozbe/with-observables';
-import { GrayText, Button, Container, ConfirmDelete, PlusButton, PatientAppointment } from '../components'
-import { useToggle } from '../utils/custom-hooks/useToggle';
-
+import { GrayText, Button, Container, PlusButton, PatientAppointmentList } from '../components'
+import { useState } from 'react';
+import { useModal } from '../context/modal-context';
 
 const PatientDetail = ({ navigation, patient, appointments }) => {
-  const [visible, handleToggle] = useToggle()
+  const [openedMenu, setOpenedMenu] = useState(null)
+  const [actions, dispatch] = useModal()
 
-  const onDelete = () => patient.deleteInstance().then(navigation.popToTop)
+  const onDeletePatient = () => patient.deleteInstance().then(() => {
+    dispatch({ type: actions.CLEAR })
+    navigation.popToTop()
+  })
+
+  const onConfirmDeletePatient = () => dispatch({ 
+    type: actions.CONFIRM_DELETE_PATIENT,
+    payload: { patient, onDelete: onDeletePatient }
+  })
+
   const onCall = () => Linking.openURL(`tel:${patient.phone}`)
 
   return (
-    <>
+      <View 
+        style={{ flex: 1, zIndex: 100 }} 
+        onStartShouldSetResponder={evt => setOpenedMenu(null)}>
       <PatientDetails>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View>
@@ -37,7 +49,7 @@ const PatientDetail = ({ navigation, patient, appointments }) => {
                 icon="delete"
                 color="red"
                 size={30}
-                onPress={handleToggle}
+                onPress={onConfirmDeletePatient}
                 style={{ padding: 0 }}
             />
           </View>
@@ -57,29 +69,23 @@ const PatientDetail = ({ navigation, patient, appointments }) => {
         </PatientButtons>
       </PatientDetails>
       <Container>
-      <FlatList
-          data={appointments}
-          renderItem={({ item }) => (
-            <PatientAppointment appointment={item} />
-          )}
-          keyExtractor={item => item.id}
+        <PatientAppointmentList 
+          appointments={appointments}
+          openedMenu={openedMenu}
+          setOpenedMenu={setOpenedMenu}
+          navigation={navigation}
+          patient={patient}
         />
       </Container>
       <PlusButton onPress={() => navigation.navigate('AddAppointment', { patient })}/>
-      <ConfirmDelete 
-        visible={visible} 
-        title={`Удаление ${patient.fullName}`}
-        question="Вы действительно хотите удалить пациента?"
-        onClose={handleToggle}
-        onDelete={onDelete}
-      /> 
-    </>
+      </View>
   )
 }
 
 
-const PatientDetails = styled(Container)`
+const PatientDetails = styled.View`
   flex: 0.3;
+  padding: 25px;
 `;
 
 const FormulaButtonView = styled.View`
@@ -103,6 +109,7 @@ const PatientFullname = styled.Text`
   line-height: 30px;
   margin-bottom: 3px;
 `;
+
 
 export default withObservables(['route'], ({ route }) => ({
     patient: route.params.patient,

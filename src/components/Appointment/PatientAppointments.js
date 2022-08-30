@@ -1,12 +1,22 @@
 import styled from 'styled-components/native'
+import { View } from 'react-native'
 import { Foundation, FontAwesome5 } from '@expo/vector-icons'
-import { Text } from 'react-native-paper'
+import { Text, Menu, IconButton, Divider } from 'react-native-paper'
 import Badge from '../Badge'
 import formatRu from '../../utils/formatRu'
+import { memo } from 'react'
 
-export const PatientAppointment = ({ appointment }) => {
+export const PatientAppointment = memo(({ appointment, isMenuOpen, setOpenedMenu, onEditAppointment, onDeleteAppointment }) => {
   return (
     <AppointmentCard>
+      <MenuApointment 
+        isOpen={isMenuOpen} 
+        setOpenedMenu={setOpenedMenu} 
+        id={appointment.id}
+        onEditAppointment={onEditAppointment}
+        onDeleteAppointment={onDeleteAppointment}
+        appointment={appointment}
+      />
       <AppointmentCardRow>
         <FontAwesome5 name="clock" size={16} color="#A3A3A3" />
         <AppointmentCardLabel>
@@ -29,7 +39,7 @@ export const PatientAppointment = ({ appointment }) => {
       {appointment.price && <PriceBadge status="green">{appointment.price} &#8381;</PriceBadge>}
     </AppointmentCard>
   )
-}
+})
 
 
 const Teeth = ({ teeth }) => {
@@ -55,7 +65,7 @@ const Diagnosis = ({ diagnosis }) => (
       color="#A3A3A3"
     />
     <AppointmentCardLabel>
-      {`Длительность: `}
+      {`Диагноз: `}
       <Text style={{ fontWeight: '600' }}>{diagnosis}</Text>
     </AppointmentCardLabel>
   </AppointmentCardRow>
@@ -74,6 +84,37 @@ const Notes = ({ notes }) => (
     </AppointmentCardLabel>
   </AppointmentCardRow>
 )
+
+const MenuApointment = ({ setOpenedMenu, isOpen, id, onEditAppointment, appointment, onDeleteAppointment }) => {
+  
+  return isOpen ? (
+    <View style={{
+      flex: 1,
+      position:'absolute',
+      backgroundColor: 'rgba(215,204,200, 1)',
+      zIndex:100,
+      right:2,
+      borderWidth:1,
+      borderColor: '#a1887f',
+      borderRadius:6,
+    }}>
+      <Menu.Item leadingIcon="redo" onPress={() => onDeleteAppointment(appointment)} title="Удалить" />
+      <Divider style={{ backgroundColor: '#78909c' }} />
+      <Menu.Item leadingIcon="undo" onPress={() => onEditAppointment(appointment)} title="Редактировать" />
+    </View>
+  ) : <IconButtonStyled
+        icon="menu"
+        size={20}
+        color={'gray'}
+        onPress={() => setOpenedMenu(id)}
+      />
+}
+
+const IconButtonStyled = styled(IconButton)`
+  position:absolute;
+  right: 0;
+  top: 0;
+`
 
 const PriceBadge = styled(Badge)`
   position: absolute;

@@ -7,7 +7,7 @@ export default ({ children }) => {
   return (
     <PaperProvider theme={themes[currentThemeName]}>
       <NavigationContainer theme={themes[currentThemeName]}>
-        {children}
+          {children}
       </NavigationContainer>
     </PaperProvider>
   )

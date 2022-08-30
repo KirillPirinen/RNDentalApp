@@ -12,9 +12,14 @@ const enhancer = withObservables(['appointment'], ({ appointment }) => ({
   patient: appointment.patient
 }))
 
-export const SwipeableAppointment = enhancer(({ navigation, appointment, patient, onDelete }) => {
-  const onEdit = () => navigation.navigate('AddAppointment', { patient, appointment, edit: true })
-  
+export const SwipeableAppointment = enhancer(({ 
+  navigation, 
+  appointment, 
+  patient, 
+  onDelete,
+  onEdit 
+}) => {
+
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const status = appointment.status
 
@@ -33,10 +38,10 @@ export const SwipeableAppointment = enhancer(({ navigation, appointment, patient
   const rightSwipeActions = () => {
     return (
       <>
-        <SwipeViewButton onPress={() => onDelete({ patient, appointment })} style={{ backgroundColor: '#F85A5A' }}>
+        <SwipeViewButton onPress={() => onDelete(appointment, patient)} style={{ backgroundColor: '#F85A5A' }}>
           <Ionicons name="ios-close" size={48} color="white" />
         </SwipeViewButton>
-        <SwipeViewButton onPress={onEdit} style={{ backgroundColor: '#B4C1CB' }}>
+        <SwipeViewButton onPress={() => onEdit(appointment, patient)} style={{ backgroundColor: '#B4C1CB' }}>
           <Ionicons name="md-create" size={28} color="white" />
         </SwipeViewButton>
       </>

@@ -1,19 +1,18 @@
 import React from 'react'
+import Svg from 'react-native-svg'
 import { teethKeysAdult, teethMetaAdult, teethKeysBaby, teethMetaBaby } from './paths-dict'
-import { Tooth } from './Tooth'
+import Tooth from './Tooth'
 
-export const Teeth = () => {
-  const withBabyTeeth = true
-  return (
-    <>
+export const Teeth = ({ withBabyTeeth, selectedTooth, pressHandler, ...rest }) => (
+    <Svg {...rest}>
       {teethKeysAdult.map(tooth => <Tooth 
         key={tooth}
         toothNo={tooth}
         paths={teethMetaAdult[tooth].paths}
         x={teethMetaAdult[tooth].x}
         y={teethMetaAdult[tooth].y}
-        style={teethMetaAdult[tooth].style}
-        textStyle={teethMetaAdult[tooth].textStyle}
+        onPress={pressHandler}
+        selected={selectedTooth === tooth}
       />)}
       {withBabyTeeth && teethKeysBaby.map(tooth => <Tooth 
         key={tooth}
@@ -21,9 +20,8 @@ export const Teeth = () => {
         paths={teethMetaBaby[tooth].paths}
         x={teethMetaBaby[tooth].x}
         y={teethMetaBaby[tooth].y}
-        style={teethMetaBaby[tooth].style}
-        textStyle={teethMetaBaby[tooth].textStyle}
+        onPress={pressHandler}
+        selected={selectedTooth === tooth}
       />)}
-    </>
-  )
-}
+    </Svg>
+)

@@ -1,73 +1,44 @@
-import React from 'react'
-import { View } from 'react-native'
-import Svg, { Path, Text, TSpan } from "react-native-svg"
+import React, { useCallback ,useState } from 'react'
+import { Dimensions, StyleSheet, View } from 'react-native'
+import { Text } from 'react-native-paper'
+import { Container } from '../components';
 import { Teeth } from '../components/Teeth/Teeth'
 
-const styles = {
-  fill: "none",
-  stroke: "#000",
-  strokeWidth: 1,
-  strokeLinecap: "round",
-  strokeLinejoin: "miter",
-  strokeMiterlimit: 4,
-  strokeOpacity: 1,
-  strokeDasharray: "none",
-}
+const originalWidth = 289;
+const originalHeight = 370;
 
-const styles2 = {
-  fill: "none",
-  stroke: "#000",
-  strokeWidth: 1,
-  strokeLinecap: "butt",
-  strokeLinejoin: "miter",
-  strokeMiterlimit: 4,
-  strokeOpacity: 1,
-  strokeDasharray: "none",
-}
-
-const styles3 = {
-  fill: "none",
-  stroke: "#000",
-  strokeWidth: 1,
-  strokeLinecap: "butt",
-  strokeLinejoin: "round",
-  strokeMiterlimit: 4,
-  strokeOpacity: 1,
-  strokeDasharray: "none",
-}
-
-const styles4 = {
-  fill: "none",
-  stroke: "#000",
-  strokeWidth: 1,
-  strokeLinecap: "round",
-  strokeLinejoin: "round",
-  strokeMiterlimit: 4,
-  strokeOpacity: 1,
-  strokeDasharray: "none",
-  markerStart: "none",
-  markerMid: "none",
-}
-
-const styles5 = {
-  fontSize: "10.13467216px",
-  fontStyle: "normal",
-  fontWeight: 400,
-  lineHeight: "125%",
-  letterSpacing: 0,
-  wordSpacing: 0,
-  fill: "#000",
-  fillOpacity: 1,
-  stroke: "none",
-  fontFamily: "Sans",
-}
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  svgWrapper: { 
+    width: Dimensions.get("window").width, 
+    aspectRatio: originalWidth / originalHeight, 
+    backgroundColor:'white',
+    borderBottomWidth: 1
+  }
+})
 
 const TeethFormula = ({ appointments, navigation }) => {
+  const [selected, setSelected] = useState(null)
+
+  const pressHandler = useCallback((toothNo) => () => {
+    setSelected(toothNo)
+  }, [])
+
   return (
-    <View style={{ marginLeft:50 }}>
-    <Svg>
-    <Teeth />
-  </Svg>
+    <View style={styles.container}>
+      <View style={styles.svgWrapper}>
+          <Teeth 
+            withBabyTeeth 
+            selectedTooth={selected} 
+            pressHandler={pressHandler}
+            width="100%" 
+            height="100%" 
+            viewBox={`0 0 ${originalWidth} ${originalHeight}`}
+          />
+      </View>
+      <Container>
+        <Text>{selected}</Text>
+      </Container>
     </View>
   )
 }

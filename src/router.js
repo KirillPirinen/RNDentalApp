@@ -7,6 +7,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { StatusBar } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import TeethFormula from './pages/TeethFormula';
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -54,6 +55,7 @@ const Router = () => {
         <Stack.Screen name="Detail" component={PatientDetail} />
         <Stack.Screen name="AddAppointment" component={AddAppointment} />
         <Stack.Screen name="AddPatient" component={AddPatient} />
+        <Stack.Screen name="TeethFormula" component={TeethFormula} />
       </Stack.Navigator>
     </>
   )

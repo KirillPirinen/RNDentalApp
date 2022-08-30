@@ -56,7 +56,7 @@ const PatientDetail = ({ navigation, patient, appointments }) => {
         </View>
         <PatientButtons>
           <FormulaButtonView>
-            <Button>Формула зубов</Button>
+            <Button onPress={() => navigation.navigate('TeethFormula')}>Формула зубов</Button>
           </FormulaButtonView>
           <PhoneButtonView>
             <Button

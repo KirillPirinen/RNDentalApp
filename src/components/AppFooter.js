@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native'
 const AppFooter = () => {
   const navigation = useNavigation()
   return (
-    (
       <AppbarStyled>
         <Appbar.Action
           icon="calendar"
@@ -18,7 +17,6 @@ const AppFooter = () => {
          />
        </AppbarStyled>
       )
-  )
 }
 
 export default AppFooter

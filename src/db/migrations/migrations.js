@@ -94,6 +94,48 @@ export default schemaMigrations({
           ]
         })
       ]
-    }
+    },
+    {
+      toVersion: 8,
+      steps: [
+        createTable({
+          name: 'teeth',
+          columns: [
+            { name: 'patient_id', type: 'string' },
+            { name: 'tooth_no', type: 'string' },
+            { name: 'tooth_state', type: 'string' }
+          ]
+        })
+      ]
+    },
+    {
+      toVersion: 9,
+      steps: [
+        createTable({
+          name: 'formulas',
+          columns: [
+            { name: 'patient_id', type: 'string' },
+            { name: 'has_baby_jaw', type: 'boolean' },
+            { name: 'has_adult_jaw', type: 'boolean' }
+          ]
+        })
+      ]
+    },
+    {
+      toVersion: 10,
+      steps: [
+        unsafeExecuteSql(
+          'drop table teeth;'
+        ),
+        createTable({
+          name: 'teeth',
+          columns: [
+            { name: 'formula_id', type: 'string' },
+            { name: 'tooth_no', type: 'string' },
+            { name: 'tooth_state', type: 'string' }
+          ]
+        })
+      ]
+    },
   ],
 })

@@ -7,7 +7,7 @@ import { GrayText, Button, Container, PlusButton, PatientAppointmentList } from 
 import { useState } from 'react';
 import { useModal } from '../context/modal-context';
 
-const PatientDetail = ({ navigation, patient, appointments }) => {
+const PatientDetail = ({ navigation, patient, appointments, formulas }) => {
   const [openedMenu, setOpenedMenu] = useState(null)
   const [actions, dispatch] = useModal()
 
@@ -56,7 +56,7 @@ const PatientDetail = ({ navigation, patient, appointments }) => {
         </View>
         <PatientButtons>
           <FormulaButtonView>
-            <Button onPress={() => navigation.navigate('TeethFormula')}>Формула зубов</Button>
+            <Button onPress={() => navigation.navigate('TeethFormula', { patient })}>Формула зубов</Button>
           </FormulaButtonView>
           <PhoneButtonView>
             <Button
@@ -113,5 +113,5 @@ const PatientFullname = styled.Text`
 
 export default withObservables(['route'], ({ route }) => ({
     patient: route.params.patient,
-    appointments: route.params.patient.appointments,
+    appointments: route.params.patient.appointments
 }))(PatientDetail);

@@ -1,24 +1,18 @@
 import { Model } from '@nozbe/watermelondb'
 import { text, field, writer, children } from '@nozbe/watermelondb/decorators'
 
-export default class Patient extends Model {
-  static table = 'patients'
+export default class Formula extends Model {
+  static table = 'formulas'
 
   static associations = {
-    appointments: { type: 'has_many', foreignKey: 'patient_id' },
-    formulas: { type: 'has_many', foreignKey: 'patient_id' },
+    patients: { type: 'belongs_to', key: 'patient_id' },
+    teeth: { type: 'has_many', foreignKey: 'formula_id' },
   }
   
-  @text('first_name') fname
-  @text('last_name') lname
-  @field('phone') phone
-
-  @children('appointments') appointments
-  @children('formulas') formulas
-
-  get fullName() {
-    return `${this.fname} ${this.lname}`
-  }
+  @text('patient_id') patientId
+  @field('has_baby_jaw') hasBabyJaw
+  @field('has_adult_jaw') hasAdultJaw
+  @children('teeth') teeth
 
   @writer async updateInstance(fields) {
     await this.update(instance => {

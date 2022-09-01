@@ -1,7 +1,7 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb'
 
 export default appSchema({
-  version: 7,
+  version: 10,
   tables: [
     tableSchema({
       name: 'patients',
@@ -24,6 +24,22 @@ export default appSchema({
         { name: 'diagnosis', type: 'string', isOptional: true },
         { name: 'notes', type: 'string', isOptional: true },
         { name: 'teeth', type: 'string', isOptional: true }
+      ]
+    }),
+    tableSchema({
+      name: 'teeth',
+      columns: [
+        { name: 'formula_id', type: 'string' },
+        { name: 'tooth_no', type: 'string' },
+        { name: 'tooth_state', type: 'string' }
+      ]
+    }),
+    tableSchema({
+      name: 'formulas',
+      columns: [
+        { name: 'patient_id', type: 'string' },
+        { name: 'has_baby_jaw', type: 'boolean' },
+        { name: 'has_adult_jaw', type: 'boolean' }
       ]
     }),
   ]

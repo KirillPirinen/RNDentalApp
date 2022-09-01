@@ -1,11 +1,12 @@
 import React from 'react'
-import Svg from 'react-native-svg'
+import Svg, {} from 'react-native-svg'
 import { teethKeysAdult, teethMetaAdult, teethKeysBaby, teethMetaBaby } from './paths-dict'
 import Tooth from './Tooth'
+import withObservables from '@nozbe/with-observables'
 
-export const Teeth = ({ withBabyTeeth, selectedTooth, pressHandler, ...rest }) => (
+export const Teeth = ({ withBabyTeeth, selectedTooth, pressHandler, withAdultTeeth, scale, ...rest }) => (
     <Svg {...rest}>
-      {teethKeysAdult.map(tooth => <Tooth 
+      {withAdultTeeth && teethKeysAdult.map(tooth => <Tooth 
         key={tooth}
         toothNo={tooth}
         paths={teethMetaAdult[tooth].paths}
@@ -13,6 +14,7 @@ export const Teeth = ({ withBabyTeeth, selectedTooth, pressHandler, ...rest }) =
         y={teethMetaAdult[tooth].y}
         onPress={pressHandler}
         selected={selectedTooth === tooth}
+        scale={scale}
       />)}
       {withBabyTeeth && teethKeysBaby.map(tooth => <Tooth 
         key={tooth}
@@ -22,6 +24,7 @@ export const Teeth = ({ withBabyTeeth, selectedTooth, pressHandler, ...rest }) =
         y={teethMetaBaby[tooth].y}
         onPress={pressHandler}
         selected={selectedTooth === tooth}
+        scale={scale}
       />)}
     </Svg>
 )

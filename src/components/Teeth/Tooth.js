@@ -2,15 +2,15 @@ import React, { memo } from 'react'
 import { Path, Text, TSpan } from "react-native-svg"
 import { StyleSheet } from 'react-native'
 
-export const Tooth = ({ paths, x, y, toothNo, onPress, selected }) => {
+export const Tooth = ({ paths, x, y, toothNo, onPress, selected, scale }) => {
   return (
     <>
-      {paths.map((path, index) => <Path onPress={onPress(toothNo)} 
+      {paths.map((path, index) => <Path scale={scale} onPress={onPress(toothNo)} 
         key={index} 
         d={path} 
         style={[styles.pathStyle, selected && styles.selected]} 
       />)}
-      <Text xmlSpace="preserve" x={x} y={y} style={styles.labelStyle}>
+      <Text scale={scale} xmlSpace="preserve" x={x} y={y} style={styles.labelStyle}>
         <TSpan x={x} y={y}>{toothNo}</TSpan>
       </Text>
     </>

@@ -1,21 +1,23 @@
-import { Divider, Text, Surface, Avatar } from 'react-native-paper';
+import { Divider } from 'react-native-paper';
 import { FlatList } from 'react-native';
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import withObservables from '@nozbe/with-observables';
 import { Container, Autocomplete, Patient, PlusButton, EmptyList } from '../components'
 import { useNavigation } from '@react-navigation/native';
+import { defaultExtractor } from '../utils/defaultExtracror';
+
 
 const renderList = ({ result }) => {
   const navigation = useNavigation()
   return (
-    <FlatList
+      <FlatList
       data={result}
-      keyExtractor={(item) => item.id}
+      keyExtractor={defaultExtractor}
       renderItem={({ item }) => <Patient 
         patient={item}
         onPress={() => navigation.navigate('Detail', { patient: item })}
       />}
-      ItemSeparatorComponent={Divider}
+      ItemSeparatorComponent={() => <Divider bold />}
       style={{ marginVertical: 12 }}
       ListFooterComponent={!result.length && EmptyList}
     />

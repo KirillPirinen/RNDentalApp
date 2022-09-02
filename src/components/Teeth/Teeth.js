@@ -4,7 +4,15 @@ import { teethKeysAdult, teethMetaAdult, teethKeysBaby, teethMetaBaby } from './
 import Tooth from './Tooth'
 import withObservables from '@nozbe/with-observables'
 
-export const Teeth = ({ withBabyTeeth, selectedTooth, pressHandler, withAdultTeeth, scale, ...rest }) => (
+export const Teeth = ({ 
+  withBabyTeeth, 
+  selectedTooth, 
+  pressHandler, 
+  withAdultTeeth, 
+  scale, 
+  teethRecords, 
+  ...rest 
+}) => (
     <Svg {...rest}>
       {withAdultTeeth && teethKeysAdult.map(tooth => <Tooth 
         key={tooth}
@@ -15,6 +23,7 @@ export const Teeth = ({ withBabyTeeth, selectedTooth, pressHandler, withAdultTee
         onPress={pressHandler}
         selected={selectedTooth === tooth}
         scale={scale}
+        record={teethRecords[tooth]}
       />)}
       {withBabyTeeth && teethKeysBaby.map(tooth => <Tooth 
         key={tooth}
@@ -25,6 +34,7 @@ export const Teeth = ({ withBabyTeeth, selectedTooth, pressHandler, withAdultTee
         onPress={pressHandler}
         selected={selectedTooth === tooth}
         scale={scale}
+        record={teethRecords[tooth]}
       />)}
     </Svg>
 )

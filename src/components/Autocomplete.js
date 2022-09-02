@@ -1,8 +1,6 @@
 import { useState } from 'react'
-import { Searchbar, Surface, Divider, Text } from 'react-native-paper'
-import styled from 'styled-components/native'
-import { TouchableOpacity } from 'react-native'
-import { FlatList, View } from 'react-native'
+import { Searchbar } from 'react-native-paper'
+import { View } from 'react-native'
 import { useEffect } from 'react'
 
 export default ({ placeholder, renderList, onChange, initState, ...rest }) => {

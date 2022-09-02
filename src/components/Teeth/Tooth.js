@@ -2,15 +2,20 @@ import React, { memo } from 'react'
 import { Path, Text, TSpan } from "react-native-svg"
 import { StyleSheet } from 'react-native'
 
-export const Tooth = ({ paths, x, y, toothNo, onPress, selected, scale }) => {
+export const Tooth = ({ paths, x, y, toothNo, onPress, selected, scale, record }) => {
   return (
     <>
       {paths.map((path, index) => <Path scale={scale} onPress={onPress(toothNo)} 
         key={index} 
         d={path} 
-        style={[styles.pathStyle, selected && styles.selected]} 
+        style={[styles.pathStyle, styles[record?.toothState], selected && styles.selected]} 
       />)}
-      <Text scale={scale} xmlSpace="preserve" x={x} y={y} style={styles.labelStyle}>
+      <Text scale={scale} 
+        xmlSpace="preserve" 
+        x={x} 
+        y={y} 
+        style={[styles.labelStyle, selected && styles.selected]}
+      >
         <TSpan x={x} y={y}>{toothNo}</TSpan>
       </Text>
     </>
@@ -22,6 +27,18 @@ export default memo(Tooth)
 const styles = StyleSheet.create({
   selected: {
     fill:'red'
+  },
+  absent: {
+    fill: '#bbbbbb'
+  },
+  scheduled: {
+    fill: '#fba404'
+  },
+  cured: {
+    fill: '#9abd57'
+  },
+  crown:{
+    fill: '#3dc895'
   },
   pathStyle: {
     stroke: "#000",

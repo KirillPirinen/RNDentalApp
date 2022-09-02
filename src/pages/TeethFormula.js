@@ -1,5 +1,5 @@
-import React, { useCallback ,useState, useMemo } from 'react'
-import { Dimensions, StyleSheet, View } from 'react-native'
+import React, { useCallback ,useState, useMemo, useEffect } from 'react'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { ToggleButton, Switch } from 'react-native-paper'
 import { Container } from '../components';
 import { Teeth } from '../components/Teeth/Teeth'
@@ -11,20 +11,35 @@ const originalWidth = 289;
 const originalHeight = 370;
 const width = Dimensions.get("window").width
 
+// selected: {
+//   fill:'red'
+// },
+// absent: {
+//   fill: '#bbbbbb'
+// },
+// scheduled: {
+//   fill: '#9abd57'
+// },
+// treatment: {
+//   fill: '#d2e74c'
+// },
+// cured: {
+//   fill: '#3e9758'
+// },
+
 const styles = StyleSheet.create({
   container: { flex: 1 },
   svgWrapper: { 
     width, 
     aspectRatio: originalWidth / originalHeight, 
     backgroundColor:'white',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    position:'relative'
   }
 })
 
 const TeethFormula = ({ formula, navigation, patient, teeth }) => {
   
-  const viewBox = (formula.hasBabyJaw && !formula.hasAdultJaw) ? `43.5 55.5 202 259` : `0 0 ${originalWidth} ${originalHeight}`
-
   const [selected, setSelected] = useState(null)
 
   const hashTeethInfo = useMemo(() => {
@@ -34,17 +49,45 @@ const TeethFormula = ({ formula, navigation, patient, teeth }) => {
     }, {})
   }, [teeth])
 
- 
+  const hashTest = {
+    55: { toothState: 'absent' },
+    54: { toothState: 'absent' },
+    53: { toothState: 'scheduled' },
+    52: { toothState: 'crown' },
+    51: { toothState: 'cured' }
+  }
   const pressHandler = useCallback((toothNo) => () => {
     setSelected(toothNo)
   }, [])
 
-  const onToggleSwitch = (e) => {
-    formula.updateInstance({ hasBabyJaw: !formula.hasBabyJaw })
-  }
-  const onToggleSwitch2 = (e) => {
-    formula.updateInstance({ hasAdultJaw: !formula.hasAdultJaw })
-  }
+  useEffect(() => {
+    
+    const onAdultCheck = () => {
+      formula.updateInstance({ hasAdultJaw: !formula.hasAdultJaw })
+    }
+    const onBabyCheck = () => {
+      formula.updateInstance({ hasBabyJaw: !formula.hasBabyJaw })
+    }
+    
+    navigation.setOptions({
+      menu: [
+      { 
+        type: 'TouchableCheckbox', 
+        title: 'Временные зубы', 
+        onPress: onBabyCheck,
+        value: formula.hasBabyJaw
+      },
+      { 
+        type: 'TouchableCheckbox', 
+        title: 'Постоянные зубы', 
+        onPress: onAdultCheck,
+        value: formula.hasAdultJaw
+      }
+    ]
+    })
+  }, [])
+
+  const viewBox = (formula.hasBabyJaw && !formula.hasAdultJaw) ? `43.5 55.5 202 259` : `0 0 ${originalWidth} ${originalHeight}`
 
   return (
     <View style={styles.container}>
@@ -57,18 +100,12 @@ const TeethFormula = ({ formula, navigation, patient, teeth }) => {
             width="100%" 
             height="100%" 
             viewBox={viewBox}
+            teethRecords={hashTest}
           />
       </View>
       <Container>
-        <ToothStatePanel initalValue="O" />
-          <Switch 
-            value={formula.hasBabyJaw} 
-            onValueChange={onToggleSwitch} 
-          />
-          <Switch 
-            value={formula.hasAdultJaw} 
-            onValueChange={onToggleSwitch2} 
-          />
+        {/* <ToothStatePanel initalValue="O" /> */}
+        <Text>Privet</Text>
       </Container>
     </View>
   )

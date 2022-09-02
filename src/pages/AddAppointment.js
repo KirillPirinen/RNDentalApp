@@ -111,13 +111,13 @@ const AddAppointment = ({ navigation, route: { params } }) => {
             style={{ marginTop: 40, borderColor: buttonColor }} 
             icon="calendar" 
             mode="outlined" 
-            color={buttonColor}
+            textColor={buttonColor}
             onPress={() => setDateMeta(prev => ({ ...prev, mode: 'date' }))}
           >
             {dateMeta.date ? formatRu(dateMeta.date, 'PPpp') : 'Выбрать дату'}
           </Button>
           <View style={{ marginTop: 20, marginLeft: 0 }}>
-            <Text variant="headlineMedium">{`Длительность приема: ${duration} минут`}</Text>
+            <Text variant="titleLarge">{`Длительность приема: ${duration} минут`}</Text>
             <Slider
               style={{width: '100%', height: 40}}
               onValueChange={setDuration}

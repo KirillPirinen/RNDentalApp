@@ -1,4 +1,4 @@
-import { DefaultTheme } from 'react-native-paper'
+import { MD3LightTheme as DefaultTheme } from 'react-native-paper';
 
 const light = {
   ...DefaultTheme,
@@ -6,9 +6,8 @@ const light = {
   colors: {
     ...DefaultTheme.colors,
     primary: '#2A86FF',
-    accent: '#f1c40f',
   },
-};
+}
 
 const dark = {
   primary: 'black',

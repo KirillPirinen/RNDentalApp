@@ -1,28 +1,44 @@
-import { View, TouchableHighlight } from 'react-native'
+import { View, TouchableHighlight, StyleSheet, Text } from 'react-native'
 import styled from 'styled-components/native'
-import { Avatar } from 'react-native-paper';
+import { Avatar, Surface, useTheme } from 'react-native-paper'
 
 export const Patient = ({ patient, onLongPress, onPress }) => {
+  const theme = useTheme()
   return (
-    <TouchableHighlight onLongPress={onLongPress} onPress={onPress}>
-      <GroupItem>
-        <Avatar.Text 
-          style={{ marginRight: 16 }} 
-          size={40} 
-          label={patient.fname[0] + (patient.lname[0] || '')} 
-        />
-        <View style={{ flex: 1 }}>
-          <FullName>{patient.fullName}</FullName>
-        </View>
-      </GroupItem>
-    </TouchableHighlight>
+      <TouchableHighlight 
+        onLongPress={onLongPress} 
+        onPress={onPress}
+        underlayColor={theme.colors.primary}
+      >
+        <Surface 
+          style={styles.groupItem} 
+          elevation={3}
+        >
+          <Avatar.Text 
+            style={{ marginRight: 16 }} 
+            size={40} 
+            label={patient.fname[0] + (patient.lname[0] || '')} 
+          />
+          <View style={{ flex: 1 }}>
+            <Text style={styles.fullName}>{patient.fullName}</Text>
+          </View>
+        </Surface>
+      </TouchableHighlight>
   )
 }
 
-const FullName = styled.Text`
-  font-weight: 600;
-  font-size: 16px;
-`
+const styles = StyleSheet.create({
+  fullName: {
+    fontSize: 16,
+    fontWeight: "600"
+  },
+  groupItem: {
+    alignItems: 'center',
+    flexDirection:'row',
+    padding: 20
+  }
+})
+
 
 const GroupItem = styled.View`
   align-items: center;

@@ -5,7 +5,7 @@ import { Appointments, PatientDetail, AddAppointment, PatientsList,
 import * as React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { StatusBar } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TeethFormula from './pages/TeethFormula';
 

@@ -1,12 +1,11 @@
 import * as React from 'react'
-import styled from 'styled-components/native'
 import { Appbar } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 
 const AppFooter = () => {
   const navigation = useNavigation()
   return (
-      <AppbarStyled>
+      <Appbar>
         <Appbar.Action
           icon="calendar"
           onPress={() => console.log('Pressed archive')}
@@ -15,13 +14,9 @@ const AppFooter = () => {
            icon="account-injury"
            onPress={() => navigation.navigate('PatientsList')}
          />
-       </AppbarStyled>
+       </Appbar>
       )
 }
 
 export default AppFooter
-
-const AppbarStyled = styled(Appbar)`
-  justify-content: space-around;
-`
 

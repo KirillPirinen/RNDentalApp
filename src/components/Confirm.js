@@ -1,7 +1,7 @@
 import { Paragraph, Dialog, Button as PaperButton } from 'react-native-paper'
 
 export const Confirm = ({ title, question, onClose, visible, children }) => (
-      <Dialog visible={visible} onDismiss={onClose}>
+      <Dialog visible={visible} onDismiss={onClose} style={{ backgroundColor: 'white' }}>
         <Dialog.Title>{title}</Dialog.Title>
         <Dialog.Content>
           <Paragraph>{question}</Paragraph>
@@ -18,24 +18,23 @@ export const ConfirmDelete = ({  title, visible, question, onClose, onDelete }) 
         title={title}
         question={question}
         onClose={onClose}
+        
       > 
         <PaperButton
           icon="delete"
-          color="red"
+          textColor="red"
           size={30}
           onPress={onDelete}
-          style={{ padding: 0 }}
         > 
-          удалить 
+          Удалить 
         </PaperButton>
         <PaperButton
           icon="window-close"
-          color="gray"
+          textColor="gray"
           size={30}
           onPress={onClose}
-          style={{ padding: 0 }}
         > 
-          отмена
+          Отмена
         </PaperButton>
       </Confirm>
 )

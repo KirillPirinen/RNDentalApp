@@ -6,6 +6,7 @@ const light = {
   colors: {
     ...DefaultTheme.colors,
     primary: '#2A86FF',
+    onSurface: '#2A86FF'
   },
 }
 

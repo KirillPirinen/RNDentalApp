@@ -7,15 +7,16 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { StatusBar } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import TeethFormula from './pages/TeethFormula';
+import TeethFormula from './pages/TeethFormula'
 
-const Stack = createNativeStackNavigator();
-const Tab = createMaterialBottomTabNavigator();
+const Stack = createNativeStackNavigator()
+const Tab = createMaterialBottomTabNavigator()
 
 function BottomTabs() {
+  const theme = useTheme()
   return (
       <Tab.Navigator 
-        screenOptions={{ headerShown:false }}
+        screenOptions={{ headerShown:false, activeTintColor:'blue' }}
       >
         <Tab.Screen 
           name="Записи" 

@@ -1,23 +1,29 @@
 import styled from 'styled-components/native'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Foundation, FontAwesome5 } from '@expo/vector-icons'
 import { Text, Menu, IconButton, Divider } from 'react-native-paper'
 import Badge from '../Badge'
 import formatRu from '../../utils/formatRu'
-import { memo } from 'react'
+import { memo, useState } from 'react'
 
-export const PatientAppointment = memo(({ appointment, isMenuOpen, setOpenedMenu, onEditAppointment, onDeleteAppointment }) => {
+export const PatientAppointment = memo(({ 
+  appointment, 
+  onEditAppointment, 
+  onDeleteAppointment 
+}) => {
   return (
-    <AppointmentCard>
-      <MenuApointment 
-        isOpen={isMenuOpen} 
-        setOpenedMenu={setOpenedMenu} 
-        id={appointment.id}
-        onEditAppointment={onEditAppointment}
-        onDeleteAppointment={onDeleteAppointment}
-        appointment={appointment}
-      />
-      <AppointmentCardRow>
+    <View style={styles.card}>
+      <View style={{ 
+          marginTop: -25,  
+          flexDirection:'row-reverse'
+        }}>
+        <MenuApointment 
+          appointment={appointment}
+          onEditAppointment={onEditAppointment}
+          onDeleteAppointment={onDeleteAppointment}
+        />
+      </View>
+      <AppointmentCardRow style={{ marginTop: -20 }}>
         <FontAwesome5 name="clock" size={16} color="#A3A3A3" />
         <AppointmentCardLabel>
          {`Длительность: `}
@@ -26,7 +32,7 @@ export const PatientAppointment = memo(({ appointment, isMenuOpen, setOpenedMenu
           </Text>
         </AppointmentCardLabel>
       </AppointmentCardRow>
-      {Boolean(appointment.teeth) && <Teeth teeth={appointment.teeth} />}
+      {Boolean(true/*appointment.teeth*/) && <Teeth teeth={appointment.teeth || '1,2,3,4'} />}
       {Boolean(appointment.diagnosis) && <Diagnosis diagnosis={appointment.diagnosis} />}
       {Boolean(appointment.notes) && <Notes notes={appointment.notes} />}
       <AppointmentCardRow
@@ -36,19 +42,19 @@ export const PatientAppointment = memo(({ appointment, isMenuOpen, setOpenedMenu
           {formatRu(appointment.date, 'PPpp')}
         </Badge>
       </AppointmentCardRow>
-      {appointment.price && <PriceBadge status="green">{appointment.price} &#8381;</PriceBadge>}
-    </AppointmentCard>
+      {true /*diagnosis*/ && <PriceBadge status="green">{appointment.price || 2000} &#8381;</PriceBadge>}
+    </View>
   )
 })
 
 
 const Teeth = ({ teeth }) => {
-  const count = teeth?.split(',')
+  const count = teeth.split(',')
   return (
     <AppointmentCardRow>
       <FontAwesome5 name="tooth" size={16} color="#A3A3A3" />
       <AppointmentCardLabel>
-        {count.length > 1 ? 'Зубы: ' : 'Зуб: '}
+        {count?.length > 1 ? 'Зубы: ' : 'Зуб: '}
         <Text style={{ fontWeight: '600' }}>
           {count.join(', ')}
         </Text>
@@ -85,43 +91,39 @@ const Notes = ({ notes }) => (
   </AppointmentCardRow>
 )
 
-const MenuApointment = ({ setOpenedMenu, isOpen, id, onEditAppointment, appointment, onDeleteAppointment }) => {
-  
-  return isOpen ? (
-    <View style={{
-      flex: 1,
-      position:'absolute',
-      backgroundColor: 'rgba(215,204,200, 1)',
-      zIndex:100,
-      right:2,
-      borderWidth:1,
-      borderColor: '#a1887f',
-      borderRadius:6,
-    }}>
-      <Menu.Item leadingIcon="redo" onPress={() => onDeleteAppointment(appointment)} title="Удалить" />
-      <Divider style={{ backgroundColor: '#78909c' }} />
-      <Menu.Item leadingIcon="undo" onPress={() => onEditAppointment(appointment)} title="Редактировать" />
-    </View>
-  ) : <IconButtonStyled
+const MenuApointment = ({ onEditAppointment, appointment, onDeleteAppointment }) => {
+  const [visible, setVisible] = useState(false)
+  return (
+    <Menu
+      visible={visible}
+      onDismiss={() => setVisible(false)}
+      anchor={<IconButton 
+        onPress={() => setVisible(true)}
         icon="menu"
         size={20}
-        color={'gray'}
-        onPress={() => setOpenedMenu(id)}
+      />}
+      contentStyle={{ backgroundColor: 'white' }}
+    >
+      <Menu.Item onPress={() => {
+        setVisible(false)
+        onDeleteAppointment(appointment)
+        
+      }} 
+        title="Удалить" 
       />
+      <Divider bold />
+      <Menu.Item onPress={() => onEditAppointment(appointment)} title="Редактировать" />
+    </Menu>
+  )
 }
 
-const IconButtonStyled = styled(IconButton)`
-  position:absolute;
-  right: 0;
-  top: 0;
-`
 
 const PriceBadge = styled(Badge)`
   position: absolute;
   width: auto;
   padding: 0 5px;
-  top: -10px;
-  right: 0;
+  top: -6px;
+  left: 0;
   z-index: 100;
   background-color: white;
   border: 1px solid #7da453;
@@ -139,13 +141,22 @@ const AppointmentCardRow = styled.View`
   margin-bottom: 3.5px;
 `;
 
-const AppointmentCard = styled.View`
-  shadow-color: gray;
-  elevation: 0.5;
-  shadow-opacity: 0.4;
-  shadow-radius: 10;
-  padding: 20px 25px;
-  border-radius: 10px;
-  background: white;
-  margin-bottom: 20px;
-`;
+
+const styles = StyleSheet.create({
+  card: {
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity:  0.17,
+    shadowRadius: 3.05,
+    elevation: 2,
+    borderRadius: 10,
+    padding: 20,
+    marginVertical: 5,
+    borderColor:'#dddddd',
+    borderWidth:1,
+    backgroundColor: '#fff'
+  }
+})

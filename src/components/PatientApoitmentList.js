@@ -14,8 +14,9 @@ export const PatientAppointmentList = ({
   
   const [actions, dispatch] = useModal()
 
-  const onEditAppointment = useCallback((appointment) => 
-    navigation.navigate('AddAppointment', { patient, appointment, edit: true }), [patient])
+  const onEditAppointment = useCallback((appointment) => {
+      navigation.navigate('AddAppointment', { patient, appointment, edit: true })
+  }, [patient])
 
   const onConfirmDeleteAppointment = useCallback((appointment) => {
     const onDelete = () => appointment.deleteInstance().then(dispatch.bind(null, { type: actions.CLEAR }))

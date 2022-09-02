@@ -1,14 +1,14 @@
 import { View, Linking } from 'react-native'
 import styled from 'styled-components/native'
 import { Foundation } from '@expo/vector-icons'
+import { Fontisto } from '@expo/vector-icons';
 import { IconButton } from 'react-native-paper'
 import withObservables from '@nozbe/with-observables';
 import { GrayText, Button, Container, PlusButton, PatientAppointmentList } from '../components'
 import { useState } from 'react';
 import { useModal } from '../context/modal-context';
 
-const PatientDetail = ({ navigation, patient, appointments, formulas }) => {
-  const [openedMenu, setOpenedMenu] = useState(null)
+const PatientDetail = ({ navigation, patient, appointments }) => {
   const [actions, dispatch] = useModal()
 
   const onDeletePatient = () => patient.deleteInstance().then(() => {
@@ -22,14 +22,18 @@ const PatientDetail = ({ navigation, patient, appointments, formulas }) => {
   })
 
   const onCall = () => Linking.openURL(`tel:${patient.phone}`)
+  const onWhatsApp = () => Linking.openURL(`whatsapp://send?text=hello&phone=${patient.phone}`)
 
   return (
       <View 
         style={{ flex: 1, zIndex: 100 }} 
-        onStartShouldSetResponder={evt => setOpenedMenu(null)}>
+      >
       <PatientDetails>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View>
+        <View style={{ 
+          flexDirection: 'row', 
+          justifyContent: 'space-between',
+        }}>
+          <View style={{ flexShrink: 2 }}>
             <PatientFullname>
               {patient.fullName}
             </PatientFullname>
@@ -40,14 +44,14 @@ const PatientDetail = ({ navigation, patient, appointments, formulas }) => {
           <View style={{ flexDirection:'row' }}>
             <IconButton
                 icon="pencil-circle"
-                color="gray"
+                iconColor="gray"
                 size={30}
                 onPress={() => navigation.navigate('AddPatient', { patient })}
                 style={{ padding: 0 }}
             />
             <IconButton
                 icon="delete"
-                color="red"
+                iconColor="red"
                 size={30}
                 onPress={onConfirmDeletePatient}
                 style={{ padding: 0 }}
@@ -66,13 +70,19 @@ const PatientDetail = ({ navigation, patient, appointments, formulas }) => {
               <Foundation name="telephone" size={22} color="white" />
             </Button>
           </PhoneButtonView>
+          <PhoneButtonView>
+            <Button
+              color="#84D269"
+              onPress={onWhatsApp}
+            >
+              <Fontisto name="whatsapp" size={24} color="white" />
+            </Button>
+          </PhoneButtonView>
         </PatientButtons>
       </PatientDetails>
       <Container>
         <PatientAppointmentList 
           appointments={appointments}
-          openedMenu={openedMenu}
-          setOpenedMenu={setOpenedMenu}
           navigation={navigation}
           patient={patient}
         />

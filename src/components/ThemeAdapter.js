@@ -1,9 +1,14 @@
 import themes from "../styles/themes"
-import { useSelector } from "react-redux"
-import { getCurrentTheme } from "../redux/themeSlice"
 import { Provider as PaperProvider } from 'react-native-paper'
+import { NavigationContainer } from '@react-navigation/native'
 
 export default ({ children }) => {
-  const currentThemeName = useSelector(getCurrentTheme)
-  return <PaperProvider theme={themes[currentThemeName]}>{children}</PaperProvider>
+  const currentThemeName = 'light'
+  return (
+    <PaperProvider theme={themes[currentThemeName]}>
+      <NavigationContainer theme={themes[currentThemeName]}>
+          {children}
+      </NavigationContainer>
+    </PaperProvider>
+  )
 }

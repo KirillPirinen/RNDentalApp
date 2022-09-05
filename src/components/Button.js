@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components/native'
+import { StyleSheet, SafeAreaView } from 'react-native'
+import { AnimatedFAB } from 'react-native-paper'
 
 const Button = ({ children, color, onPress }) => (
   <ButtonWrapper onPress={onPress} color={color}>
@@ -27,3 +29,32 @@ const ButtonText = styled.Text`
 `
 
 export default Button;
+
+export const FAB = (props) => {
+  const [visible, setVisible] = useState(false)
+  return (
+    <SafeAreaView style={styles.container}>
+      <AnimatedFAB
+        icon={'plus'}
+        label={'Label'}
+        extended={true}
+        onPress={() => console.log('Pressed')}
+        visible={true}
+        animateFrom={'right'}
+        iconMode={'dynamic'}
+        style={[styles.fabStyle]}
+        {...props}
+      />
+    </SafeAreaView>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+  },
+  fabStyle: {
+    bottom: 16,
+    right: 16,
+  },
+});

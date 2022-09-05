@@ -157,6 +157,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     borderColor:'#dddddd',
     borderWidth:1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   }
 })

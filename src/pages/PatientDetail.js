@@ -1,16 +1,16 @@
+import React, { useRef } from 'react'
 import { View, Linking } from 'react-native'
 import styled from 'styled-components/native'
 import { Foundation } from '@expo/vector-icons'
 import { Fontisto } from '@expo/vector-icons';
 import { IconButton } from 'react-native-paper'
 import withObservables from '@nozbe/with-observables';
-import { GrayText, Button, Container, PlusButton, PatientAppointmentList } from '../components'
-import { useState } from 'react';
+import { GrayText, Button, Container, PlusButton, PatientAppointmentList, FAB } from '../components'
 import { useModal } from '../context/modal-context';
 
 const PatientDetail = ({ navigation, patient, appointments }) => {
   const [actions, dispatch] = useModal()
-
+  const getFullName = () => patient.fullName
   const onDeletePatient = () => patient.deleteInstance().then(() => {
     dispatch({ type: actions.CLEAR })
     navigation.popToTop()
@@ -23,6 +23,12 @@ const PatientDetail = ({ navigation, patient, appointments }) => {
 
   const onCall = () => Linking.openURL(`tel:${patient.phone}`)
   const onWhatsApp = () => Linking.openURL(`whatsapp://send?text=hello&phone=${patient.phone}`)
+
+  const buttonControls = useRef()
+
+  const onDrug = () => buttonControls.current?.setVisible(false)
+
+  const onDrop = () => buttonControls.current?.setVisible(true)
 
   return (
       <View 
@@ -85,9 +91,15 @@ const PatientDetail = ({ navigation, patient, appointments }) => {
           appointments={appointments}
           navigation={navigation}
           patient={patient}
+          onScrollBeginDrag={onDrug}
+          onScrollEndDrag={onDrop}
         />
       </Container>
-      <PlusButton onPress={() => navigation.navigate('AddAppointment', { patient })}/>
+        <FAB
+          ref={buttonControls} 
+          label={`Записать ${patient.fullName}`}
+          onPress={() => navigation.navigate('AddAppointment', { patient })}
+        />
       </View>
   )
 }

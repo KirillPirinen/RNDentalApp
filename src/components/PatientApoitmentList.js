@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { FlatList } from 'react-native'
-import { PatientAppointment } from '../components'
+import { PatientAppointment } from '../components/Appointment/PatientAppointments'
 import { useModal } from '../context/modal-context'
 import { defaultExtractor } from '../utils/defaultExtracror'
 
@@ -9,7 +9,8 @@ export const PatientAppointmentList = ({
   setOpenedMenu, 
   openedMenu,
   navigation,
-  patient
+  patient,
+  ...rest
 }) => {
   
   const [actions, dispatch] = useModal()
@@ -37,8 +38,9 @@ export const PatientAppointmentList = ({
   )
 
   return <FlatList
-    data={appointments}
-    renderItem={renderAppointments}
-    keyExtractor={defaultExtractor}
-  />
+      data={appointments}
+      renderItem={renderAppointments}
+      keyExtractor={defaultExtractor}
+      {...rest}
+    />
 }

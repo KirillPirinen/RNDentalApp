@@ -1,11 +1,11 @@
 import withObservables from '@nozbe/with-observables'
-import { SafeAreaView, StatusBar, SectionList } from 'react-native'
+import { SafeAreaView, View, StatusBar, SectionList } from 'react-native'
 import styled from 'styled-components/native'
-import { PlusButton, SwipeableAppointment, SectionTitle, ConfirmDelete } from '../components'
+import { FAB, SwipeableAppointment, SectionTitle } from '../components'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import { Q } from '@nozbe/watermelondb';
 import { groupAppointments } from '../utils/groupAppointments'
-import { useMemo, useCallback } from 'react'
+import { useMemo, useCallback, useRef } from 'react'
 import { useForceUpdateByInterval } from '../utils/custom-hooks/useForceUpdate'
 import { defaultExtractor } from '../utils/defaultExtracror'
 import { useModal } from '../context/modal-context'
@@ -35,24 +35,33 @@ const Appointments = ({ appointments, navigation }) => {
     })
   }, [])
 
+  const buttonControls = useRef()
+
+  const onDrug = () => buttonControls.current?.setVisible(false)
+
+  const onDrop = () => buttonControls.current?.setVisible(true)
+
   return (
-    <Container>
-      <StatusBar />
-      <SafeAreaView>
-      <SectionList
-        sections={grouped}
-        keyExtractor={defaultExtractor}
-        renderItem={({ item }) => <SwipeableAppointment
-        navigation={navigation}
-        appointment={item}
-        onEdit={onEditAppointment}
-        onDelete={onConfirmDeleteAppointment}
-      />} 
-        renderSectionHeader={renderSectionHeader}
-      />
-      </SafeAreaView>
-      <PlusButton onPress={() => navigation.navigate('AddAppointment')}/>
-    </Container>
+    <View>
+        <SectionList
+          sections={grouped}
+          keyExtractor={defaultExtractor}
+          renderItem={({ item }) => <SwipeableAppointment
+          navigation={navigation}
+          appointment={item}
+          onEdit={onEditAppointment}
+          onDelete={onConfirmDeleteAppointment}
+        />} 
+          renderSectionHeader={renderSectionHeader}
+          onScrollBeginDrag={onDrug}
+          onScrollEndDrag={onDrop}
+        />
+        <FAB 
+          ref={buttonControls} 
+          label="Добавить запись" 
+          onPress={() => navigation.navigate('AddAppointment')}
+        />
+    </View>
   )
 }
 

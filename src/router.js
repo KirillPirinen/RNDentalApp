@@ -1,13 +1,15 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import CustomNavigationBar from './components/AppHeader';
 import { Appointments, PatientDetail, AddAppointment, PatientsList,
-  AddPatient } from './pages'
+  AddPatient, 
+  ImportContacts} from './pages'
 import * as React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { StatusBar } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TeethFormula from './pages/TeethFormula'
+import { useModal } from './context/modal-context';
 
 const Stack = createNativeStackNavigator()
 const Tab = createMaterialBottomTabNavigator()
@@ -42,6 +44,7 @@ function BottomTabs() {
 
 const Router = () => {
   const theme = useTheme()
+  const [actions, dispatch] = useModal()
   return (
     <>
       <StatusBar
@@ -51,12 +54,18 @@ const Router = () => {
         screenOptions={{
           header: (props) => <CustomNavigationBar {...props} />
         }}
+        screenListeners={{
+          focus: (e) => {
+            dispatch({ type: actions.CLEAR })
+          },
+        }}
       >
         <Stack.Screen name="Home" component={BottomTabs} />
         <Stack.Screen name="Detail" component={PatientDetail} />
         <Stack.Screen name="AddAppointment" component={AddAppointment} />
         <Stack.Screen name="AddPatient" component={AddPatient} />
         <Stack.Screen name="TeethFormula" component={TeethFormula} />
+        <Stack.Screen name="ImportContacts" component={ImportContacts} />
       </Stack.Navigator>
     </>
   )

@@ -1,6 +1,7 @@
 import { View, TouchableHighlight, StyleSheet, Text } from 'react-native'
 import styled from 'styled-components/native'
-import { Avatar, Surface, useTheme } from 'react-native-paper'
+import { Surface, useTheme } from 'react-native-paper'
+import { Avatar } from './Avatar'
 
 export const Patient = ({ patient, onLongPress, onPress }) => {
   const theme = useTheme()
@@ -14,10 +15,10 @@ export const Patient = ({ patient, onLongPress, onPress }) => {
           style={styles.groupItem} 
           elevation={3}
         >
-          <Avatar.Text 
+          <Avatar 
             style={{ marginRight: 16 }} 
             size={40} 
-            label={patient.fname[0] + (patient.lname[0] || '')} 
+            fullName={patient.fullName}
           />
           <View style={{ flex: 1 }}>
             <Text style={styles.fullName}>{patient.fullName}</Text>

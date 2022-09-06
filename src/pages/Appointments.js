@@ -10,9 +10,7 @@ import { useForceUpdateByInterval } from '../utils/custom-hooks/useForceUpdate'
 import { defaultExtractor } from '../utils/defaultExtracror'
 import { useModal } from '../context/modal-context'
 
-const Container = styled.View`
-  flex: 1;
-`
+const wrapperStyle = { height: '100%'}
 
 const renderSectionHeader = ({ section: { day }}) => <SectionTitle>{day}</SectionTitle>
 
@@ -42,7 +40,7 @@ const Appointments = ({ appointments, navigation }) => {
   const onDrop = () => buttonControls.current?.setVisible(true)
 
   return (
-    <View>
+    <View style={wrapperStyle}>
         <SectionList
           sections={grouped}
           keyExtractor={defaultExtractor}

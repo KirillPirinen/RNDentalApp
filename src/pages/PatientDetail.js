@@ -5,12 +5,12 @@ import { Foundation } from '@expo/vector-icons'
 import { Fontisto } from '@expo/vector-icons';
 import { IconButton } from 'react-native-paper'
 import withObservables from '@nozbe/with-observables';
-import { GrayText, Button, Container, PlusButton, PatientAppointmentList, FAB } from '../components'
+import { GrayText, Button, Container, PatientAppointmentList, FAB } from '../components'
 import { useModal } from '../context/modal-context';
 
-const PatientDetail = ({ navigation, patient, appointments }) => {
+const PatientDetail = ({ navigation, patient, appointments, phones }) => {
   const [actions, dispatch] = useModal()
-  const getFullName = () => patient.fullName
+
   const onDeletePatient = () => patient.deleteInstance().then(() => {
     dispatch({ type: actions.CLEAR })
     navigation.popToTop()
@@ -27,7 +27,6 @@ const PatientDetail = ({ navigation, patient, appointments }) => {
   const buttonControls = useRef()
 
   const onDrug = () => buttonControls.current?.setVisible(false)
-
   const onDrop = () => buttonControls.current?.setVisible(true)
 
   return (
@@ -44,7 +43,7 @@ const PatientDetail = ({ navigation, patient, appointments }) => {
               {patient.fullName}
             </PatientFullname>
             <GrayText>
-              {patient.phone}
+              {phones.map(phone => phone.number).join(', ')}
             </GrayText>
           </View>
           <View style={{ flexDirection:'row' }}>
@@ -52,7 +51,7 @@ const PatientDetail = ({ navigation, patient, appointments }) => {
                 icon="pencil-circle"
                 iconColor="gray"
                 size={30}
-                onPress={() => navigation.navigate('AddPatient', { patient })}
+                onPress={() => navigation.navigate('AddPatient', { patient, phones })}
                 style={{ padding: 0 }}
             />
             <IconButton
@@ -135,5 +134,6 @@ const PatientFullname = styled.Text`
 
 export default withObservables(['route'], ({ route }) => ({
     patient: route.params.patient,
+    phones: route.params.patient.phones,
     appointments: route.params.patient.appointments
 }))(PatientDetail);

@@ -1,16 +1,22 @@
-import { Paragraph, Dialog, Button as PaperButton } from 'react-native-paper'
+import { Text, Dialog, Button as PaperButton } from 'react-native-paper'
 
 export const Confirm = ({ title, question, onClose, visible, children }) => (
-      <Dialog visible={visible} onDismiss={onClose} style={{ backgroundColor: 'white' }}>
-        <Dialog.Title>{title}</Dialog.Title>
-        <Dialog.Content>
-          <Paragraph>{question}</Paragraph>
-        </Dialog.Content>
-        <Dialog.Actions>
-          {children}
-        </Dialog.Actions>
-      </Dialog>
-  )
+    <Dialog 
+      visible={visible}
+      onDismiss={onClose}
+      style={{ backgroundColor: 'white' }}
+    >
+      <Dialog.Title>
+        <Text variant="titleLarge">{title}</Text>
+      </Dialog.Title>
+      <Dialog.Content>
+        <Text variant="bodyMedium">{question}</Text>
+      </Dialog.Content>
+      <Dialog.Actions style={{ flexWrap:'wrap' }}>
+        {children}
+      </Dialog.Actions>
+    </Dialog>
+)
 
 export const ConfirmDelete = ({  title, visible, question, onClose, onDelete }) => (
       <Confirm 

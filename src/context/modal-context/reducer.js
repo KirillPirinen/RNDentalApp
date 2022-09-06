@@ -3,14 +3,10 @@ import actions from './action-types'
 export default (state, action) => {
   switch (action.type) {
 
-    case actions.CONFIRM_DELETE_PATIENT: return {
-      as: 'ConfirmDeletePatient',
-      props: action.payload,
-      __visible: true
-    }
-
+    case actions.CHOOSE_ADD_PATIENT_METHOD:
+    case actions.CONFIRM_DELETE_PATIENT: 
     case actions.CONFIRM_DELETE_APPOINTMENT: return {
-      as: 'ConfirmDeleteAppointment',
+      as: action.type,
       props: action.payload,
       __visible: true
     }
@@ -22,6 +18,6 @@ export default (state, action) => {
 
     case actions.CLEAR: return null
 
-    default: console.error('Неизвестный тип экшена');
+    default: console.error('unknown action type');
   }
 }

@@ -93,6 +93,7 @@ const Notes = ({ notes }) => (
 
 const MenuApointment = ({ onEditAppointment, appointment, onDeleteAppointment }) => {
   const [visible, setVisible] = useState(false)
+  const hof = (fn) => () => (setVisible(false), fn(appointment))
   return (
     <Menu
       visible={visible}
@@ -104,15 +105,13 @@ const MenuApointment = ({ onEditAppointment, appointment, onDeleteAppointment })
       />}
       contentStyle={{ backgroundColor: 'white' }}
     >
-      <Menu.Item onPress={() => {
-        setVisible(false)
-        onDeleteAppointment(appointment)
-        
-      }} 
+      <Menu.Item onPress={hof(onDeleteAppointment)} 
         title="Удалить" 
       />
       <Divider bold />
-      <Menu.Item onPress={() => onEditAppointment(appointment)} title="Редактировать" />
+      <Menu.Item onPress={hof(onEditAppointment)} 
+        title="Редактировать" 
+      />
     </Menu>
   )
 }

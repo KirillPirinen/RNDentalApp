@@ -1,11 +1,12 @@
 import React, { useRef } from 'react'
 import { Portal } from 'react-native-paper'
 import { useModalContent, useModal } from '../../context/modal-context'
-import { ConfirmDeletePatient, ConfirmDeleteAppointment } from './portal-content'
+import { ConfirmDeletePatient, ConfirmDeleteAppointment, ChooseAddPatientMethod } from './portal-content'
 
 const RegisterContent = {
   ConfirmDeletePatient,
-  ConfirmDeleteAppointment
+  ConfirmDeleteAppointment,
+  ChooseAddPatientMethod
 }
 
 export const ContextedPortal = () => {
@@ -13,9 +14,9 @@ export const ContextedPortal = () => {
   const [actions, dispatch] = useModal()
 
   const __defaultHandlers = useRef({
-      hide: dispatch.bind(null, { type: actions.HIDE }),
-      clear: dispatch.bind(null, { type: actions.CLEAR })
-    })
+    hide: dispatch.bind(null, { type: actions.HIDE }),
+    clear: dispatch.bind(null, { type: actions.CLEAR })
+  })
 
   const Content = RegisterContent[state?.as]
 

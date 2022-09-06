@@ -1,14 +1,20 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb'
 
 export default appSchema({
-  version: 10,
+  version: 12,
   tables: [
     tableSchema({
       name: 'patients',
       columns: [
-        { name: 'first_name', type: 'string' },
-        { name: 'last_name', type: 'string' },
-        { name: 'phone', type: 'string' }
+        { name: 'full_name', type: 'string' },
+      ]
+    }),
+    tableSchema({
+      name: 'phones',
+      columns: [
+        { name: 'patient_id', type: 'string' },
+        { name: 'is_primary', type: 'boolean' },
+        { name: 'number', type: 'string' },
       ]
     }),
     tableSchema({

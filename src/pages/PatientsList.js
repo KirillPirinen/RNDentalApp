@@ -6,6 +6,7 @@ import withObservables from '@nozbe/with-observables';
 import { Container, Autocomplete, Patient, FAB, EmptyList } from '../components'
 import { useNavigation } from '@react-navigation/native';
 import { defaultExtractor } from '../utils/defaultExtracror';
+import { useModal } from '../context/modal-context';
 
 
 const renderList = ({ result, ...rest }) => {
@@ -27,14 +28,22 @@ const renderList = ({ result, ...rest }) => {
 }
 
 export const PatientsList = ({ patients, navigation }) => {
+  const [actions, dispatch] = useModal()
 
   const onChange = (query) => 
     patients.filter(patient => patient.fullName.toLowerCase().includes(query))
 
   const buttonControls = useRef()
 
-  const onDrug = () => buttonControls.current?.setVisible(false)
+  const onChoosePatientMethod = () => dispatch({ 
+    type: actions.CHOOSE_ADD_PATIENT_METHOD,
+    payload: { 
+      onAlone: () => navigation.navigate('AddPatient'), 
+      onBulk: () => navigation.navigate('ImportContacts')  
+    }
+  })
 
+  const onDrug = () => buttonControls.current?.setVisible(false)
   const onDrop = () => buttonControls.current?.setVisible(true)
 
   return (
@@ -49,7 +58,7 @@ export const PatientsList = ({ patients, navigation }) => {
           <FAB
             ref={buttonControls} 
             label="Добавить пациента" 
-            onPress={() => navigation.navigate('AddPatient')}
+            onPress={onChoosePatientMethod}
           />
       </Container>
   )

@@ -7,7 +7,7 @@ import { ModalContextProvider } from './src/context/modal-context'
 import { ContextedPortal } from './src/components/Portal'
 
 LogBox.ignoreLogs([
-  'Non-serializable values were found in the navigation state',
+  'Non-serializable values were found in the navigation state.',
 ]);
 
 const App = () => {

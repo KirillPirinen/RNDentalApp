@@ -22,7 +22,7 @@ export default ({ placeholder, renderList, onChange, initState, ...rest }) => {
       } else {
         setResult(onChange(prepQuery))
       }
-
+      
     } else {
       setResult(initState)
     }

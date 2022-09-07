@@ -1,27 +1,6 @@
 import React from 'react'
-import { ConfirmDelete, Confirm } from '../Confirm'
-import formatRu from '../../utils/formatRu'
+import { Confirm } from '../Confirm'
 import { Button } from 'react-native-paper'
-
-export const ConfirmDeletePatient = ({ __visible, __defaultHandlers, patient, ...rest }) => (
-  <ConfirmDelete
-    visible={__visible}
-    title={`Удаление ${patient.fullName}`}
-    question="Вы действительно хотите удалить пациента?"
-    onClose={rest.onClose || __defaultHandlers.current.hide}
-    {...rest}
-  />
-)
-
-export const ConfirmDeleteAppointment = ({ __visible, __defaultHandlers, patient, appointment, ...rest }) => (
-  <ConfirmDelete
-    visible={__visible}
-    title={`Удаление записи пациента ${patient.fullName}`}
-    question={`Вы действительно хотите удалить запись на ${formatRu(appointment.date, 'PPpp')}?`}
-    onClose={rest.onClose || __defaultHandlers.current.hide}
-    {...rest}
-  />
-)
 
 export const ChooseAddPatientMethod = ({ 
   __visible, 

@@ -4,7 +4,7 @@ import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
 import { database } from './src/db'
 import { LogBox } from 'react-native'
 import { ModalContextProvider } from './src/context/modal-context'
-import { ContextedPortal } from './src/components/Portal'
+import { ContextedPortal } from './src/components/__components__/__Portal'
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state.',

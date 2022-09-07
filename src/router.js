@@ -18,7 +18,10 @@ function BottomTabs() {
   const theme = useTheme()
   return (
       <Tab.Navigator 
-        screenOptions={{ headerShown:false, activeTintColor:'blue' }}
+        screenOptions={{ 
+          headerShown:false, 
+          activeTintColor:'blue',
+        }}
       >
         <Tab.Screen 
           name="Записи" 
@@ -35,7 +38,8 @@ function BottomTabs() {
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="account-injury" color={color} size={26} />
-            )
+            ),
+            unmountOnBlur: true
           }} 
         />
       </Tab.Navigator>
@@ -52,7 +56,7 @@ const Router = () => {
       />
       <Stack.Navigator
         screenOptions={{
-          header: (props) => <CustomNavigationBar {...props} />
+          header: (props) => <CustomNavigationBar {...props} />,
         }}
         screenListeners={{
           focus: (e) => {

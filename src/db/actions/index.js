@@ -1,27 +1,32 @@
 import { database } from '..'
+import { phoneSanitazer } from '../../utils/sanitizers'
 
-export const createPatient = async ({ fullName, phones }) => {
+export const createPatient = async ({ fullName, phones, phoneNumbers, name }) => {
+  const phonesToBatch = phones || phoneNumbers
+  const recievedName = fullName || name
 
   return await database.write(async () => {
     
       const newPatient = await database.get('patients').create(patient => {
-        patient.fullName = fullName
+        patient.fullName = recievedName
       })
 
-      await database.get('formulas').create(formula => {
-        formula.patientId = newPatient.id
-        formula.hasAdultJaw = true
-        formula.hasBabyJaw = false
-      })
-
-      if(phones?.length) {
-        await Promise.all(phones.map(phone => {
-          return database.get('phones').create(instance => {
+      const batches = phonesToBatch?.map(phone => {
+          return database.get('phones').prepareCreate(instance => {
             instance.patientId = newPatient.id
-            instance.number = phone.number
+            instance.number = phoneSanitazer(phone.number)
+            instance.isPrimary = Boolean(phone.isPrimary)
           })
-        }))
-      }
+        }) || {}
+
+      await database.batch(
+        database.get('formulas').prepareCreate(formula => {
+          formula.patientId = newPatient.id
+          formula.hasAdultJaw = true
+          formula.hasBabyJaw = false
+        }),
+        ...batches
+      )
 
       return newPatient
     } 
@@ -56,4 +61,3 @@ export const createPhone = async ({ patientId, number, isPrimary = false }) => {
     })
   )
 }
-

@@ -1,14 +1,14 @@
-import React, { useRef } from 'react'
-import { Divider } from 'react-native-paper';
-import { FlatList, SafeAreaView, View } from 'react-native';
+import React, { useCallback, useEffect, useRef } from 'react'
+import { Divider } from 'react-native-paper'
+import { FlatList} from 'react-native'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
-import withObservables from '@nozbe/with-observables';
+import withObservables from '@nozbe/with-observables'
 import { Container, Autocomplete, Patient, FAB, EmptyList } from '../components'
-import { useNavigation } from '@react-navigation/native';
-import { defaultExtractor } from '../utils/defaultExtracror';
-import { useModal } from '../context/modal-context';
+import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { defaultExtractor } from '../utils/defaultExtracror'
+import { useModal } from '../context/modal-context'
 
-
+const renderDivider = () => <Divider bold />
 const renderList = ({ result, ...rest }) => {
   const navigation = useNavigation()
   return (
@@ -19,7 +19,7 @@ const renderList = ({ result, ...rest }) => {
           patient={item}
           onPress={() => navigation.navigate('Detail', { patient: item })}
         />}
-        ItemSeparatorComponent={() => <Divider bold />}
+        ItemSeparatorComponent={renderDivider}
         style={{ marginVertical: 12 }}
         ListFooterComponent={!result.length && EmptyList}
         {...rest}
@@ -29,6 +29,7 @@ const renderList = ({ result, ...rest }) => {
 
 export const PatientsList = ({ patients, navigation }) => {
   const [actions, dispatch] = useModal()
+  const isFocused = useIsFocused()
 
   const onChange = (query) => 
     patients.filter(patient => patient.fullName.toLowerCase().includes(query))
@@ -48,13 +49,13 @@ export const PatientsList = ({ patients, navigation }) => {
 
   return (
       <Container>
-          <Autocomplete
+          {isFocused && <Autocomplete
             onChange={onChange}
             renderList={renderList}
-            initState={patients}
+            initState={patients || []}
             onScrollBeginDrag={onDrug}
             onScrollEndDrag={onDrop}
-          />
+          />}
           <FAB
             ref={buttonControls} 
             label="Добавить пациента" 
@@ -68,4 +69,4 @@ export default withDatabase(
   withObservables([], ({ database }) => ({
     patients: database.get('patients').query()
   }))(PatientsList), 
-);
+)

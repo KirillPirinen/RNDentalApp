@@ -1,13 +1,7 @@
 import React, { useRef } from 'react'
 import { Portal } from 'react-native-paper'
 import { useModalContent, useModal } from '../../context/modal-context'
-import { ConfirmDeletePatient, ConfirmDeleteAppointment, ChooseAddPatientMethod } from './portal-content'
-
-const RegisterContent = {
-  ConfirmDeletePatient,
-  ConfirmDeleteAppointment,
-  ChooseAddPatientMethod
-}
+import RegisterContent from '../PortalContent'
 
 export const ContextedPortal = () => {
   const state = useModalContent()

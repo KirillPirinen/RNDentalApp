@@ -2,6 +2,7 @@ import { View, TouchableHighlight, StyleSheet, Text } from 'react-native'
 import styled from 'styled-components/native'
 import { Surface, useTheme } from 'react-native-paper'
 import { Avatar } from './Avatar'
+import { memo } from 'react'
 
 export const Patient = ({ patient, onLongPress, onPress }) => {
   const theme = useTheme()
@@ -27,6 +28,8 @@ export const Patient = ({ patient, onLongPress, onPress }) => {
       </TouchableHighlight>
   )
 }
+
+export default memo(Patient)
 
 const styles = StyleSheet.create({
   fullName: {

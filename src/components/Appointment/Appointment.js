@@ -1,18 +1,17 @@
 import { View, TouchableHighlight } from 'react-native'
 import styled from 'styled-components/native'
-import { Avatar } from 'react-native-paper'
 import GrayText from '../GrayText'
 import Badge from '../Badge'
 import { addMinutes, format } from 'date-fns'
 import { APPOINTMENT_STATUS } from '../../utils/constants'
-
+import { Avatar } from '../Avatar'
 
 export const Appointment = ({ onLongPress, patient, appointment, status }) => {
   const showEndTime = (status === APPOINTMENT_STATUS.lasts || status === APPOINTMENT_STATUS.future)
   return (
     <TouchableHighlight onLongPress={onLongPress}>
       <GroupItem status={status}>
-        <Avatar.Text style={{ marginRight: 16 }} size={40} label={patient.fname[0] + (patient.lname[0] || '')} />
+        <Avatar fullName={patient.fullName} />
         <View style={{ flex: 1 }}>
           <FullName>{patient.fullName}</FullName>
           {Boolean(appointment.notes) && <GrayText>{appointment.notes}</GrayText>}

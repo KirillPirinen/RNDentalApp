@@ -9,7 +9,7 @@ const contentTypes = {
 }
 
 export const HeaderMenu = ({ menu, theme }) => {
-  const [visible, setVisible] = React.useState(true);
+  const [visible, setVisible] = React.useState(false);
 
   const openMenu = () => setVisible(true);
 

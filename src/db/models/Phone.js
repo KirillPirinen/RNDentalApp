@@ -12,6 +12,22 @@ export default class Phone extends Model {
   @field('is_primary') isPrimary
   @text('number') number
 
+  @writer async markAsPrime(numbersToOff) {
+
+    const batchPhones = numbersToOff?.map(phone => {
+      return phone.prepareUpdate(instance => {
+        instance.isPrimary = false
+      })
+    })
+
+    await await this.batch(
+      this.prepareUpdate(instance => {
+        instance.isPrimary = true
+      }),
+      ...batchPhones
+    )
+  }
+
   @writer async updateInstance(fields) {
     await this.update(instance => {
         Object.keys(fields).forEach((key) => {

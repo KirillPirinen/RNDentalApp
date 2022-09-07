@@ -5,7 +5,7 @@ import { Foundation } from '@expo/vector-icons'
 import { Fontisto } from '@expo/vector-icons';
 import { IconButton } from 'react-native-paper'
 import withObservables from '@nozbe/with-observables';
-import { GrayText, Button, Container, PatientAppointmentList, FAB } from '../components'
+import { Button, Container, PatientAppointmentList, FAB, PhonesList } from '../components'
 import { useModal } from '../context/modal-context';
 
 const PatientDetail = ({ navigation, patient, appointments, phones }) => {
@@ -21,8 +21,13 @@ const PatientDetail = ({ navigation, patient, appointments, phones }) => {
     payload: { patient, onDelete: onDeletePatient }
   })
 
-  const onCall = () => Linking.openURL(`tel:${patient.phone}`)
-  const onWhatsApp = () => Linking.openURL(`whatsapp://send?text=hello&phone=${patient.phone}`)
+  const getPrimaryPhoneNumber = () => {
+    const primary = phones.find((phone) => phone.isPrimary)?.number
+    return primary || phones[0]?.number
+  }
+
+  const onCall = () => Linking.openURL(`tel:${getPrimaryPhoneNumber()}`)
+  const onWhatsApp = () => Linking.openURL(`whatsapp://send?text=hello&phone=${getPrimaryPhoneNumber()}`)
 
   const buttonControls = useRef()
 
@@ -39,12 +44,7 @@ const PatientDetail = ({ navigation, patient, appointments, phones }) => {
           justifyContent: 'space-between',
         }}>
           <View style={{ flexShrink: 2 }}>
-            <PatientFullname>
-              {patient.fullName}
-            </PatientFullname>
-            <GrayText>
-              {phones.map(phone => phone.number).join(', ')}
-            </GrayText>
+            <PatientFullname>{patient.fullName}</PatientFullname>
           </View>
           <View style={{ flexDirection:'row' }}>
             <IconButton
@@ -62,6 +62,9 @@ const PatientDetail = ({ navigation, patient, appointments, phones }) => {
                 style={{ padding: 0 }}
             />
           </View>
+        </View>
+        <View style={{ flexDirection: 'row', flexWrap:'wrap', justifyContent:'space-between' }}>
+          <PhonesList phones={phones} />
         </View>
         <PatientButtons>
           <FormulaButtonView>

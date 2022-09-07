@@ -3,6 +3,7 @@ import actions from './action-types'
 export default (state, action) => {
   switch (action.type) {
 
+    case actions.IMPORT_PROGRESS:
     case actions.CHOOSE_ADD_PATIENT_METHOD:
     case actions.CONFIRM_DELETE_PATIENT: 
     case actions.CONFIRM_DELETE_APPOINTMENT: return {

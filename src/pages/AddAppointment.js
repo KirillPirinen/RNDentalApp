@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { View, FlatList, Divider, ScrollView } from 'react-native'
 import styled from 'styled-components'
 import DatePicker from '@react-native-community/datetimepicker'
@@ -10,15 +10,11 @@ import { useNavigation } from '@react-navigation/native'
 import formatRu from '../utils/formatRu'
 import { createAppointment } from '../db/actions'
 import Slider from '@react-native-community/slider';
+import { querySanitazer } from '../utils/sanitizers'
 
 const onSearch = (db) => async (query) => {
-  const sanitized = Q.sanitizeLikeString(query)
-  return db.get('patients').query(
-    Q.or(
-      Q.where('first_name', Q.like(`%${sanitized}%`)),
-      Q.where('last_name', Q.like(`%${sanitized}%`))
-    )
-  )
+  const sanitized = querySanitazer(query)
+  return db.get('patients').query(Q.where('full_name', Q.like(`%${sanitized}%`)))
 }
 
 const renderList = ({ result, onChoose }) => {

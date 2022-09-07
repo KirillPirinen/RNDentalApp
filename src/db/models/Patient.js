@@ -1,5 +1,6 @@
 import { Model } from '@nozbe/watermelondb'
 import { text, writer, children } from '@nozbe/watermelondb/decorators'
+import { phoneSanitazer } from '../../utils/sanitizers'
 
 export default class Patient extends Model {
   static table = 'patients'
@@ -28,13 +29,13 @@ export default class Patient extends Model {
         return dirtyPhone.link.prepareMarkAsDeleted()
       } else if (dirtyPhone.link) {
         return dirtyPhone.link.prepareUpdate(instance => {
-          instance.number = dirtyPhone.number
+          instance.number = phoneSanitazer(dirtyPhone.number)
         })
       }
 
       return this.collections.get('phones').prepareCreate(instance => {
         instance.patientId = this.id
-        instance.number = dirtyPhone.number
+        instance.number = phoneSanitazer(dirtyPhone.number)
       })
     })
 

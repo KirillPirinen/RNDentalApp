@@ -178,10 +178,10 @@ const AddAppointment = ({ navigation, route: { params } }) => {
 const ButtonView = styled.View`
   flex: 1;
   margin-top: 30px;
-`;
+`
 
 const TimeRow = styled.View`
   flex-direction: row;
-`;
+`
 
 export default AddAppointment;

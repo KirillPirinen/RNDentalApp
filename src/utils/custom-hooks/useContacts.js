@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import * as Contacts from 'expo-contacts'
 
 export const useContacts = () => {
-  const [contacts, setContacts] = useState([null, null])
+  const [contacts, setContacts] = useState([null, []])
 
   useEffect(() => {
     (async () => {

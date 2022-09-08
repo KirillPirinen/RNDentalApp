@@ -1,10 +1,8 @@
-import { useState, useRef, useMemo } from "react"
+import { useState, useMemo } from "react"
 import { View } from "react-native"
 import { TextInput, Button } from "react-native-paper"
 import { PhoneInput } from "../components"
-import { createPatient, createPhone } from "../db/actions"
-import { of, map, reduce, scan, from } from 'rxjs'
-import withObservables from '@nozbe/with-observables'
+import { createPatient } from "../db/actions"
 import { ScrollView } from "react-native-gesture-handler"
 
 const defObj = {}

@@ -35,9 +35,9 @@ const Appointments = ({ appointments, navigation }) => {
 
   const buttonControls = useRef()
 
-  const onDrug = () => buttonControls.current?.setVisible(false)
+  const onDrug = () => buttonControls.current?.(false)
 
-  const onDrop = () => buttonControls.current?.setVisible(true)
+  const onDrop = () => buttonControls.current?.(true)
 
   return (
     <View style={wrapperStyle}>

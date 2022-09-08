@@ -7,6 +7,7 @@ import { IconButton } from 'react-native-paper'
 import withObservables from '@nozbe/with-observables';
 import { Button, Container, PatientAppointmentList, FAB, PhonesList } from '../components'
 import { useModal } from '../context/modal-context';
+import { useSafeRefCB } from '../utils/custom-hooks/useSafeRef';
 
 const PatientDetail = ({ navigation, patient, appointments, phones }) => {
   const [actions, dispatch] = useModal()
@@ -29,10 +30,10 @@ const PatientDetail = ({ navigation, patient, appointments, phones }) => {
   const onCall = () => Linking.openURL(`tel:${getPrimaryPhoneNumber()}`)
   const onWhatsApp = () => Linking.openURL(`whatsapp://send?text=hello&phone=${getPrimaryPhoneNumber()}`)
 
-  const buttonControls = useRef()
+  const buttonControls = useSafeRefCB()
 
-  const onDrug = () => buttonControls.current?.setVisible(false)
-  const onDrop = () => buttonControls.current?.setVisible(true)
+  const onDrug = () => buttonControls.current?.(false)
+  const onDrop = () => buttonControls.current?.(true)
 
   return (
       <View 

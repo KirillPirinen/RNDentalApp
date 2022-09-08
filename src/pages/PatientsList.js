@@ -7,6 +7,7 @@ import { Container, Autocomplete, Patient, FAB, EmptyList } from '../components'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { defaultExtractor } from '../utils/defaultExtracror'
 import { useModal } from '../context/modal-context'
+import { useSafeRefCB } from '../utils/custom-hooks/useSafeRef'
 
 const renderDivider = () => <Divider bold />
 const renderList = ({ result, ...rest }) => {
@@ -21,7 +22,7 @@ const renderList = ({ result, ...rest }) => {
         />}
         ItemSeparatorComponent={renderDivider}
         style={{ marginVertical: 12 }}
-        ListFooterComponent={!result.length && EmptyList}
+        ListEmptyComponent={EmptyList}
         {...rest}
       />
   )
@@ -34,7 +35,7 @@ export const PatientsList = ({ patients, navigation }) => {
   const onChange = (query) => 
     patients.filter(patient => patient.fullName.toLowerCase().includes(query))
 
-  const buttonControls = useRef()
+  const buttonControls = useSafeRefCB()
 
   const onChoosePatientMethod = () => dispatch({ 
     type: actions.CHOOSE_ADD_PATIENT_METHOD,
@@ -44,8 +45,8 @@ export const PatientsList = ({ patients, navigation }) => {
     }
   })
 
-  const onDrug = () => buttonControls.current?.setVisible(false)
-  const onDrop = () => buttonControls.current?.setVisible(true)
+  const onDrug = () => buttonControls.current(false)
+  const onDrop = () => buttonControls.current(true)
 
   return (
       <Container>

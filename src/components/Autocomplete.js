@@ -29,11 +29,6 @@ export default ({ placeholder, renderList, onChange, initState, ...rest }) => {
     setSearchQuery(query)
   }
 
-  const onSelectItem = () => () => {
-    setSearchQuery(text)
-    setResult()
-  }
-
   const Output = renderList
 
   return (
@@ -43,7 +38,7 @@ export default ({ placeholder, renderList, onChange, initState, ...rest }) => {
         onChangeText={onChangeSearch}
         value={searchQuery}
       />
-      <Output {...rest} onSelect={onSelectItem} result={result} />
+      <Output {...rest} result={result} />
     </View>
   )
 }

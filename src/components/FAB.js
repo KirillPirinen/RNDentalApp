@@ -6,9 +6,7 @@ export const FAB = forwardRef(({ onPress, label, style }, ref) => {
   const [visible, setVisible] = useState(true)
   const [expanded, setExpanded] = useState(false)
 
-  useImperativeHandle(ref, () => ({
-    setVisible
-  }))
+  useImperativeHandle(ref, () => setVisible)
 
   useEffect(() => {
     if(!visible) {

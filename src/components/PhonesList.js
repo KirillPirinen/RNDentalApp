@@ -11,8 +11,7 @@ const Phone = ({ phone, onMarkPrime }) => {
         labelStyle={phone.isPrimary ? styles.checkedLabel : styles.uncheckedLabel}
         style={styles.wrapper}
         label={phone.number}
-        labelVariant="labelMedium"
-        mode="ios"
+        labelVariant="labelLarge"
       />
   )
 }

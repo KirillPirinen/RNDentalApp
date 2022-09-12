@@ -3,13 +3,16 @@ import styled from 'styled-components/native'
 import { Surface, useTheme } from 'react-native-paper'
 import { Avatar } from './Avatar'
 import { memo } from 'react'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 
-export const Patient = ({ patient, onLongPress, onPress }) => {
+export const Patient = ({ patient, onLongPress, onPress, navigation }) => {
   const theme = useTheme()
+  const __onPress = onPress || function () { navigation?.navigate('Detail', { patient }) }
+
   return (
       <TouchableHighlight 
         onLongPress={onLongPress} 
-        onPress={onPress}
+        onPress={__onPress}
         underlayColor={theme.colors.primary}
       >
         <Surface 

@@ -7,6 +7,8 @@ export default appSchema({
       name: 'patients',
       columns: [
         { name: 'full_name', type: 'string' },
+        // { name: 'has_telegram', type: 'boolean' },
+        // { name: 'has_whatsapp', type: 'boolean' },
       ]
     }),
     tableSchema({

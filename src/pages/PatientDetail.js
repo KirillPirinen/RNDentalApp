@@ -1,13 +1,13 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { View, Linking } from 'react-native'
 import styled from 'styled-components/native'
-import { Foundation } from '@expo/vector-icons'
-import { Fontisto } from '@expo/vector-icons';
+import { Foundation, FontAwesome5, Fontisto } from '@expo/vector-icons'
 import { IconButton } from 'react-native-paper'
 import withObservables from '@nozbe/with-observables';
 import { Button, Container, PatientAppointmentList, FAB, PhonesList } from '../components'
 import { useModal } from '../context/modal-context';
 import { useSafeRefCB } from '../utils/custom-hooks/useSafeRef';
+import { getPrimaryPhoneNumber } from '../utils/getPrimaryPhoneNumber'
 
 const PatientDetail = ({ navigation, patient, appointments, phones }) => {
   const [actions, dispatch] = useModal()
@@ -22,13 +22,39 @@ const PatientDetail = ({ navigation, patient, appointments, phones }) => {
     payload: { patient, onDelete: onDeletePatient }
   })
 
-  const getPrimaryPhoneNumber = () => {
-    const primary = phones.find((phone) => phone.isPrimary)?.number
-    return primary || phones[0]?.number
+  const onCall = () => {
+    Linking.openURL(`tel:${getPrimaryPhoneNumber(phones)}`).catch(() => {
+      dispatch({ 
+        type: actions.INFO,
+        payload: { 
+          text: 'К сожалению мы не смогли открыть приложение для звонка',
+          color: 'error'
+        }
+      })
+    })
   }
-
-  const onCall = () => Linking.openURL(`tel:${getPrimaryPhoneNumber()}`)
-  const onWhatsApp = () => Linking.openURL(`whatsapp://send?text=hello&phone=${getPrimaryPhoneNumber()}`)
+  const onWhatsApp = () => {
+    Linking.openURL(`whatsapp://send?text=hello&phone=${getPrimaryPhoneNumber(phones)}`).catch(() => {
+      dispatch({ 
+        type: actions.INFO,
+        payload: { 
+          text: 'К сожалению мы не смогли открыть whatsapp, возможно он не установлен',
+          color: 'error' 
+        }
+      })
+    })
+  }
+  const onTelegramApp = () => {
+    Linking.openURL(`tg://msg?text=hello&to=${getPrimaryPhoneNumber(phones)}`).catch(() => {
+      dispatch({ 
+        type: actions.INFO,
+        payload: { 
+          text: 'К сожалению мы не смогли открыть telegram, возможно он не установлен',
+          color: 'error'
+        }
+      })
+    })
+  }
 
   const buttonControls = useSafeRefCB()
 
@@ -69,7 +95,7 @@ const PatientDetail = ({ navigation, patient, appointments, phones }) => {
         </View>
         <PatientButtons>
           <FormulaButtonView>
-            <Button onPress={() => navigation.navigate('TeethFormula', { patient })}>Формула зубов</Button>
+            <Button onPress={() => navigation.navigate('TeethFormula', { patient })}>Зубная формула</Button>
           </FormulaButtonView>
           <PhoneButtonView>
             <Button
@@ -81,10 +107,18 @@ const PatientDetail = ({ navigation, patient, appointments, phones }) => {
           </PhoneButtonView>
           <PhoneButtonView>
             <Button
-              color="#84D269"
+              color="#43d854"
               onPress={onWhatsApp}
             >
               <Fontisto name="whatsapp" size={24} color="white" />
+            </Button>
+          </PhoneButtonView>
+          <PhoneButtonView>
+            <Button
+              color="#0088cc"
+              onPress={onTelegramApp}
+            >
+              <FontAwesome5 name="telegram-plane" size={24} color="white" />
             </Button>
           </PhoneButtonView>
         </PatientButtons>

@@ -2,15 +2,6 @@ import React, { forwardRef, useLayoutEffect, useImperativeHandle, useRef, useSta
 import { ScrollView, StyleSheet } from 'react-native'
 import { Button, Modal, Text, ProgressBar } from 'react-native-paper'
 import { createPatient } from '../../db/actions'
-import { noop } from '../../utils/noop'
-
-const Progress = forwardRef((props, forwardedRef) => {
-  const [progress, setProgress] = useState(0)
-
-  useImperativeHandle(forwardedRef, () => setProgress)
-
-  return <ProgressBar {...props} progress={progress} color={'green'} />
-})
 
 export const ImportProgress = ({ 
   __visible, 
@@ -42,7 +33,6 @@ export const ImportProgress = ({
         await prev
         container.success++
       } catch(e) {
-        console.log(e)
         container.failedIndexes.push(index - 1)
       } finally {
         container.total++

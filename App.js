@@ -12,14 +12,14 @@ LogBox.ignoreLogs([
 
 const App = () => {
   return (
-    <ThemeAdapter>
       <DatabaseProvider database={database}>
-        <ModalContextProvider>
-          <Router />
-          <ContextedPortal />
-        </ModalContextProvider>
+        <ThemeAdapter>
+          <ModalContextProvider>
+            <Router />
+            <ContextedPortal />
+          </ModalContextProvider>
+        </ThemeAdapter>
       </DatabaseProvider>
-    </ThemeAdapter>
   )
 }
 

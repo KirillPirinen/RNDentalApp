@@ -1,7 +1,7 @@
 import { Appbar, useTheme } from 'react-native-paper'
 import { HeaderMenu } from './HeaderMenu'
 
-const AppHeader = ({ navigation, route, options: { menu }, style }) => {
+const AppHeader = ({ navigation, options: { menu, headerTitle }, style }) => {
   const theme = useTheme()
   return (
     <Appbar.Header
@@ -10,7 +10,7 @@ const AppHeader = ({ navigation, route, options: { menu }, style }) => {
       elevated
     >
       {navigation.canGoBack() && <Appbar.BackAction onPress={navigation.goBack} />}
-      <Appbar.Content title={route.name} />
+      <Appbar.Content title={headerTitle} />
       {menu && <HeaderMenu menu={menu} theme={theme} />}
     </Appbar.Header>
   )

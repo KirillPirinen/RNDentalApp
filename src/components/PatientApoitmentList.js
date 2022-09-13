@@ -3,6 +3,11 @@ import { FlatList } from 'react-native'
 import { PatientAppointment } from '../components/Appointment/PatientAppointments'
 import { useModal } from '../context/modal-context'
 import { defaultExtractor } from '../utils/defaultExtracror'
+import withObservables from '@nozbe/with-observables'
+
+const ObservablePatientAppointment = withObservables(['appointment'], ({ appointment }) => ({
+  appointment
+}))(PatientAppointment)
 
 export const PatientAppointmentList = ({ 
   appointments, 
@@ -28,7 +33,7 @@ export const PatientAppointmentList = ({
   }, [])
 
   const renderAppointments = ({ item }) => (
-    <PatientAppointment 
+    <ObservablePatientAppointment 
       appointment={item}
       setOpenedMenu={setOpenedMenu}
       isMenuOpen={openedMenu === item.id}

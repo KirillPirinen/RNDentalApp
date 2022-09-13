@@ -1,6 +1,7 @@
 import { Model } from '@nozbe/watermelondb'
-import { text, writer, children } from '@nozbe/watermelondb/decorators'
+import { text, writer, children, field, lazy } from '@nozbe/watermelondb/decorators'
 import { phoneSanitazer } from '../../utils/sanitizers'
+import { Q } from '@nozbe/watermelondb'
 
 export default class Patient extends Model {
   static table = 'patients'
@@ -12,16 +13,30 @@ export default class Patient extends Model {
   }
   
   @text('full_name') fullName
+  @field('has_telegram') hasTelegram
+  @field('has_whatsapp') hasWhatsapp
 
   @children('phones') phones
   @children('appointments') appointments
   @children('formulas') formulas
+
+  @lazy sortedAppointments = this.collections.get('appointments').query(
+    Q.sortBy('date', Q.desc)
+  )
 
   get separateNames () {
     return this.fullName.split(' ')
   }
 
   @writer async updateInstance(fields, phones) {
+
+    if(!phones) {
+      return await this.update(instance => {
+        Object.keys(fields).forEach((key) => {
+          instance[key] = fields[key]
+        })
+      })
+    }
 
     const batchPhones = phones.map(dirtyPhone => {
 

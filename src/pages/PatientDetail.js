@@ -1,16 +1,17 @@
-import React from 'react'
-import { View, Linking } from 'react-native'
-import styled from 'styled-components/native'
-import { Foundation, FontAwesome5, Fontisto } from '@expo/vector-icons'
+import React, { useEffect } from 'react'
+import { View, Linking, StyleSheet, Text } from 'react-native'
 import { IconButton } from 'react-native-paper'
-import withObservables from '@nozbe/with-observables';
-import { Button, Container, PatientAppointmentList, FAB, PhonesList } from '../components'
-import { useModal } from '../context/modal-context';
-import { useSafeRefCB } from '../utils/custom-hooks/useSafeRef';
+import withObservables from '@nozbe/with-observables'
+import { Button, Container, PatientAppointmentList, FAB, PhonesList,
+  CallButton, WhatsappButton, TelegramButtom } from '../components'
+import { useModal } from '../context/modal-context'
+import { useSafeRefCB } from '../utils/custom-hooks/useSafeRef'
 import { getPrimaryPhoneNumber } from '../utils/getPrimaryPhoneNumber'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
 
 const PatientDetail = ({ navigation, patient, appointments, phones }) => {
   const [actions, dispatch] = useModal()
+  const db = useDatabase()
 
   const onDeletePatient = () => patient.deleteInstance().then(() => {
     dispatch({ type: actions.CLEAR })
@@ -33,9 +34,10 @@ const PatientDetail = ({ navigation, patient, appointments, phones }) => {
       })
     })
   }
-  const onWhatsApp = () => {
-    Linking.openURL(`whatsapp://send?text=hello&phone=${getPrimaryPhoneNumber(phones)}`).catch(() => {
-      dispatch({ 
+
+  const onWhatsApp = (text) => {
+    Linking.openURL(`whatsapp://send?${text}=hello&phone=${getPrimaryPhoneNumber(phones)}`).catch(() => {
+      dispatch({
         type: actions.INFO,
         payload: { 
           text: 'К сожалению мы не смогли открыть whatsapp, возможно он не установлен',
@@ -44,7 +46,8 @@ const PatientDetail = ({ navigation, patient, appointments, phones }) => {
       })
     })
   }
-  const onTelegramApp = () => {
+
+  const onTelegramApp = (text) => {
     Linking.openURL(`tg://msg?text=hello&to=${getPrimaryPhoneNumber(phones)}`).catch(() => {
       dispatch({ 
         type: actions.INFO,
@@ -56,82 +59,88 @@ const PatientDetail = ({ navigation, patient, appointments, phones }) => {
     })
   }
 
+  const onSendMessage = () => dispatch({ 
+    type: actions.CHOOSE_TEMPLATE,
+    payload: { patient, appointments, onSend: onWhatsApp }
+  })
+
   const buttonControls = useSafeRefCB()
 
-  const onDrug = () => buttonControls.current?.(false)
-  const onDrop = () => buttonControls.current?.(true)
+  const onDrug = () => buttonControls.current(false)
+  const onDrop = () => buttonControls.current(true)
+
+  useEffect(() => {
+    
+    const onWhatsappCheck = () => {
+      patient.updateInstance({ hasWhatsapp: !patient.hasWhatsapp })
+    }
+    const onTelegramCheck = () => {
+      patient.updateInstance({ hasTelegram: !patient.hasTelegram })
+    }
+
+    navigation.setOptions({
+      menu: [{ 
+        type: 'TouchableCheckbox', 
+        title: 'Telegram', 
+        onPress: onTelegramCheck,
+        value: patient.hasTelegram
+      },
+      {
+        type: 'TouchableCheckbox', 
+        title: 'Whatsapp', 
+        onPress: onWhatsappCheck,
+        value: patient.hasWhatsapp
+      }]
+    })
+  }, [patient])
 
   return (
-      <View 
-        style={{ flex: 1, zIndex: 100 }} 
-      >
-      <PatientDetails>
-        <View style={{ 
-          flexDirection: 'row', 
-          justifyContent: 'space-between',
-        }}>
-          <View style={{ flexShrink: 2 }}>
-            <PatientFullname>{patient.fullName}</PatientFullname>
+      <View style={styles.pageWrapper}>
+        <View style={styles.patientDetails}>
+          <View style={styles.metaWrapper}>
+            <View style={styles.nameWrapper}>
+              <Text style={styles.patientFullname}>
+                {patient.fullName}
+              </Text>
+            </View>
+            <View style={styles.actionsWrapper}>
+              <IconButton
+                  icon="pencil-circle"
+                  iconColor="gray"
+                  size={30}
+                  onPress={() => navigation.navigate('AddPatient', { patient, phones })}
+                  style={styles.noPadding}
+              />
+              <IconButton
+                  icon="delete"
+                  iconColor="red"
+                  size={30}
+                  onPress={onConfirmDeletePatient}
+                  style={styles.noPadding}
+              />
+            </View>
           </View>
-          <View style={{ flexDirection:'row' }}>
-            <IconButton
-                icon="pencil-circle"
-                iconColor="gray"
-                size={30}
-                onPress={() => navigation.navigate('AddPatient', { patient, phones })}
-                style={{ padding: 0 }}
-            />
-            <IconButton
-                icon="delete"
-                iconColor="red"
-                size={30}
-                onPress={onConfirmDeletePatient}
-                style={{ padding: 0 }}
-            />
+          <View style={styles.phoneListWrapper}>
+            <PhonesList phones={phones} />
+          </View>
+          <View style={styles.patientButtons}>
+            <View style={styles.formulaButtonView}>
+              <Button onPress={() => navigation.navigate('TeethFormula', { patient })}>Зубная формула</Button>
+            </View>
+            <CallButton onPress={onCall} />
+            {patient.hasWhatsapp && <WhatsappButton onPress={onSendMessage} />}
+            {patient.hasTelegram && <TelegramButtom onPress={onTelegramApp} />}
           </View>
         </View>
-        <View style={{ flexDirection: 'row', flexWrap:'wrap', justifyContent:'space-between' }}>
-          <PhonesList phones={phones} />
-        </View>
-        <PatientButtons>
-          <FormulaButtonView>
-            <Button onPress={() => navigation.navigate('TeethFormula', { patient })}>Зубная формула</Button>
-          </FormulaButtonView>
-          <PhoneButtonView>
-            <Button
-              color="#84D269"
-              onPress={onCall}
-            >
-              <Foundation name="telephone" size={22} color="white" />
-            </Button>
-          </PhoneButtonView>
-          <PhoneButtonView>
-            <Button
-              color="#43d854"
-              onPress={onWhatsApp}
-            >
-              <Fontisto name="whatsapp" size={24} color="white" />
-            </Button>
-          </PhoneButtonView>
-          <PhoneButtonView>
-            <Button
-              color="#0088cc"
-              onPress={onTelegramApp}
-            >
-              <FontAwesome5 name="telegram-plane" size={24} color="white" />
-            </Button>
-          </PhoneButtonView>
-        </PatientButtons>
-      </PatientDetails>
-      <Container>
-        <PatientAppointmentList 
-          appointments={appointments}
-          navigation={navigation}
-          patient={patient}
-          onScrollBeginDrag={onDrug}
-          onScrollEndDrag={onDrop}
-        />
-      </Container>
+        <Container>
+          <PatientAppointmentList 
+            appointments={appointments}
+            navigation={navigation}
+            patient={patient}
+            onScrollBeginDrag={onDrug}
+            onScrollEndDrag={onDrop}
+          />
+        </Container>
         <FAB
           ref={buttonControls} 
           label={`Записать ${patient.fullName}`}
@@ -141,37 +150,29 @@ const PatientDetail = ({ navigation, patient, appointments, phones }) => {
   )
 }
 
-
-const PatientDetails = styled.View`
-  flex: 0.3;
-  padding: 25px;
-`;
-
-const FormulaButtonView = styled.View`
-  flex: 1;
-`;
-
-const PhoneButtonView = styled.View`
-  margin-left: 10px;
-  width: 45px;
-`;
-
-const PatientButtons = styled.View`
-  flex: 1;
-  flex-direction: row;
-  margin-top: 20px;
-`;
-
-const PatientFullname = styled.Text`
-  font-weight: 800;
-  font-size: 24px;
-  line-height: 30px;
-  margin-bottom: 3px;
-`;
-
+const styles = StyleSheet.create({
+  pageWrapper: { flex: 1, zIndex: 100 },
+  patientDetails: { flex: 0.3, padding: 25 },
+  formulaButtonView: { flex: 1 },
+  patientButtons: { flex: 1, flexDirection: 'row', marginTop: 20 },
+  nameWrapper: { flexShrink: 2 },
+  actionsWrapper: { flexDirection:'row' },
+  patientFullname: {
+    fontWeight:'800',
+    fontSize: 24,
+    lineHeight: 30,    
+    marginBottom: 3
+  },
+  phoneListWrapper: { flexDirection: 'row', flexWrap:'wrap', justifyContent:'space-between' },
+  noPadding: { padding: 0 },
+  metaWrapper: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between',
+  }
+})
 
 export default withObservables(['route'], ({ route }) => ({
     patient: route.params.patient,
     phones: route.params.patient.phones,
     appointments: route.params.patient.appointments
-}))(PatientDetail);
+}))(PatientDetail)

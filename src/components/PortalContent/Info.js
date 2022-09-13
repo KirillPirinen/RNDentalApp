@@ -1,11 +1,9 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Snackbar, useTheme } from 'react-native-paper'
+import { TabsName } from '../../router'
 
-const levels = {
-  error: 'error', //onErrorContainer //error //errorContainer
-  info: 'onPrimary' //onPrimaryContainer //onSecondary
-}
+const homeTabs = Object.values(TabsName)
 
 export const Info = ({ 
   __visible, 
@@ -26,11 +24,13 @@ export const Info = ({
     backgroundColor: theme.colors[color] || theme.colors.onPrimaryContainer
   }
 
+  const hasTabs = homeTabs.includes(routeName)
+
   return (
       <Snackbar
         style={[
           styles.container, 
-          routeName === 'Home' && styles.withMargin, 
+          hasTabs && styles.withMargin, 
           colorStyle
         ]}
         visible={__visible}

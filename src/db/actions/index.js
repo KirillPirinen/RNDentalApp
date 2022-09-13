@@ -9,6 +9,8 @@ export const createPatient = async ({ fullName, phones, phoneNumbers, name }) =>
     
       const newPatient = await database.get('patients').create(patient => {
         patient.fullName = recievedName
+        patient.hasWhatsapp = true
+        patient.hasTelegram = true
       })
 
       const batches = phonesToBatch?.map(phone => {
@@ -58,6 +60,14 @@ export const createPhone = async ({ patientId, number, isPrimary = false }) => {
       phone.patientId = patientId
       phone.number = number
       phone.isPrimary = isPrimary
+    })
+  )
+}
+
+export const createTemplate = async ({ text, name }) => {
+  return await database.write(async () => await database.get('templates').create(template => {
+      template.name = name
+      template.text = text
     })
   )
 }

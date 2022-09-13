@@ -85,7 +85,7 @@ const TeethFormula = ({ formula, navigation, patient, teeth }) => {
       }
     ]
     })
-  }, [])
+  }, [formula])
 
   const viewBox = (formula.hasBabyJaw && !formula.hasAdultJaw) ? `43.5 55.5 202 259` : `0 0 ${originalWidth} ${originalHeight}`
 

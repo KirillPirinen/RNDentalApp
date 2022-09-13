@@ -4,6 +4,7 @@ export default (state, action) => {
   switch (action.type) {
 
     case actions.INFO:
+    case actions.CHOOSE_TEMPLATE:
     case actions.IMPORT_PROGRESS:
     case actions.CHOOSE_ADD_PATIENT_METHOD:
     case actions.CONFIRM_DELETE_PATIENT: 

@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import CustomNavigationBar from './components/AppHeader';
 import { Appointments, PatientDetail, AddAppointment, PatientsList,
-  AddPatient, ImportContacts } from './pages'
+  AddPatient, ImportContacts, Settings, AddTemplate } from './pages'
 import * as React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { StatusBar } from 'react-native';
@@ -9,6 +9,12 @@ import { useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TeethFormula from './pages/TeethFormula'
 import { useModal } from './context/modal-context';
+
+export const TabsName = {
+  records: 'Записи',
+  patients: 'Все пациенты',
+  settings: 'Настройки'
+}
 
 const Stack = createNativeStackNavigator()
 const Tab = createMaterialBottomTabNavigator()
@@ -22,7 +28,7 @@ function BottomTabs() {
         activeColor={theme.colors.primary}
       >
         <Tab.Screen 
-          name="Записи" 
+          name={TabsName.records}
           component={Appointments}
           options={{
             tabBarIcon: ({ color }) => (
@@ -31,11 +37,20 @@ function BottomTabs() {
           }}
         />
         <Tab.Screen 
-          name="Все пациенты" 
+          name={TabsName.patients}
           component={PatientsList}
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="account-injury" color={color} size={26} />
+            ),
+          }} 
+        />
+        <Tab.Screen 
+          name={TabsName.settings} 
+          component={Settings}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="cog-outline" color={color} size={26} />
             ),
           }} 
         />
@@ -75,6 +90,7 @@ const Router = () => {
         <Stack.Screen options={{ headerTitle: 'Добавление пациента' }} name="AddPatient" component={AddPatient} />
         <Stack.Screen options={{ headerTitle: 'Зубная формула' }} name="TeethFormula" component={TeethFormula} />
         <Stack.Screen options={{ headerTitle: 'Импорт контактов' }} name="ImportContacts" component={ImportContacts} />
+        <Stack.Screen options={{ headerTitle: 'Добавить новый шаблон' }} name="AddTemplate" component={AddTemplate} />
       </Stack.Navigator>
     </>
   )

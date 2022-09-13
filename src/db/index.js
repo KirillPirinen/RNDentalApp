@@ -2,7 +2,7 @@ import { Database } from '@nozbe/watermelondb'
 import SQLiteAdapter from '@nozbe/watermelondb/adapters/sqlite'
 import schema from './schema'
 import migrations from './migrations/migrations'
-import { Patient, Appointment, Tooth, Formula, Phone } from './models'
+import modelClasses from './models'
 
 const adapter = new SQLiteAdapter({
   schema,
@@ -15,5 +15,5 @@ const adapter = new SQLiteAdapter({
 
 export const database = new Database({
   adapter,
-  modelClasses: [Patient, Appointment, Tooth, Formula, Phone]
+  modelClasses
 })

@@ -1,5 +1,15 @@
-export { default as Patient } from './Patient'
-export { default as Appointment } from './Appointment'
-export { default as Tooth } from './Tooth'
-export { default as Formula } from './Formula'
-export { default as Phone } from './Phone'
+import Patient from './Patient'
+import Appointment from './Appointment'
+import Tooth from './Tooth'
+import Formula from './Formula'
+import Phone from './Phone'
+import Template from './Template'
+
+export default [
+  Patient,
+  Appointment,
+  Tooth,
+  Formula,
+  Phone,
+  Template
+]

@@ -15,7 +15,8 @@ export default class Patient extends Model {
   @text('full_name') fullName
   @field('has_telegram') hasTelegram
   @field('has_whatsapp') hasWhatsapp
-
+  @text('contact_id') contactId
+  
   @children('phones') phones
   @children('appointments') appointments
   @children('formulas') formulas

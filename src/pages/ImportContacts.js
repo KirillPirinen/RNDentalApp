@@ -1,13 +1,14 @@
-import React, { memo, useState, useRef, useCallback } from 'react'
+import React, { memo, useState, useCallback, useEffect } from 'react'
 import { FlatList } from 'react-native'
 import { useContacts } from '../utils/custom-hooks/useContacts'
 import { Container, Autocomplete, FAB, EmptyList } from '../components'
-import { List, Divider } from 'react-native-paper'
+import { List, Divider} from 'react-native-paper'
 import { defaultExtractor } from '../utils/defaultExtracror'
 import { useModal } from '../context/modal-context'
 import { useForceUpdate } from '../utils/custom-hooks/useForceUpdate'
 import { noop } from '../utils/noop'
 import { useSafeRefCB } from '../utils/custom-hooks/useSafeRef'
+import { useToggle } from '../utils/custom-hooks/useToggle'
 
 const eqCompare = (prev, next) => prev.checked === next.checked
 
@@ -65,15 +66,28 @@ const renderItem = ({ item }) => <Item item={item} checked={item.checked} />
 const renderSeparator = () => <Divider bold />
 
 const ImportContacts = ({ navigation }) => {
-
-    const [status, contacts] = useContacts()
+    const [isUnique, setUnique] = useToggle(true)
+    const [status, contacts] = useContacts(isUnique)
     const [actions, dispatch] = useModal()
 
+    useEffect(() => {
+      navigation.setOptions({
+        menu: [
+        { 
+          type: 'TouchableCheckbox', 
+          title: 'Скрыть добавленные', 
+          onPress: setUnique,
+          value: isUnique
+        }
+      ]
+      })
+    }, [])
+
     const onChange = (query) => 
-      contacts.data.filter(contact => contact.name.toLowerCase().includes(query))
+      contacts.filter(contact => contact.name.toLowerCase().includes(query))
     
     const onSubmit = () => {
-      const choosed = contacts.data.filter(contact => contact.checked)
+      const choosed = contacts.filter(contact => contact.checked)
       const onDone = () => navigation.popToTop()
 
       dispatch({ type: actions.IMPORT_PROGRESS, payload: { 
@@ -82,7 +96,7 @@ const ImportContacts = ({ navigation }) => {
       }})
 
     }
-
+  
   const buttonControls = useSafeRefCB()
 
   return (
@@ -90,7 +104,7 @@ const ImportContacts = ({ navigation }) => {
       <Autocomplete
         onChange={onChange}
         renderList={RenderedList}
-        initState={contacts.data}
+        initState={contacts}
         buttonControls={buttonControls}
       />
       <FAB

@@ -1,7 +1,7 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb'
 
 export default appSchema({
-  version: 1,
+  version: 3,
   tables: [
     tableSchema({
       name: 'patients',
@@ -9,6 +9,7 @@ export default appSchema({
         { name: 'full_name', type: 'string' },
         { name: 'has_telegram', type: 'boolean' },
         { name: 'has_whatsapp', type: 'boolean' },
+        { name: 'contact_id', type: 'string', isOptional: true }
       ]
     }),
     tableSchema({

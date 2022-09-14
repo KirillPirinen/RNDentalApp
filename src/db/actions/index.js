@@ -1,7 +1,7 @@
 import { database } from '..'
 import { phoneSanitazer } from '../../utils/sanitizers'
 
-export const createPatient = async ({ fullName, phones, phoneNumbers, name }) => {
+export const createPatient = async ({ fullName, phones, phoneNumbers, name, id }) => {
   const phonesToBatch = phones || phoneNumbers
   const recievedName = fullName || name
 
@@ -11,6 +11,7 @@ export const createPatient = async ({ fullName, phones, phoneNumbers, name }) =>
         patient.fullName = recievedName
         patient.hasWhatsapp = true
         patient.hasTelegram = true
+        patient.contactId = id
       })
 
       const batches = phonesToBatch?.map(phone => {

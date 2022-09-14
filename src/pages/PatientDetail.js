@@ -7,11 +7,13 @@ import { Button, Container, PatientAppointmentList, FAB, PhonesList,
 import { useModal } from '../context/modal-context'
 import { useSafeRefCB } from '../utils/custom-hooks/useSafeRef'
 import { getPrimaryPhoneNumber } from '../utils/getPrimaryPhoneNumber'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
 
-const PatientDetail = ({ navigation, patient, appointments, phones }) => {
+const ObservablePatientAppointmentList = withObservables(['patient'], ({ patient }) => ({
+  appointments: patient.sortedAppointments
+}))(PatientAppointmentList)
+
+const PatientDetail = ({ navigation, patient, phones }) => {
   const [actions, dispatch] = useModal()
-  const db = useDatabase()
 
   const onDeletePatient = () => patient.deleteInstance().then(() => {
     dispatch({ type: actions.CLEAR })
@@ -35,33 +37,9 @@ const PatientDetail = ({ navigation, patient, appointments, phones }) => {
     })
   }
 
-  const onWhatsApp = (text) => {
-    Linking.openURL(`whatsapp://send?${text}=hello&phone=${getPrimaryPhoneNumber(phones)}`).catch(() => {
-      dispatch({
-        type: actions.INFO,
-        payload: { 
-          text: 'К сожалению мы не смогли открыть whatsapp, возможно он не установлен',
-          color: 'error' 
-        }
-      })
-    })
-  }
-
-  const onTelegramApp = (text) => {
-    Linking.openURL(`tg://msg?text=hello&to=${getPrimaryPhoneNumber(phones)}`).catch(() => {
-      dispatch({ 
-        type: actions.INFO,
-        payload: { 
-          text: 'К сожалению мы не смогли открыть telegram, возможно он не установлен',
-          color: 'error'
-        }
-      })
-    })
-  }
-
-  const onSendMessage = () => dispatch({ 
+  const onSendMessage = (mode) => () => dispatch({ 
     type: actions.CHOOSE_TEMPLATE,
-    payload: { patient, appointments, onSend: onWhatsApp }
+    payload: { patient, mode, phone: getPrimaryPhoneNumber(phones) }
   })
 
   const buttonControls = useSafeRefCB()
@@ -128,13 +106,12 @@ const PatientDetail = ({ navigation, patient, appointments, phones }) => {
               <Button onPress={() => navigation.navigate('TeethFormula', { patient })}>Зубная формула</Button>
             </View>
             <CallButton onPress={onCall} />
-            {patient.hasWhatsapp && <WhatsappButton onPress={onSendMessage} />}
-            {patient.hasTelegram && <TelegramButtom onPress={onTelegramApp} />}
+            {patient.hasWhatsapp && <WhatsappButton onPress={onSendMessage('whatsapp')} />}
+            {patient.hasTelegram && <TelegramButtom onPress={onSendMessage('telegram')} />}
           </View>
         </View>
         <Container>
-          <PatientAppointmentList 
-            appointments={appointments}
+          <ObservablePatientAppointmentList 
             navigation={navigation}
             patient={patient}
             onScrollBeginDrag={onDrug}
@@ -173,6 +150,5 @@ const styles = StyleSheet.create({
 
 export default withObservables(['route'], ({ route }) => ({
     patient: route.params.patient,
-    phones: route.params.patient.phones,
-    appointments: route.params.patient.appointments
+    phones: route.params.patient.phones
 }))(PatientDetail)

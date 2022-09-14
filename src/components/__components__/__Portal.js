@@ -12,6 +12,7 @@ export const ContextedPortal = () => {
   const __defaultHandlers = useRef({
     hide: dispatch.bind(null, { type: actions.HIDE }),
     clear: dispatch.bind(null, { type: actions.CLEAR }),
+    dispatch,
     navigation
   })
 

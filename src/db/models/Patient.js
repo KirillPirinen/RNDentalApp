@@ -24,6 +24,10 @@ export default class Patient extends Model {
     Q.sortBy('date', Q.desc)
   )
 
+  @lazy nextAppointment = this.sortedAppointments.extend(
+    Q.take(1)
+  )
+
   get separateNames () {
     return this.fullName.split(' ')
   }

@@ -30,25 +30,6 @@ const ButtonText = styled.Text`
 
 export default Button;
 
-export const FAB = (props) => {
-  const [visible, setVisible] = useState(false)
-  return (
-    <SafeAreaView style={styles.container}>
-      <AnimatedFAB
-        icon={'plus'}
-        label={'Label'}
-        extended={true}
-        onPress={() => console.log('Pressed')}
-        visible={true}
-        animateFrom={'right'}
-        iconMode={'dynamic'}
-        style={[styles.fabStyle]}
-        {...props}
-      />
-    </SafeAreaView>
-  )
-}
-
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,

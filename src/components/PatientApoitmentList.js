@@ -17,7 +17,7 @@ export const PatientAppointmentList = ({
   patient,
   ...rest
 }) => {
-  
+
   const [actions, dispatch] = useModal()
 
   const onEditAppointment = useCallback((appointment) => {
@@ -32,15 +32,17 @@ export const PatientAppointmentList = ({
     })
   }, [])
 
-  const renderAppointments = ({ item }) => (
-    <ObservablePatientAppointment 
-      appointment={item}
-      setOpenedMenu={setOpenedMenu}
-      isMenuOpen={openedMenu === item.id}
-      onEditAppointment={onEditAppointment}
-      onDeleteAppointment={onConfirmDeleteAppointment}
-    />
-  )
+  const renderAppointments = ({ item }) => {
+    return (
+      <ObservablePatientAppointment 
+        appointment={item}
+        setOpenedMenu={setOpenedMenu}
+        isMenuOpen={openedMenu === item.id}
+        onEditAppointment={onEditAppointment}
+        onDeleteAppointment={onConfirmDeleteAppointment}
+      />
+    )
+  }
 
   return <FlatList
       data={appointments}

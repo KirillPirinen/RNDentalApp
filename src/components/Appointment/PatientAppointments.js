@@ -6,11 +6,12 @@ import Badge from '../Badge'
 import formatRu from '../../utils/formatRu'
 import { memo, useState } from 'react'
 
-export const PatientAppointment = memo(({ 
+export const PatientAppointment = ({ 
   appointment, 
   onEditAppointment, 
   onDeleteAppointment 
 }) => {
+
   return (
     <View style={styles.card}>
       <View style={{ 
@@ -45,7 +46,7 @@ export const PatientAppointment = memo(({
       {true /*diagnosis*/ && <PriceBadge status="green">{appointment.price || 2000} &#8381;</PriceBadge>}
     </View>
   )
-})
+}
 
 
 const Teeth = ({ teeth }) => {
@@ -116,6 +117,7 @@ const MenuApointment = ({ onEditAppointment, appointment, onDeleteAppointment })
   )
 }
 
+export default memo(PatientAppointment)
 
 const PriceBadge = styled(Badge)`
   position: absolute;

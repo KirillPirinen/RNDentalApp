@@ -20,17 +20,25 @@ export const createPatient = async ({ fullName, phones, phoneNumbers, name, id }
             instance.number = phoneSanitazer(phone.number)
             instance.isPrimary = Boolean(phone.isPrimary)
           })
-        }) || {}
+        })
 
-      await database.batch(
-        database.get('formulas').prepareCreate(formula => {
-          formula.patientId = newPatient.id
-          formula.hasAdultJaw = true
-          formula.hasBabyJaw = false
-        }),
-        ...batches
-      )
-
+        if (batches) {
+          await database.batch(
+            database.get('formulas').prepareCreate(formula => {
+              formula.patientId = newPatient.id
+              formula.hasAdultJaw = true
+              formula.hasBabyJaw = false
+            }),
+            ...batches
+          )
+        } else {
+          await database.get('formulas').create(formula => {
+            formula.patientId = newPatient.id
+            formula.hasAdultJaw = true
+            formula.hasBabyJaw = false
+          })
+        }
+      
       return newPatient
     } 
   )

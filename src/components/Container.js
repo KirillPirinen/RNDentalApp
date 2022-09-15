@@ -1,6 +1,11 @@
-import styled from 'styled-components/native';
+import { View } from 'react-native'
 
-export default styled.View`
-  padding: 25px;
-  flex: 1;
-`
+const defaultStyle = {
+  padding: 25,
+  flex: 1
+}
+
+const Container = ({ children }) => <View style={defaultStyle}>{children}</View>
+
+
+export default Container

@@ -1,5 +1,4 @@
-import styled from 'styled-components/native'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text as RNText } from 'react-native'
 import { Foundation, FontAwesome5 } from '@expo/vector-icons'
 import { Text, Menu, IconButton, Divider } from 'react-native-paper'
 import Badge from '../Badge'
@@ -43,7 +42,7 @@ export const PatientAppointment = ({
           {formatRu(appointment.date, 'PPpp')}
         </Badge>
       </AppointmentCardRow>
-      {true /*diagnosis*/ && <PriceBadge status="green">{appointment.price || 2000} &#8381;</PriceBadge>}
+      {true /*diagnosis*/ && <Badge style={styles.badgePrice} status="green">{appointment.price || 2000} &#8381;</Badge>}
     </View>
   )
 }
@@ -119,29 +118,9 @@ const MenuApointment = ({ onEditAppointment, appointment, onDeleteAppointment })
 
 export default memo(PatientAppointment)
 
-const PriceBadge = styled(Badge)`
-  position: absolute;
-  width: auto;
-  padding: 0 5px;
-  top: -6px;
-  left: 0;
-  z-index: 100;
-  background-color: white;
-  border: 1px solid #7da453;
-`
+const AppointmentCardLabel = ({ children }) => <RNText style={styles.appointmentCardLabel}>{children}</RNText>
 
-const AppointmentCardLabel = styled.Text`
-  font-size: 16px;
-  margin-left: 10px;
-`;
-
-const AppointmentCardRow = styled.View`
-  flex-direction: row;
-  align-items: center;
-  margin-top: 3.5px;
-  margin-bottom: 3.5px;
-`;
-
+const AppointmentCardRow = ({ style, children }) => <View style={[styles.appointmentCardRow, style]}>{children}</View>
 
 const styles = StyleSheet.create({
   card: {
@@ -159,5 +138,26 @@ const styles = StyleSheet.create({
     borderColor:'#dddddd',
     borderWidth:1,
     backgroundColor: '#fff',
+  },
+  badgePrice: {
+    position: 'absolute',
+    width: 'auto',
+    paddingHorizontal: 5,
+    top: -6,
+    left: 0,
+    zIndex: 100,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#7da453'
+  },
+  appointmentCardLabel: {
+    fontSize: 16,
+    marginLeft: 10
+  },
+  appointmentCardRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 3.5,
+    marginBottom: 3.5,
   }
 })

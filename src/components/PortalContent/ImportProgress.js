@@ -1,4 +1,4 @@
-import React, { forwardRef, useLayoutEffect, useImperativeHandle, useRef, useState, useCallback, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { Button, Modal, Text, ProgressBar } from 'react-native-paper'
 import { createPatient } from '../../db/actions'

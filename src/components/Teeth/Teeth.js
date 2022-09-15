@@ -2,7 +2,6 @@ import React from 'react'
 import Svg, {} from 'react-native-svg'
 import { teethKeysAdult, teethMetaAdult, teethKeysBaby, teethMetaBaby } from './paths-dict'
 import Tooth from './Tooth'
-import withObservables from '@nozbe/with-observables'
 
 export const Teeth = ({ 
   withBabyTeeth, 

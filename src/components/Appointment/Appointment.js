@@ -1,5 +1,4 @@
-import { View, TouchableHighlight } from 'react-native'
-import styled from 'styled-components/native'
+import { View, TouchableHighlight, StyleSheet, Text } from 'react-native'
 import GrayText from '../GrayText'
 import Badge from '../Badge'
 import { addMinutes, format } from 'date-fns'
@@ -8,39 +7,39 @@ import { Avatar } from '../Avatar'
 
 export const Appointment = ({ onLongPress, patient, appointment, status }) => {
   const showEndTime = (status === APPOINTMENT_STATUS.lasts || status === APPOINTMENT_STATUS.future)
+  const backgroundColor = status === APPOINTMENT_STATUS.lasts ? '#daebd3' : '#FFFFFF'
   return (
     <TouchableHighlight onLongPress={onLongPress}>
-      <GroupItem status={status}>
+      <View style={[styles.groupItem, { backgroundColor }]}>
         <Avatar fullName={patient.fullName} />
         <View style={{ flex: 1 }}>
-          <FullName>{patient.fullName}</FullName>
+          <Text style={styles.fullName}>{patient.fullName}</Text>
           {Boolean(appointment.notes) && <GrayText>{appointment.notes}</GrayText>}
         </View>
-        <BadgeWrapper>
+        <View style={styles.badgeWrapper}>
           <Badge status={status}>{format(appointment.date, 'H:mm')}</Badge>
           {showEndTime && (
             <Badge status="green" size={25}>{format(addMinutes(appointment.date, appointment.duration), 'H:mm')}</Badge>
           )}
-        </BadgeWrapper>
-      </GroupItem>
+        </View>
+      </View>
     </TouchableHighlight>
   )
 }
 
-const FullName = styled.Text`
-  font-weight: 600;
-  font-size: 16px;
-`
-
-const BadgeWrapper = styled.View`
-  flex-direction: column;
-`
-
-const GroupItem = styled.View`
-  align-items: center;
-  flex-direction: row;
-  padding: 20px;
-  border-bottom-width: 1px;
-  border-bottom-color: #f3f3f3;
-  background-color:${({ status }) => status === APPOINTMENT_STATUS.lasts ? '#daebd3' : 'white'};
-`
+const styles = StyleSheet.create({
+  fullName: {
+    fontWeight: '600',
+    fontSize: 16
+  },
+  badgeWrapper: {
+    flexDirection: 'column'
+  },
+  groupItem: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f3f3f3',
+  }
+})

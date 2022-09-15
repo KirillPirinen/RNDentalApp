@@ -1,9 +1,7 @@
 import { View, TouchableHighlight, StyleSheet, Text } from 'react-native'
-import styled from 'styled-components/native'
 import { Surface, useTheme } from 'react-native-paper'
 import { Avatar } from './Avatar'
 import { memo } from 'react'
-import { useIsFocused, useNavigation } from '@react-navigation/native'
 
 export const Patient = ({ patient, onLongPress, onPress, navigation }) => {
   const theme = useTheme()
@@ -42,16 +40,6 @@ const styles = StyleSheet.create({
   groupItem: {
     alignItems: 'center',
     flexDirection:'row',
-    padding: 20
+    padding: 20,
   }
 })
-
-
-const GroupItem = styled.View`
-  align-items: center;
-  flex-direction: row;
-  padding: 20px;
-  border-bottom-width: 1px;
-  border-bottom-color: #f3f3f3;
-  background-color: white;
-`

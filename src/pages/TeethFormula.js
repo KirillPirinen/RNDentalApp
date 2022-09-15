@@ -1,14 +1,12 @@
 import React, { useCallback ,useState, useMemo, useEffect } from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
-import { ToggleButton, Switch } from 'react-native-paper'
-import { Container } from '../components';
+import { Container } from '../components'
 import { Teeth } from '../components/Teeth/Teeth'
-import withObservables from '@nozbe/with-observables';
-import { ToothStatePanel } from '../components/Teeth/ToothStatePanel';
+import withObservables from '@nozbe/with-observables'
 import { switchMap } from 'rxjs/operators'
 
-const originalWidth = 289;
-const originalHeight = 370;
+const originalWidth = 289
+const originalHeight = 370
 const width = Dimensions.get("window").width
 
 // selected: {

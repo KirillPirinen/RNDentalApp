@@ -1,4 +1,4 @@
-import React, { memo, useState, useCallback, useEffect } from 'react'
+import React, { memo, useCallback, useEffect } from 'react'
 import { FlatList } from 'react-native'
 import { useContacts } from '../utils/custom-hooks/useContacts'
 import { Container, Autocomplete, FAB, EmptyList } from '../components'
@@ -6,7 +6,6 @@ import { List, Divider} from 'react-native-paper'
 import { defaultExtractor } from '../utils/defaultExtracror'
 import { useModal } from '../context/modal-context'
 import { useForceUpdate } from '../utils/custom-hooks/useForceUpdate'
-import { noop } from '../utils/noop'
 import { useSafeRefCB } from '../utils/custom-hooks/useSafeRef'
 import { useToggle } from '../utils/custom-hooks/useToggle'
 

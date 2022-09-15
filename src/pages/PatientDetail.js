@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { View, Linking, StyleSheet, Text } from 'react-native'
 import { IconButton } from 'react-native-paper'
 import withObservables from '@nozbe/with-observables'
-import { Button, Container, PatientAppointmentList, FAB, PhonesList,
+import { Button, PatientAppointmentList, FAB, PhonesList,
   CallButton, WhatsappButton, TelegramButtom } from '../components'
 import { useModal } from '../context/modal-context'
 import { useSafeRefCB } from '../utils/custom-hooks/useSafeRef'
@@ -110,14 +110,14 @@ const PatientDetail = ({ navigation, patient, phones }) => {
             {patient.hasTelegram && <TelegramButtom onPress={onSendMessage('telegram')} />}
           </View>
         </View>
-        <Container>
+        <View style={styles.patientListWrapper}>
           <ObservablePatientAppointmentList 
             navigation={navigation}
             patient={patient}
             onScrollBeginDrag={onDrug}
             onScrollEndDrag={onDrop}
           />
-        </Container>
+        </View>
         <FAB
           ref={buttonControls} 
           label={`Записать ${patient.fullName}`}
@@ -128,10 +128,11 @@ const PatientDetail = ({ navigation, patient, phones }) => {
 }
 
 const styles = StyleSheet.create({
+  patientListWrapper: { paddingHorizontal: 25 },
   pageWrapper: { flex: 1, zIndex: 100 },
-  patientDetails: { flex: 0.3, padding: 25 },
+  patientDetails: { maxHeight: 300, padding: 25 },
   formulaButtonView: { flex: 1 },
-  patientButtons: { flex: 1, flexDirection: 'row', marginTop: 20 },
+  patientButtons: { flexDirection: 'row', marginTop: 20 },
   nameWrapper: { flexShrink: 2 },
   actionsWrapper: { flexDirection:'row' },
   patientFullname: {

@@ -1,10 +1,7 @@
 import React from 'react'
 import { Avatar as PaperAvatar } from 'react-native-paper'
 
-const defLabStyle = { includeFontPadding: false,
-  /* TODO: вернуть если вне эмулятора текст опять уедет в космос
-lineHeight: undefined*/}
-
+const defLabStyle = { includeFontPadding: false, lineHeight: undefined }
 const defStyle = { marginRight: 16 }
 
 export const Avatar = ({ fullName }) => {

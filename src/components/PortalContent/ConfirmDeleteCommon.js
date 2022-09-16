@@ -27,7 +27,7 @@ export const ConfirmDeleteCommon = ({
   return (
     <ConfirmDelete
       visible={__visible}
-      onClose={__defaultHandlers.current.hide}
+      onClose={__defaultHandlers.current.clear}
       {...defaultProps}
       {...rest}
     />

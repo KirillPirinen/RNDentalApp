@@ -1,14 +1,13 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import CustomNavigationBar from './components/AppHeader';
+import CustomNavigationBar from './components/AppHeader'
 import { Appointments, PatientDetail, AddAppointment, PatientsList,
   AddPatient, ImportContacts, Settings, AddTemplate, TemplatesList } from './pages'
-import * as React from 'react';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { StatusBar } from 'react-native';
-import { useTheme } from 'react-native-paper';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import React from 'react'
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
+import { useTheme } from 'react-native-paper'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import TeethFormula from './pages/TeethFormula'
-import { useModal } from './context/modal-context';
+import { useModal } from './context/modal-context'
 import { Text } from 'react-native-paper'
 
 export const TabsName = {
@@ -66,33 +65,24 @@ function BottomTabs() {
           }} 
         />
       </Tab.Navigator>
-  );
+  )
 }
 
 const Router = () => {
-  const theme = useTheme()
   const [actions, dispatch] = useModal()
   return (
-    <>
-      <StatusBar
-        backgroundColor={theme.colors.primary}
-        //barStyle="dark-content"
-        animated
-      />
       <Stack.Navigator
         screenOptions={{
-          header: CustomNavigationBar,
+          header: (props) => <CustomNavigationBar {...props} />
         }}
         screenListeners={{
-          focus: (e) => {
-            dispatch({ type: actions.CLEAR })
-          },
+          focus: (e) => dispatch({ type: actions.CLEAR })
         }}
       >
         <Stack.Screen 
           name="Home" 
           component={BottomTabs} 
-          options={{ headerShown: false }}
+          //options={{ headerShown: false }}
         />
         <Stack.Screen 
           name="Detail" 
@@ -106,7 +96,6 @@ const Router = () => {
         <Stack.Screen options={{ headerTitle: 'Добавить новый шаблон' }} name="AddTemplate" component={AddTemplate} />
         <Stack.Screen options={{ headerTitle: 'Управление шаблонами' }} name="TemplatesList" component={TemplatesList} />
       </Stack.Navigator>
-    </>
   )
 }
 

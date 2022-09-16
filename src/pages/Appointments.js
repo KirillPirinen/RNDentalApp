@@ -1,5 +1,5 @@
 import withObservables from '@nozbe/with-observables'
-import { View, SectionList } from 'react-native'
+import { View, SectionList, StatusBar } from 'react-native'
 import { FAB, SwipeableAppointment, SectionTitle } from '../components'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import { Q } from '@nozbe/watermelondb';

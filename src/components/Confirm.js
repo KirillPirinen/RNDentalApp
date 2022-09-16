@@ -1,4 +1,4 @@
-import { Text, Dialog, Button as PaperButton } from 'react-native-paper'
+import { Text, Dialog, Button as PaperButton, useTheme } from 'react-native-paper'
 
 export const Confirm = ({ title, question, onClose, visible, children }) => (
     <Dialog 
@@ -18,29 +18,32 @@ export const Confirm = ({ title, question, onClose, visible, children }) => (
     </Dialog>
 )
 
-export const ConfirmDelete = ({  title, visible, question, onClose, onDelete }) => (
-      <Confirm 
-        visible={visible} 
-        title={title}
-        question={question}
-        onClose={onClose}
-        
+export const ConfirmDelete = ({  title, visible, question, onClose, onDelete }) => {
+  const theme = useTheme()
+  return (
+    <Confirm 
+      visible={visible} 
+      title={title}
+      question={question}
+      onClose={onClose}
+      
+    > 
+      <PaperButton
+        icon="delete"
+        textColor={theme.colors.error}
+        size={30}
+        onPress={onDelete}
       > 
-        <PaperButton
-          icon="delete"
-          textColor="red"
-          size={30}
-          onPress={onDelete}
-        > 
-          Удалить 
-        </PaperButton>
-        <PaperButton
-          icon="window-close"
-          textColor="gray"
-          size={30}
-          onPress={onClose}
-        > 
-          Отмена
-        </PaperButton>
-      </Confirm>
+        Удалить 
+      </PaperButton>
+      <PaperButton
+        icon="window-close"
+        textColor={theme.colors.backdrop}
+        size={30}
+        onPress={onClose}
+      > 
+        Отмена
+      </PaperButton>
+    </Confirm>
 )
+}

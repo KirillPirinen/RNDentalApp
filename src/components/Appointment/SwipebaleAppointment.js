@@ -17,7 +17,8 @@ export const SwipeableAppointment = enhancer(({
   appointment, 
   patient, 
   onDelete,
-  onEdit 
+  onEdit,
+  theme
 }) => {
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -38,10 +39,17 @@ export const SwipeableAppointment = enhancer(({
   const rightSwipeActions = () => {
     return (
       <>
-        <SwipeViewButton onPress={() => onDelete(appointment, patient)} style={{ backgroundColor: '#F85A5A' }}>
-          <Ionicons name="ios-close" size={48} color="white" />
+        <SwipeViewButton 
+          onPress={() => onDelete(appointment, patient)} 
+          style={{ backgroundColor: theme.colors.error }}
+        >
+          <Ionicons name="ios-close" size={48} color="white"
+          />
         </SwipeViewButton>
-        <SwipeViewButton onPress={() => onEdit(appointment, patient)} style={{ backgroundColor: '#B4C1CB' }}>
+        <SwipeViewButton 
+          onPress={() => onEdit(appointment, patient)} 
+          style={{ backgroundColor: theme.colors.backdrop }}
+        >
           <Ionicons name="md-create" size={28} color="white" />
         </SwipeViewButton>
       </>

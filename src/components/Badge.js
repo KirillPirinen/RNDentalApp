@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     height: 28
   },
   [past]: {
-    backgroundColor: '#2A86FF',
+    backgroundColor: '#27A2DF',
     color: '#fff'
   },
   [lasts]: {

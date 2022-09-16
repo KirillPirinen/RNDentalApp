@@ -1,13 +1,15 @@
-import { View, TouchableHighlight, StyleSheet, Text } from 'react-native'
+import { View, TouchableHighlight, StyleSheet } from 'react-native'
+import { Text, useTheme } from 'react-native-paper'
 import GrayText from '../GrayText'
 import Badge from '../Badge'
 import { addMinutes, format } from 'date-fns'
 import { APPOINTMENT_STATUS } from '../../utils/constants'
 import { Avatar } from '../Avatar'
-
+//'#daebd3'
 export const Appointment = ({ onLongPress, patient, appointment, status }) => {
   const showEndTime = (status === APPOINTMENT_STATUS.lasts || status === APPOINTMENT_STATUS.future)
-  const backgroundColor = status === APPOINTMENT_STATUS.lasts ? '#daebd3' : '#FFFFFF'
+  const theme = useTheme()
+  const backgroundColor = status === APPOINTMENT_STATUS.lasts ? theme.colors.primaryContainer : theme.colors.inverseOnSurface
   return (
     <TouchableHighlight onLongPress={onLongPress}>
       <View style={[styles.groupItem, { backgroundColor }]}>

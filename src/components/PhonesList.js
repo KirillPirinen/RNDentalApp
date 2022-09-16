@@ -39,8 +39,5 @@ const styles = StyleSheet.create({
     textDecorationStyle: "solid",
     textDecorationColor: "#000",
   },
-  uncheckedLabel: {
-    color:'black'
-  },
   wrapper: { paddingVertical: 0, paddingHorizontal: 1 }
 })

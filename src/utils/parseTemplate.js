@@ -1,10 +1,19 @@
 import formatRu from "./formatRu"
 
+const now = new Date()
+
+const defaultSource = { 
+  date: formatRu(now, 'd MMMM (cccc)'),
+  time: formatRu(now, 'H:mm'),
+  name: 'Иванов Иван Иванович'
+}
+
 class TagResolver {
 
   constructor(patient) {
     this.patient = patient
     this.hash = {}
+    this.name = this.patient.fullName
   }
 
   async init () {
@@ -24,11 +33,17 @@ class TagResolver {
     return this.hash.metaDate ? formatRu(this.hash.metaDate, 'H:mm') : '[приемов не найдено]'
   }
 
-  name () {
-    return this.patient.fullName
+}
+
+export const parseTemplate = (text, source = defaultSource) => text.replace(/\[\-(.*?)\-]/g, (substr, tag) => {
+  const type = typeof source[tag]
+
+  switch(type) {
+    case 'function': return source[tag]() || ''
+    case 'string': return source[tag]
   }
 
-}
+})
 
 export const parseTemplateByPatient = async (template, patient) => {
   
@@ -36,13 +51,12 @@ export const parseTemplateByPatient = async (template, patient) => {
 
   await tagResolver.init()
 
-  const parse = (text) => text.replace(/\[\-(.*?)\-]/g, (substr, tag) => tagResolver[tag]?.() || '')
 
   if(Array.isArray(template)) {
     return template.map(({ text, name, id }) => {
-      return { text: parse(text), name, id }
+      return { text: parseTemplate(text, tagResolver), name, id }
     })
   }
 
-  return parse(template)
+  return parseTemplate(template, tagResolver)
 }

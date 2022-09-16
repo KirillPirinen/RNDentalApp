@@ -1,10 +1,10 @@
-import { View, TouchableHighlight, StyleSheet, Text } from 'react-native'
-import { Surface, useTheme } from 'react-native-paper'
+import { View, TouchableHighlight, StyleSheet } from 'react-native'
+import { Text } from 'react-native-paper'
+import { Surface } from 'react-native-paper'
 import { Avatar } from './Avatar'
 import { memo } from 'react'
 
-export const Patient = ({ patient, onLongPress, onPress, navigation }) => {
-  const theme = useTheme()
+export const Patient = ({ patient, onLongPress, onPress, navigation, theme, style }) => {
   const __onPress = onPress || function () { navigation?.navigate('Detail', { patient }) }
 
   return (
@@ -14,8 +14,8 @@ export const Patient = ({ patient, onLongPress, onPress, navigation }) => {
         underlayColor={theme.colors.primary}
       >
         <Surface 
-          style={styles.groupItem} 
-          elevation={3}
+          style={[styles.groupItem, style]} 
+          elevation={2}
         >
           <Avatar 
             style={{ marginRight: 16 }} 

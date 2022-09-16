@@ -1,9 +1,8 @@
-import { Text } from "react-native"
+import { Text } from "react-native-paper"
 
 const defaultStyle = {
   fontWeight: '800',
   fontSize: 22,
-  color: '#000000',
   marginTop: 25,
   marginBottom: 10,
   paddingHorizontal: 20

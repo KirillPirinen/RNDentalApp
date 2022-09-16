@@ -35,7 +35,8 @@ const RenderedList = memo(({result, buttonControls, ...rest }) => {
     res()
   })).then(inverse)
 
-  const onDrug = useCallback(() => buttonControls.current(false), [])
+
+  const onDrag = useCallback(() => buttonControls.current(false), [])
   const onDrop = useCallback(() => buttonControls.current(true), [])
 
   return (
@@ -52,7 +53,7 @@ const RenderedList = memo(({result, buttonControls, ...rest }) => {
         ItemSeparatorComponent={renderSeparator}
         style={wrapper}
         ListEmptyComponent={EmptyList}
-        onScrollBeginDrag={onDrug}
+        onScrollBeginDrag={onDrag}
         onScrollEndDrag={onDrop}
         forceRerenderer={all}
         {...rest}

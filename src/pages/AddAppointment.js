@@ -18,11 +18,13 @@ const onSearch = (db) => async (query) => {
 
 const renderList = ({ result, onChoose }) => {
   const navigation = useNavigation()
+  const theme = useTheme()
   return Boolean(result) && (
     <FlatList
       data={result}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <Patient 
+      renderItem={({ item }) => <Patient
+        theme={theme}
         patient={item}
         onPress={() => onChoose(item)}
         onLongPress={() => navigation.navigate('Detail', { patient: item })}
@@ -94,11 +96,18 @@ const AddAppointment = ({ navigation, route: { params } }) => {
         placeholder="Поиск пациента"
       /> : (
         <ScrollView keyboardShouldPersistTaps='handled'>
-          <Patient patient={choosed} />
+          <Patient 
+            patient={choosed} 
+            theme={theme} 
+          />
           <Button 
             icon="reload" 
             mode="contained"
             onPress={onReset}
+            style={{
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0
+            }}
           >
             Выбрать другого
           </Button>

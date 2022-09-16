@@ -1,6 +1,6 @@
-import { StyleSheet, View, Text as RNText } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Foundation, FontAwesome5 } from '@expo/vector-icons'
-import { Text, Menu, IconButton, Divider } from 'react-native-paper'
+import { Text, Menu, IconButton, Divider, Surface } from 'react-native-paper'
 import Badge from '../Badge'
 import formatRu from '../../utils/formatRu'
 import { memo, useState } from 'react'
@@ -8,11 +8,18 @@ import { memo, useState } from 'react'
 export const PatientAppointment = ({ 
   appointment, 
   onEditAppointment, 
-  onDeleteAppointment 
+  onDeleteAppointment,
+  theme: { colors }
 }) => {
 
   return (
-    <View style={styles.card}>
+    <Surface 
+      style={[
+        styles.card, 
+        { backgroundColor: colors.patientAppointment.background }
+      ]} 
+      elevation={1}
+    >
       <View style={{ 
           marginTop: -25,  
           flexDirection:'row-reverse'
@@ -21,6 +28,7 @@ export const PatientAppointment = ({
           appointment={appointment}
           onEditAppointment={onEditAppointment}
           onDeleteAppointment={onDeleteAppointment}
+          contentStyle={{ backgroundColor: colors.patientAppointment.background }}
         />
       </View>
       <AppointmentCardRow style={{ marginTop: -20 }}>
@@ -43,7 +51,7 @@ export const PatientAppointment = ({
         </Badge>
       </AppointmentCardRow>
       {true /*diagnosis*/ && <Badge style={styles.badgePrice} status="green">{appointment.price || 2000} &#8381;</Badge>}
-    </View>
+    </Surface>
   )
 }
 
@@ -91,7 +99,7 @@ const Notes = ({ notes }) => (
   </AppointmentCardRow>
 )
 
-const MenuApointment = ({ onEditAppointment, appointment, onDeleteAppointment }) => {
+const MenuApointment = ({ onEditAppointment, appointment, onDeleteAppointment, ...rest }) => {
   const [visible, setVisible] = useState(false)
   const hof = (fn) => () => (setVisible(false), fn(appointment))
   return (
@@ -103,7 +111,7 @@ const MenuApointment = ({ onEditAppointment, appointment, onDeleteAppointment })
         icon="menu"
         size={20}
       />}
-      contentStyle={{ backgroundColor: 'white' }}
+      {...rest}
     >
       <Menu.Item onPress={hof(onDeleteAppointment)} 
         title="Удалить" 
@@ -118,26 +126,18 @@ const MenuApointment = ({ onEditAppointment, appointment, onDeleteAppointment })
 
 export default memo(PatientAppointment)
 
-const AppointmentCardLabel = ({ children }) => <RNText style={styles.appointmentCardLabel}>{children}</RNText>
+const AppointmentCardLabel = ({ children }) => <Text style={styles.appointmentCardLabel}>{children}</Text>
 
 const AppointmentCardRow = ({ style, children }) => <View style={[styles.appointmentCardRow, style]}>{children}</View>
 
 const styles = StyleSheet.create({
   card: {
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity:  0.17,
-    shadowRadius: 3.05,
-    elevation: 2,
+    backgroundColor:'white',
     borderRadius: 10,
     padding: 20,
     marginVertical: 5,
     borderColor:'#dddddd',
     borderWidth:1,
-    backgroundColor: '#fff',
   },
   badgePrice: {
     position: 'absolute',

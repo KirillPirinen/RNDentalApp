@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
-import { FlatList } from 'react-native'
+import { FlatList, View } from 'react-native'
+import { useTheme } from 'react-native-paper'
 import { PatientAppointment } from '../components/Appointment/PatientAppointments'
 import { useModal } from '../context/modal-context'
 import { defaultExtractor } from '../utils/defaultExtracror'
@@ -17,7 +18,7 @@ export const PatientAppointmentList = ({
   patient,
   ...rest
 }) => {
-
+  const theme = useTheme()
   const [actions, dispatch] = useModal()
 
   const onEditAppointment = useCallback((appointment) => {
@@ -27,8 +28,8 @@ export const PatientAppointmentList = ({
   const onConfirmDeleteAppointment = useCallback((appointment) => {
     const onDelete = () => appointment.deleteInstance().then(dispatch.bind(null, { type: actions.CLEAR }))
     dispatch({ 
-      type: actions.CONFIRM_DELETE_APPOINTMENT,
-      payload: { patient, appointment, onDelete }
+      type: actions.CONFIRM_DELETE,
+      payload: { patient, appointment, onDelete, mode: 'appointment' }
     })
   }, [])
 
@@ -40,14 +41,20 @@ export const PatientAppointmentList = ({
         isMenuOpen={openedMenu === item.id}
         onEditAppointment={onEditAppointment}
         onDeleteAppointment={onConfirmDeleteAppointment}
+        theme={theme}
       />
     )
   }
 
-  return <FlatList
-      data={appointments}
-      renderItem={renderAppointments}
-      keyExtractor={defaultExtractor}
-      {...rest}
-    />
+  return (
+    <View style={{ height: '90%' }}>
+      <FlatList
+        data={appointments}
+        renderItem={renderAppointments}
+        keyExtractor={defaultExtractor}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        {...rest}
+      />
+    </View>
+  )
 }

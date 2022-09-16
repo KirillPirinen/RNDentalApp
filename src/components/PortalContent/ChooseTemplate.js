@@ -3,7 +3,7 @@ import { View, StyleSheet, Linking } from 'react-native'
 import { Modal, Text, Button, RadioButton, Divider, 
   Surface } from 'react-native-paper'
 import { database } from '../../db'
-import { parseTemplateByPatient } from '../../utils/parseTemplateByPatient'
+import { parseTemplateByPatient } from '../../utils/parseTemplate'
 import actions from '../../context/modal-context/action-types'
 import { setStringAsync } from 'expo-clipboard'
 
@@ -153,27 +153,3 @@ const styles = StyleSheet.create({
     marginTop: 5
   }
 })
-
-// const onTelegramApp = () => {
-//   Linking.openURL(`tg://resolve?phone=${getPrimaryPhoneNumber(phones)}`)
-//   .catch(() => {
-//     dispatch({ 
-//       type: actions.INFO,
-//       payload: { 
-//         text: 'К сожалению мы не смогли открыть telegram, возможно он не установлен',
-//         color: 'error'
-//       }
-//     })
-//   })
-// }
-
-//`whatsapp://send?text=${text}&phone=${getPrimaryPhoneNumber(phones)}`
-//`tg://resolve?phone=${getPrimaryPhoneNumber(phones)}`
-
-/* dispatch({
-  type: actions.INFO,
-  payload: { 
-    text: 'К сожалению мы не смогли открыть whatsapp, возможно он не установлен',
-    color: 'error' 
-  }
-}) */

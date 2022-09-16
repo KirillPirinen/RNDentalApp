@@ -8,6 +8,8 @@ import { useMemo, useCallback, useRef } from 'react'
 import { useForceUpdateByInterval } from '../utils/custom-hooks/useForceUpdate'
 import { defaultExtractor } from '../utils/defaultExtracror'
 import { useModal } from '../context/modal-context'
+import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef';
+import { useTheme } from 'react-native-paper';
 
 const wrapperStyle = { height: '100%'}
 
@@ -27,17 +29,13 @@ const Appointments = ({ appointments, navigation }) => {
   const onConfirmDeleteAppointment = useCallback((appointment, patient) => {
     const onDelete = () => appointment.deleteInstance().then(dispatch.bind(null, { type: actions.CLEAR }))
     dispatch({ 
-      type: actions.CONFIRM_DELETE_APPOINTMENT,
-      payload: { patient, appointment, onDelete }
+      type: actions.CONFIRM_DELETE,
+      payload: { patient, appointment, onDelete, mode: 'appointment' }
     })
   }, [])
 
-  const buttonControls = useRef()
-
-  const onDrug = () => buttonControls.current?.(false)
-
-  const onDrop = () => buttonControls.current?.(true)
-
+  const [ref, onDrop, onDrag] = useFabControlsRef()
+  const theme = useTheme()
   return (
     <View style={wrapperStyle}>
         <SectionList
@@ -48,13 +46,14 @@ const Appointments = ({ appointments, navigation }) => {
           appointment={item}
           onEdit={onEditAppointment}
           onDelete={onConfirmDeleteAppointment}
+          theme={theme}
         />} 
           renderSectionHeader={renderSectionHeader}
-          onScrollBeginDrag={onDrug}
+          onScrollBeginDrag={onDrag}
           onScrollEndDrag={onDrop}
         />
         <FAB 
-          ref={buttonControls} 
+          ref={ref} 
           label="Добавить запись" 
           onPress={() => navigation.navigate('AddAppointment')}
         />

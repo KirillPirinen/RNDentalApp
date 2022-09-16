@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import CustomNavigationBar from './components/AppHeader';
 import { Appointments, PatientDetail, AddAppointment, PatientsList,
-  AddPatient, ImportContacts, Settings, AddTemplate } from './pages'
+  AddPatient, ImportContacts, Settings, AddTemplate, TemplatesList } from './pages'
 import * as React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { StatusBar } from 'react-native';
@@ -91,6 +91,7 @@ const Router = () => {
         <Stack.Screen options={{ headerTitle: 'Зубная формула' }} name="TeethFormula" component={TeethFormula} />
         <Stack.Screen options={{ headerTitle: 'Импорт контактов' }} name="ImportContacts" component={ImportContacts} />
         <Stack.Screen options={{ headerTitle: 'Добавить новый шаблон' }} name="AddTemplate" component={AddTemplate} />
+        <Stack.Screen options={{ headerTitle: 'Управление шаблонами' }} name="TemplatesList" component={TemplatesList} />
       </Stack.Navigator>
     </>
   )

@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { Menu, Appbar } from 'react-native-paper';
-import { TouchableCheckbox } from './TouchableCheckbox';
+import * as React from 'react'
+import { Menu, Appbar } from 'react-native-paper'
+import { TouchableCheckbox } from './TouchableCheckbox'
 
 const style = { marginRight: 10 }
 
@@ -9,11 +9,11 @@ const contentTypes = {
 }
 
 export const HeaderMenu = ({ menu, theme }) => {
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = React.useState(false)
 
-  const openMenu = () => setVisible(true);
+  const openMenu = () => setVisible(true)
 
-  const closeMenu = () => setVisible(false);
+  const closeMenu = () => setVisible(false)
 
   return (
     <Menu
@@ -21,6 +21,7 @@ export const HeaderMenu = ({ menu, theme }) => {
       visible={visible}
       style={style}
       anchor={<Appbar.Action color={theme.colors.primary} icon="dots-vertical" onPress={openMenu} />}
+      contentStyle={{ backgroundColor: theme.colors.background }}
     >
       {menu.map(({ type, title, ...rest }) => {
         const Comp = contentTypes[type]

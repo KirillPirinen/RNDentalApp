@@ -9,7 +9,7 @@ const Settings = ({ navigation }) => {
         title="Шаблоны сообщений"
         left={props => <List.Icon {...props} icon="format-text" />}>
         <List.Item title="Добавить шаблон" onPress={() => navigation.navigate('AddTemplate')}/>
-        <List.Item title="Мои шаблоны" onPress={() => void 0} />
+        <List.Item title="Управление шаблонами" onPress={() => navigation.navigate('TemplatesList')} />
       </List.Accordion>
     </List.Section>
   )

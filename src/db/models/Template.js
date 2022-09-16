@@ -16,7 +16,6 @@ export default class Template extends Model {
   }
 
   @writer async deleteInstance() {
-    await this.appointments.destroyAllPermanently()
     return await this.markAsDeleted()
   }
 

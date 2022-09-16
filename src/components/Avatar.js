@@ -6,7 +6,8 @@ const defStyle = { marginRight: 16 }
 
 export const Avatar = ({ fullName }) => {
   const separated = fullName.toUpperCase().split(' ')
-  return <PaperAvatar.Text 
+  return <PaperAvatar.Text
+    color="white"
     style={defStyle}
     size={40} 
     labelStyle={defLabStyle}

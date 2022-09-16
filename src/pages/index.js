@@ -6,6 +6,7 @@ import AddPatient from './AddPatient'
 import ImportContacts from './ImportContacts'
 import Settings from './Settings'
 import AddTemplate from './AddTemplate'
+import TemplatesList from './TemplatesList'
 
 export {
   Appointments,
@@ -15,5 +16,6 @@ export {
   AddPatient,
   ImportContacts,
   Settings,
-  AddTemplate
+  AddTemplate,
+  TemplatesList
 }

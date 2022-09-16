@@ -8,10 +8,13 @@ import { createTemplate } from '../db/actions'
 import { useToggle } from '../utils/custom-hooks/useToggle'
 import { replaceStringByIndex } from '../utils/insertString'
 
-const AddTemplate = ({ navigation }) => {
+const AddTemplate = ({ navigation, route: { params } }) => {
 
-  const [name, setName] = useState()
-  const [text, setText] = useState()
+  const template = params?.template 
+  const isEdit = params?.edit
+
+  const [name, setName] = useState(template?.name || '')
+  const [text, setText] = useState(template?.text || '')
   const [visible, toggleVisible] = useToggle()
   const [error, setError] = useState({})
   const [actions, dispatch] = useModal()
@@ -43,6 +46,11 @@ const AddTemplate = ({ navigation }) => {
     if(!name) {
       return setError({ name: true })
     }
+
+    if(isEdit) {
+      return template?.updateInstance({ text, name }).then(navigation.goBack)
+    }
+
     createTemplate({ text, name }).then(() => {
       setTimeout(() => {
         dispatch({ 
@@ -61,6 +69,7 @@ const AddTemplate = ({ navigation }) => {
     setName(text)
   }
 
+  
   return (
       <ScrollView keyboardShouldPersistTaps='handled'>
         <Container>
@@ -118,7 +127,7 @@ const AddTemplate = ({ navigation }) => {
             buttonColor={'green'}
             onPress={onSubmit}
           >
-            Добавить шаблон
+            {isEdit ? 'Сохранить изменения' : 'Добавить шаблон'}
           </Button>
         </Container>
       </ScrollView>

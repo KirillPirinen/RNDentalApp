@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useImperativeHandle, useEffect } from 'react'
+import React, { forwardRef, useState, useImperativeHandle, useEffect, useCallback, useRef } from 'react'
 import { StyleSheet } from 'react-native'
 import AnimatedFAB from './__components__/__FAB'
 
@@ -29,6 +29,8 @@ export const FAB = forwardRef(({ onPress, label, style }, ref) => {
         animateFrom={'right'}
         iconMode={'dynamic'}
         style={[styles.fabStyle, style]}
+        //variant="surface"
+        //color="black"
       />
   )
 })

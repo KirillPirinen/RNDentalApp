@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Divider } from 'react-native-paper'
+import { Divider, useTheme } from 'react-native-paper'
 import { FlatList} from 'react-native'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import withObservables from '@nozbe/with-observables'
@@ -7,13 +7,14 @@ import { Container, Autocomplete, FAB, EmptyList, Patient } from '../components'
 import { useIsFocused } from '@react-navigation/native'
 import { defaultExtractor } from '../utils/defaultExtracror'
 import { useModal } from '../context/modal-context'
-import { useSafeRefCB } from '../utils/custom-hooks/useSafeRef'
+import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef'
 
 const wrapper = { marginVertical: 12 }
 const renderDivider = () => <Divider bold />
 const renderList = ({ result, navigation, ...rest }) => {
+  const theme = useTheme()
   const renderItem = useCallback(({ item }) => 
-    <Patient patient={item} navigation={navigation} />, [])
+    <Patient patient={item} navigation={navigation} theme={theme} />, [])
   return (
       <FlatList
         data={result}
@@ -34,7 +35,8 @@ export const PatientsList = ({ patients, navigation }) => {
   const onChange = (query) => 
     patients.filter(patient => patient.fullName.toLowerCase().includes(query))
 
-  const buttonControls = useSafeRefCB()
+
+    const [ref, onDrop, onDrag] = useFabControlsRef()
 
   const onChoosePatientMethod = () => dispatch({ 
     type: actions.CHOOSE_ADD_PATIENT_METHOD,
@@ -44,22 +46,19 @@ export const PatientsList = ({ patients, navigation }) => {
     }
   })
 
-  const onDrug = () => buttonControls.current(false)
-  const onDrop = () => buttonControls.current(true)
-  
   return (
       <Container>
           {isFocused && <Autocomplete
             onChange={onChange}
             renderList={renderList}
             initState={patients || []}
-            onScrollBeginDrag={onDrug}
+            onScrollBeginDrag={onDrag}
             onScrollEndDrag={onDrop}
             removeClippedSubviews={true}
             navigation={navigation}
           />}
           <FAB
-            ref={buttonControls} 
+            ref={ref} 
             label="Добавить пациента" 
             onPress={onChoosePatientMethod}
           />

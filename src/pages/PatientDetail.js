@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
-import { View, Linking, StyleSheet, Text } from 'react-native'
-import { IconButton } from 'react-native-paper'
+import { View, SafeAreaView, Linking, StyleSheet } from 'react-native'
 import withObservables from '@nozbe/with-observables'
+import { Text } from 'react-native-paper'
 import { Button, PatientAppointmentList, FAB, PhonesList,
-  CallButton, WhatsappButton, TelegramButtom } from '../components'
+  CallButton, WhatsappButton, TelegramButtom, ButtonRowPanel } from '../components'
 import { useModal } from '../context/modal-context'
-import { useSafeRefCB } from '../utils/custom-hooks/useSafeRef'
+import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef'
 import { getPrimaryPhoneNumber } from '../utils/getPrimaryPhoneNumber'
 
 const ObservablePatientAppointmentList = withObservables(['patient'], ({ patient }) => ({
@@ -21,8 +21,8 @@ const PatientDetail = ({ navigation, patient, phones }) => {
   })
 
   const onConfirmDeletePatient = () => dispatch({ 
-    type: actions.CONFIRM_DELETE_PATIENT,
-    payload: { patient, onDelete: onDeletePatient }
+    type: actions.CONFIRM_DELETE,
+    payload: { patient, onDelete: onDeletePatient, mode: 'patient' }
   })
 
   const onCall = () => {
@@ -42,10 +42,7 @@ const PatientDetail = ({ navigation, patient, phones }) => {
     payload: { patient, mode, phone: getPrimaryPhoneNumber(phones) }
   })
 
-  const buttonControls = useSafeRefCB()
-
-  const onDrug = () => buttonControls.current(false)
-  const onDrop = () => buttonControls.current(true)
+  const [ref, onDrop, onDrag] = useFabControlsRef()
 
   useEffect(() => {
     
@@ -73,7 +70,7 @@ const PatientDetail = ({ navigation, patient, phones }) => {
   }, [patient])
 
   return (
-      <View style={styles.pageWrapper}>
+      <SafeAreaView style={styles.pageWrapper}>
         <View style={styles.patientDetails}>
           <View style={styles.metaWrapper}>
             <View style={styles.nameWrapper}>
@@ -81,22 +78,10 @@ const PatientDetail = ({ navigation, patient, phones }) => {
                 {patient.fullName}
               </Text>
             </View>
-            <View style={styles.actionsWrapper}>
-              <IconButton
-                  icon="pencil-circle"
-                  iconColor="gray"
-                  size={30}
-                  onPress={() => navigation.navigate('AddPatient', { patient, phones })}
-                  style={styles.noPadding}
-              />
-              <IconButton
-                  icon="delete"
-                  iconColor="red"
-                  size={30}
-                  onPress={onConfirmDeletePatient}
-                  style={styles.noPadding}
-              />
-            </View>
+            <ButtonRowPanel 
+              onEdit={() => navigation.navigate('AddPatient', { patient, phones })}
+              onDelete={onConfirmDeletePatient}
+            />
           </View>
           <View style={styles.phoneListWrapper}>
             <PhonesList phones={phones} />
@@ -114,16 +99,16 @@ const PatientDetail = ({ navigation, patient, phones }) => {
           <ObservablePatientAppointmentList 
             navigation={navigation}
             patient={patient}
-            onScrollBeginDrag={onDrug}
+            onScrollBeginDrag={onDrag}
             onScrollEndDrag={onDrop}
           />
         </View>
         <FAB
-          ref={buttonControls} 
+          ref={ref} 
           label={`Записать ${patient.fullName}`}
           onPress={() => navigation.navigate('AddAppointment', { patient })}
         />
-      </View>
+      </SafeAreaView>
   )
 }
 
@@ -134,7 +119,6 @@ const styles = StyleSheet.create({
   formulaButtonView: { flex: 1 },
   patientButtons: { flexDirection: 'row', marginTop: 20 },
   nameWrapper: { flexShrink: 2 },
-  actionsWrapper: { flexDirection:'row' },
   patientFullname: {
     fontWeight:'800',
     fontSize: 24,
@@ -142,7 +126,6 @@ const styles = StyleSheet.create({
     marginBottom: 3
   },
   phoneListWrapper: { flexDirection: 'row', flexWrap:'wrap', justifyContent:'space-between' },
-  noPadding: { padding: 0 },
   metaWrapper: {
     flexDirection: 'row', 
     justifyContent: 'space-between',

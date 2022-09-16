@@ -8,7 +8,7 @@ const Button = ({ children, color, onPress, textColor }) => (
 )
 
 Button.defaultProps = {
-  color: '#2a86ff',
+  color: '#27A2DF',
   textColor: '#FFFFFF'
 }
 

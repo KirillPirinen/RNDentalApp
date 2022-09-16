@@ -9,6 +9,7 @@ import { useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TeethFormula from './pages/TeethFormula'
 import { useModal } from './context/modal-context';
+import { Text } from 'react-native-paper'
 
 export const TabsName = {
   records: 'Записи',
@@ -24,8 +25,18 @@ function BottomTabs() {
   return (
       <Tab.Navigator 
         sceneAnimationType="shifting"
-        barStyle={{ height: 70 }}
-        activeColor={theme.colors.primary}
+        barStyle={{ 
+          height: 67, 
+          backgroundColor: theme.colors.primary 
+        }}
+        activeColor={theme.colors.primaryContainer}
+        renderLabel={({ focused, route }) => (<Text
+            variant="labelSmall"
+            style={{ 
+              textAlign: 'center',
+              color: focused ? theme.colors.onPrimary : theme.colors.onSecondaryContainer
+            }}>{route.name}</Text>)
+        }
       >
         <Tab.Screen 
           name={TabsName.records}
@@ -65,6 +76,8 @@ const Router = () => {
     <>
       <StatusBar
         backgroundColor={theme.colors.primary}
+        //barStyle="dark-content"
+        animated
       />
       <Stack.Navigator
         screenOptions={{

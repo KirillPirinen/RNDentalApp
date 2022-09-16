@@ -21,7 +21,7 @@ export default class Patient extends Model {
   @children('appointments') appointments
   @children('formulas') formulas
 
-  @lazy sortedAppointments = this.collections.get('appointments').query(
+  @lazy sortedAppointments = this.appointments.extend(
     Q.sortBy('date', Q.desc)
   )
 

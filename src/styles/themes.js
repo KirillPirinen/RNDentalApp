@@ -6,11 +6,15 @@ const light = {
   colors: {
     ...MD3LightTheme.colors,
     primary: '#27A2DF',
-    primaryContainer: '#3e9758',
-    onPrimaryContainer: 'white',
+    primaryContainer: '#01579B',
+    onPrimaryContainer: '#FFFFFF',
+    error: '#DD2C00',
     patientAppointment: {
       background: '#FFFFFF'
-    }
+    },
+    appointment: {
+      lasts: '#daebd3'
+    },
   },
 }
 

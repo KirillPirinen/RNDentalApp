@@ -8,7 +8,7 @@ const contentTypes = {
   TouchableCheckbox
 }
 
-export const HeaderMenu = ({ menu, theme }) => {
+export const HeaderMenu = ({ menu, theme, contentColor }) => {
   const [visible, setVisible] = React.useState(false)
 
   const openMenu = () => setVisible(true)
@@ -20,7 +20,7 @@ export const HeaderMenu = ({ menu, theme }) => {
       onDismiss={closeMenu}
       visible={visible}
       style={style}
-      anchor={<Appbar.Action color={theme.colors.primary} icon="dots-vertical" onPress={openMenu} />}
+      anchor={<Appbar.Action color={contentColor} icon="dots-vertical" onPress={openMenu} />}
       contentStyle={{ backgroundColor: theme.colors.background }}
     >
       {menu.map(({ type, title, ...rest }) => {

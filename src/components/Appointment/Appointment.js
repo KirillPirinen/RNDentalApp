@@ -9,7 +9,7 @@ import { Avatar } from '../Avatar'
 export const Appointment = ({ onLongPress, patient, appointment, status }) => {
   const showEndTime = (status === APPOINTMENT_STATUS.lasts || status === APPOINTMENT_STATUS.future)
   const theme = useTheme()
-  const backgroundColor = status === APPOINTMENT_STATUS.lasts ? theme.colors.primaryContainer : theme.colors.inverseOnSurface
+  const backgroundColor = status === APPOINTMENT_STATUS.lasts ? theme.colors.appointment.lasts : theme.colors.inverseOnSurface
   return (
     <TouchableHighlight onLongPress={onLongPress}>
       <View style={[styles.groupItem, { backgroundColor }]}>

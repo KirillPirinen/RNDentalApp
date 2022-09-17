@@ -9,6 +9,7 @@ const light = {
     primaryContainer: '#01579B',
     onPrimaryContainer: '#FFFFFF',
     error: '#DD2C00',
+    errorContainer: MD3DarkTheme.colors.errorContainer,
     patientAppointment: {
       background: '#FFFFFF'
     },

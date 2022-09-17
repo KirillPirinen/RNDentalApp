@@ -31,7 +31,7 @@ const PatientDetail = ({ navigation, patient, phones }) => {
         type: actions.INFO,
         payload: { 
           text: 'К сожалению мы не смогли открыть приложение для звонка',
-          color: 'error'
+          color: 'errorContainer'
         }
       })
     })

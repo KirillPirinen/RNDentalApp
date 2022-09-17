@@ -1,5 +1,7 @@
+import { TAG_REGEX } from "./constants"
 import formatRu from "./formatRu"
 
+const reg = new RegExp(TAG_REGEX.source, TAG_REGEX.flags + "g")
 const now = new Date()
 
 const defaultSource = { 
@@ -35,7 +37,7 @@ class TagResolver {
 
 }
 
-export const parseTemplate = (text, source = defaultSource) => text.replace(/\[\-(.*?)\-]/g, (substr, tag) => {
+export const parseTemplate = (text, source = defaultSource) => text.replace(reg, (substr, tag) => {
   const type = typeof source[tag]
 
   switch(type) {

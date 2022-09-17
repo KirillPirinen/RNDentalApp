@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { StyleSheet } from 'react-native'
-import { Container, TemplateCard } from '../components'
+import { TemplateCard } from '../components'
 import withObservables from '@nozbe/with-observables'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import { useModal } from '../context/modal-context'
@@ -37,7 +37,7 @@ const TemplatesList = ({ templates, navigation }) => {
           key={template.id} 
           onDelete={onDelete}
           onEdit={onEdit} 
-          template={template} 
+          template={template}
         /> )}
     </ScrollView>
   )

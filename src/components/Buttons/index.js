@@ -9,7 +9,7 @@ export const ButtonRowPanel = ({ onDelete, onEdit, children }) => {
   return (
   <View style={styles.actionsWrapper}>
     {Children.map(children, (child) => {
-      if(child.type === IconButton) {
+      if(child?.type === IconButton) {
         return cloneElement(child, { 
           size: 30,
           style:styles.noPadding

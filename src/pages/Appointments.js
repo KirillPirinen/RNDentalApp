@@ -1,15 +1,16 @@
 import withObservables from '@nozbe/with-observables'
-import { View, SectionList, StatusBar } from 'react-native'
+import { View, SectionList } from 'react-native'
 import { FAB, SwipeableAppointment, SectionTitle } from '../components'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import { Q } from '@nozbe/watermelondb';
 import { groupAppointments } from '../utils/groupAppointments'
-import { useMemo, useCallback, useRef } from 'react'
+import { useMemo, useCallback } from 'react'
 import { useForceUpdateByInterval } from '../utils/custom-hooks/useForceUpdate'
 import { defaultExtractor } from '../utils/defaultExtracror'
 import { useModal } from '../context/modal-context'
 import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef';
 import { useTheme } from 'react-native-paper';
+import { appointmentsByDays } from '../db/raw-queries'
 
 const wrapperStyle = { height: '100%'}
 
@@ -63,8 +64,9 @@ const Appointments = ({ appointments, navigation }) => {
 
 export default withDatabase(
   withObservables([], ({ database }) => ({
-    appointments: database.get('appointments').query(
-      Q.sortBy('date', Q.asc)
-    ).observeWithColumns(['date'])
+    appointments: database
+    .get('appointments')
+      .query(appointmentsByDays(0, 14))
+        .observeWithColumns(['date'])
   }))(Appointments),
 )

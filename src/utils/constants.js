@@ -6,3 +6,5 @@ export const APPOINTMENT_STATUS = {
   future: 'future',
   ended: 'ended'
 }
+
+export const TAG_REGEX = /\[\-(.*?)\-]/

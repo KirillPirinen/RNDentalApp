@@ -5,7 +5,7 @@ import Badge from '../Badge'
 import { addMinutes, format } from 'date-fns'
 import { APPOINTMENT_STATUS } from '../../utils/constants'
 import { Avatar } from '../Avatar'
-//'#daebd3'
+
 export const Appointment = ({ onLongPress, patient, appointment, status }) => {
   const showEndTime = (status === APPOINTMENT_STATUS.lasts || status === APPOINTMENT_STATUS.future)
   const theme = useTheme()

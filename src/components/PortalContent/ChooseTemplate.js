@@ -16,7 +16,7 @@ const createDefaultAction = (mode) => ({
     type: actions.INFO,
     payload: { 
       text: `К сожалению мы не смогли открыть ${mode}, возможно он не установлен`,
-      color: 'error'
+      color: 'errorContainer'
     }
 })
 

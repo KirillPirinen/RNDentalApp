@@ -65,6 +65,6 @@ export default withDatabase(
   withObservables([], ({ database }) => ({
     appointments: database.get('appointments').query(
       Q.sortBy('date', Q.asc)
-    ).observe()
+    ).observeWithColumns(['date'])
   }))(Appointments),
-);
+)

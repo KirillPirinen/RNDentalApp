@@ -6,7 +6,7 @@ import { addMinutes, format } from 'date-fns'
 import { APPOINTMENT_STATUS } from '../../utils/constants'
 import { Avatar } from '../Avatar'
 
-export const Appointment = ({ onLongPress, patient, appointment, status }) => {
+export const Appointment = ({ onLongPress, patient, appointment, status, children }) => {
   const showEndTime = (status === APPOINTMENT_STATUS.lasts || status === APPOINTMENT_STATUS.future)
   const theme = useTheme()
   const backgroundColor = status === APPOINTMENT_STATUS.lasts ? theme.colors.appointment.lasts : theme.colors.inverseOnSurface
@@ -24,6 +24,7 @@ export const Appointment = ({ onLongPress, patient, appointment, status }) => {
             <Badge status="green" size={25}>{format(addMinutes(appointment.date, appointment.duration), 'H:mm')}</Badge>
           )}
         </View>
+        {children}
       </View>
     </TouchableHighlight>
   )

@@ -24,8 +24,12 @@ const Appointments = ({ appointments, navigation }) => {
 
   useForceUpdateByInterval(10000)
 
-  const onEditAppointment = useCallback((appointment, patient) => 
-    navigation.navigate('AddAppointment', { patient, appointment, edit: true }), [])
+  const onEditAppointment = useCallback((appointment, patient, confirm) => {
+    if(confirm) {
+      return navigation.navigate('ConfirmAppointment', { patient, appointment })
+    }
+    return navigation.navigate('AddAppointment', { patient, appointment, edit: true })
+  }, [])
 
   const onConfirmDeleteAppointment = useCallback((appointment, patient) => {
     const onDelete = () => appointment.deleteInstance().then(dispatch.bind(null, { type: actions.CLEAR }))

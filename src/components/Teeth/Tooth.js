@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native'
 export const Tooth = ({ paths, x, y, toothNo, onPress, selected, scale, record }) => {
   return (
     <>
-      {paths.map((path, index) => <Path scale={scale} onPress={onPress(toothNo)} 
+      {paths.map((path, index) => <Path scale={scale} onPress={onPress?.(toothNo)} 
         key={index} 
         d={path} 
         style={[styles.pathStyle, styles[record?.toothState], selected && styles.selected]} 

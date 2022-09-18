@@ -7,6 +7,7 @@ const light = {
     ...MD3LightTheme.colors,
     primary: '#27A2DF',
     primaryContainer: '#01579B',
+    secondaryContainer: 'rgba(1, 87, 155, 0.5)',
     onPrimaryContainer: '#FFFFFF',
     error: '#DD2C00',
     errorContainer: MD3DarkTheme.colors.errorContainer,

@@ -1,13 +1,9 @@
 import React, { useCallback ,useState, useMemo, useEffect } from 'react'
-import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { Container } from '../components'
 import { Teeth } from '../components/Teeth/Teeth'
 import withObservables from '@nozbe/with-observables'
 import { switchMap } from 'rxjs/operators'
-
-const originalWidth = 289
-const originalHeight = 370
-const width = Dimensions.get("window").width
 
 // selected: {
 //   fill:'red'
@@ -26,14 +22,7 @@ const width = Dimensions.get("window").width
 // },
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  svgWrapper: { 
-    width, 
-    aspectRatio: originalWidth / originalHeight, 
-    backgroundColor:'white',
-    borderBottomWidth: 1,
-    position:'relative'
-  }
+  container: { flex: 1 }
 })
 
 const TeethFormula = ({ formula, navigation, patient, teeth }) => {
@@ -85,22 +74,18 @@ const TeethFormula = ({ formula, navigation, patient, teeth }) => {
     })
   }, [formula])
 
-  const viewBox = (formula.hasBabyJaw && !formula.hasAdultJaw) ? `43.5 55.5 202 259` : `0 0 ${originalWidth} ${originalHeight}`
+  const viewBox = (formula.hasBabyJaw && !formula.hasAdultJaw) && `43.5 55.5 202 259`
 
   return (
     <View style={styles.container}>
-      <View style={styles.svgWrapper}>
-          <Teeth
-            withBabyTeeth={formula.hasBabyJaw}
-            withAdultTeeth={formula.hasAdultJaw}
-            selectedTooth={selected} 
-            pressHandler={pressHandler}
-            width="100%" 
-            height="100%" 
-            viewBox={viewBox}
-            teethRecords={hashTest}
-          />
-      </View>
+        <Teeth
+          withBabyTeeth={formula.hasBabyJaw}
+          withAdultTeeth={formula.hasAdultJaw}
+          selectedTooth={selected} 
+          onPressTooth={pressHandler}
+          teethRecords={hashTest}
+          viewBox={viewBox}
+        />
       <Container>
         {/* <ToothStatePanel initalValue="O" /> */}
         <Text>Privet</Text>

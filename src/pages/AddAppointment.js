@@ -42,7 +42,8 @@ const AddAppointment = ({ navigation, route: { params } }) => {
 
   const appointment = params?.appointment || {}
   const patient = params?.patient
-  
+  const confirmMode = params?.confirm
+
   const theme = useTheme()
   const db = useDatabase()
 
@@ -54,7 +55,7 @@ const AddAppointment = ({ navigation, route: { params } }) => {
   const [diagnosis, setDiagnosis] = useState(appointment.diagnosis || '')
   const [notes, setNotes] = useState(appointment.notes || '')
   const [duration, setDuration] = useState(appointment.duration || 5)
-  const [buttonColor, setButtonColor] = useState(theme.colors.primary)
+  const [buttonColor, setButtonColor] = useState(confirmMode ? 'gray' : theme.colors.primary)
 
   const onReset = () => setChoosed(null)
   
@@ -98,7 +99,8 @@ const AddAppointment = ({ navigation, route: { params } }) => {
         <ScrollView keyboardShouldPersistTaps='handled'>
           <Patient 
             patient={choosed} 
-            theme={theme} 
+            theme={theme}
+            onPress={choosed && function(){ navigation.navigate('Detail', { patient: choosed })}}
           />
           <Button 
             icon="reload" 
@@ -108,6 +110,7 @@ const AddAppointment = ({ navigation, route: { params } }) => {
               borderTopLeftRadius: 0,
               borderTopRightRadius: 0
             }}
+            disabled={confirmMode}
           >
             Выбрать другого
           </Button>
@@ -117,6 +120,7 @@ const AddAppointment = ({ navigation, route: { params } }) => {
             mode="outlined" 
             textColor={buttonColor}
             onPress={() => setDateMeta(prev => ({ ...prev, mode: 'date' }))}
+            disabled={confirmMode}
           >
             {dateMeta.date ? formatRu(dateMeta.date, 'PPpp') : 'Выбрать дату'}
           </Button>
@@ -133,6 +137,7 @@ const AddAppointment = ({ navigation, route: { params } }) => {
               minimumTrackTintColor={theme.colors.primary}
               thumbTintColor={theme.colors.primary}
               maximumTrackTintColor="#000000"
+              disabled={confirmMode}
             />
           </View>
           <View style={styles.middleWrapper}>
@@ -143,6 +148,7 @@ const AddAppointment = ({ navigation, route: { params } }) => {
               onChangeText={setDiagnosis}
               value={diagnosis}
               multiline
+              disabled={confirmMode}
             />
           </View>
           <View style={styles.middleWrapper}>
@@ -153,6 +159,7 @@ const AddAppointment = ({ navigation, route: { params } }) => {
               onChangeText={setNotes}
               value={notes}
               multiline
+              disabled={confirmMode}
             />
           </View>
           <View style={styles.middleWrapper}>

@@ -1,16 +1,22 @@
 import { Model } from '@nozbe/watermelondb'
-import { text, field, writer } from '@nozbe/watermelondb/decorators'
+import { text, writer, lazy } from '@nozbe/watermelondb/decorators'
 
 export default class Tooth extends Model {
   static table = 'teeth'
 
   static associations = {
     formulas: { type: 'belongs_to', key: 'formula_id' },
+    appointments_teeth: { type: 'has_many', foreignKey: 'tooth_id' },
   }
   
   @text('formula_id') formulaId
   @text('tooth_no') toothNo
-  @field('tooth_state') toothState
+  @text('tooth_state') toothState
+  @text('notes') notes
+  
+  @lazy appointments = this.collections
+    .get('appointments')
+    .query(Q.on('appointments_teeth', 'tooth_id', this.id))
 
   @writer async updateInstance(fields) {
     await this.update(instance => {

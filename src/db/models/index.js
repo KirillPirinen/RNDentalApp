@@ -4,6 +4,7 @@ import Tooth from './Tooth'
 import Formula from './Formula'
 import Phone from './Phone'
 import Template from './Template'
+import AppointmentTooth from './AppointmentTooth'
 
 export default [
   Patient,
@@ -11,5 +12,6 @@ export default [
   Tooth,
   Formula,
   Phone,
-  Template
+  Template,
+  AppointmentTooth
 ]

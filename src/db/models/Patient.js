@@ -2,6 +2,7 @@ import { Model } from '@nozbe/watermelondb'
 import { text, writer, children, field, lazy } from '@nozbe/watermelondb/decorators'
 import { phoneSanitazer } from '../../utils/sanitizers'
 import { Q } from '@nozbe/watermelondb'
+import { switchMap } from 'rxjs/operators'
 
 export default class Patient extends Model {
   static table = 'patients'
@@ -20,6 +21,10 @@ export default class Patient extends Model {
   @children('phones') phones
   @children('appointments') appointments
   @children('formulas') formulas
+
+  @lazy teeth = this.collections.get('teeth').query(
+    Q.on('formulas', 'patient_id', this.id)
+  )
 
   @lazy sortedAppointments = this.appointments.extend(
     Q.sortBy('date', Q.desc)

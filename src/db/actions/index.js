@@ -64,6 +64,15 @@ export const createTooth = async ({ patientId, toothNo, toothState }) => {
   )
 }
 
+export const findOrCreateTeeth = async (appointment, teeth) => {
+  return await database.write(async () => await database.get('teeth').create(tooth => {
+      tooth.patientId = patientId
+      tooth.toothNo = toothNo
+      tooth.toothState = toothState
+    })
+  )
+}
+
 export const createPhone = async ({ patientId, number, isPrimary = false }) => {
   return await database.write(async () => await database.get('phones').create(phone => {
       phone.patientId = patientId

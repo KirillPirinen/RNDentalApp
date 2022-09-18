@@ -9,13 +9,13 @@ import { createAppointment } from '../db/actions'
 import Slider from '@react-native-community/slider'
 import { querySanitazer } from '../utils/sanitizers'
 import { useModal } from '../context/modal-context'
+import { Q } from '@nozbe/watermelondb'
 
 const ConfirmAppointment = ({ navigation, route: { params } }) => {
   const [actions, dispatch] = useModal()
 
   const appointment = params?.appointment || {}
   const patient = params?.patient
-  const confirmMode = params?.confirm
 
   const theme = useTheme()
 
@@ -25,11 +25,16 @@ const ConfirmAppointment = ({ navigation, route: { params } }) => {
   const [teeth, setTeeth] = useState('')
   const [duration, setDuration] = useState(appointment.duration)
 
-  const onChooseTeeth = () => dispatch({ type: actions.CHOOSE_TEETH })
-  
+  const onOpenSelection = () => dispatch({ 
+    type: actions.CHOOSE_TEETH, 
+    payload: { onSubmit:setTeeth, teeth } 
+  })
 
-  const onSubmit = () => {
-
+  const onSubmit = async () => {
+    const teeth = await patient.teeth.fetch()
+    console.log(teeth.length)
+    // const content = { notes, diagnosis, price, duration }
+    // appointment.updateInstance(content)
   }
 
   return (
@@ -44,10 +49,9 @@ const ConfirmAppointment = ({ navigation, route: { params } }) => {
             style={{ marginTop: 40, borderColor: theme.colors.primary }} 
             icon="tooth-outline" 
             mode="outlined" 
-            onPress={onChooseTeeth}
-            disabled={confirmMode}
+            onPress={onOpenSelection}
           >
-            Выбрать зубы
+            {teeth || 'Выбрать зубы'}
           </Button>
           <View style={styles.middleWrapper}>
             <Text variant="titleLarge">{`Длительность приема: ${duration} минут`}</Text>
@@ -62,7 +66,6 @@ const ConfirmAppointment = ({ navigation, route: { params } }) => {
               minimumTrackTintColor={theme.colors.primary}
               thumbTintColor={theme.colors.primary}
               maximumTrackTintColor="#000000"
-              disabled={confirmMode}
             />
           </View>
           <View style={styles.middleWrapper}>
@@ -73,7 +76,6 @@ const ConfirmAppointment = ({ navigation, route: { params } }) => {
               onChangeText={setDiagnosis}
               value={diagnosis}
               multiline
-              disabled={confirmMode}
             />
           </View>
           <View style={styles.middleWrapper}>
@@ -84,7 +86,6 @@ const ConfirmAppointment = ({ navigation, route: { params } }) => {
               onChangeText={setNotes}
               value={notes}
               multiline
-              disabled={confirmMode}
             />
           </View>
           <View style={styles.middleWrapper}>
@@ -95,7 +96,6 @@ const ConfirmAppointment = ({ navigation, route: { params } }) => {
               onChangeText={setPrice}
               value={price}
               keyboardType="number-pad"
-              disabled={confirmMode}
             />
           </View>
           <View style={styles.buttonView}>
@@ -103,7 +103,7 @@ const ConfirmAppointment = ({ navigation, route: { params } }) => {
               icon="plus-thick" 
               mode="contained" 
               color="green"
-              onPress={() => void 0}
+              onPress={onSubmit}
             >
               Подтвердить прием
             </Button>

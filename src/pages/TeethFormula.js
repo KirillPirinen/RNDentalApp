@@ -26,15 +26,15 @@ const styles = StyleSheet.create({
 })
 
 const TeethFormula = ({ formula, navigation, patient, teeth }) => {
-  
+  console.log(teeth)
   const [selected, setSelected] = useState(null)
 
-  const hashTeethInfo = useMemo(() => {
-    return teeth.reduce((acc, tooth) => {
-      acc.toothNo = tooth
-      return acc
-    }, {})
-  }, [teeth])
+  // const hashTeethInfo = useMemo(() => {
+  //   return teeth.reduce((acc, tooth) => {
+  //     acc.toothNo = tooth
+  //     return acc
+  //   }, {})
+  // }, [teeth])
 
   const hashTest = {
     55: { toothState: 'absent' },
@@ -96,9 +96,7 @@ const TeethFormula = ({ formula, navigation, patient, teeth }) => {
 
 export default withObservables(['route'], ({ route }) => ({
   patient: route.params.patient,
-  formula: route.params.patient.formulas.observe()
-    .pipe(switchMap(formulas => formulas[0].observe())),
-  teeth: route.params.patient.formulas.observe()
-    .pipe(switchMap(formulas => formulas[0].teeth.observe()))
+  formula: route.params.patient.formulas.observe().pipe(switchMap(formulas => formulas[0].observe())),
+  teeth: route.params.patient.teeth
 }))(TeethFormula)
 

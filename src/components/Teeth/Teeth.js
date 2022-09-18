@@ -54,7 +54,7 @@ export const Teeth = ({
           x={teethMetaBaby[tooth].x}
           y={teethMetaBaby[tooth].y}
           onPress={onPressTooth}
-          selected={selectedTooth === tooth}
+          selected={selectedTooth === tooth || multiSelect && selectedTooth[tooth]}
           scale={scale}
           record={teethRecords[tooth]}
         />)}

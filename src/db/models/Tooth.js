@@ -1,6 +1,7 @@
 import { Model } from '@nozbe/watermelondb'
 import { text, writer, lazy } from '@nozbe/watermelondb/decorators'
 import { defaultUpdater } from '../../utils/defaultFn'
+import { Q } from '@nozbe/watermelondb'
 
 export default class Tooth extends Model {
   static table = 'teeth'
@@ -15,8 +16,7 @@ export default class Tooth extends Model {
   @text('tooth_state') toothState
   @text('notes') notes
   
-  @lazy appointments = this.collections
-    .get('appointments')
+  @lazy allAppointments = this.collections.get('appointments')
     .query(Q.on('appointments_teeth', 'tooth_id', this.id))
 
   @writer async updateInstance(fields) {
@@ -24,7 +24,7 @@ export default class Tooth extends Model {
   }
 
   @writer async deleteInstance() {
-    await this.appointments.destroyAllPermanently()
+    //await this.appointments.destroyAllPermanently()
     return await this.markAsDeleted()
   }
 

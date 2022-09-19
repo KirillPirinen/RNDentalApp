@@ -12,6 +12,7 @@ export const PatientAppointment = ({
   onDeleteAppointment,
   theme: { colors }
 }) => {
+  const hasMenu = onEditAppointment && onDeleteAppointment
   const needsConfirmation = appointment.needsConfimation()
   return (
     <Surface 
@@ -22,15 +23,15 @@ export const PatientAppointment = ({
       elevation={1}
     >
       <View style={{ 
-          marginTop: -25,  
+          marginTop: hasMenu ? -25 : 20,  
           flexDirection:'row-reverse'
         }}>
-        <MenuApointment 
+        {hasMenu && <MenuApointment 
           appointment={appointment}
           onEditAppointment={onEditAppointment}
           onDeleteAppointment={onDeleteAppointment}
           contentStyle={{ backgroundColor: colors.patientAppointment.background }}
-        />
+        />}
       </View>
       <AppointmentCardRow style={{ marginTop: -20 }}>
         <FontAwesome5 name="clock" size={16} color="#A3A3A3" />

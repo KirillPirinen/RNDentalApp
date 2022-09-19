@@ -77,15 +77,16 @@ export default class Appointment extends Model {
           instance.appointmentId = this.id
         }))
       } else {
+        let newTooth
         acc.push(this.collections.get('teeth').prepareCreate(instance => {
-          instance.teethNo = teeth
+          newTooth = instance.id
+          instance.toothNo = teeth
           instance.formulaId = formula[0].id
-
-          acc.push(this.collections.get('appointments_teeth').prepareCreate(instance => {
-            instance.toothId = instance.id
-            instance.appointmentId = this.id
-          }))
-          
+          instance.toothState = 'cured' 
+        }))
+        acc.push(this.collections.get('appointments_teeth').prepareCreate(instance => {
+          instance.toothId = newTooth
+          instance.appointmentId = this.id
         }))
       }
       return acc

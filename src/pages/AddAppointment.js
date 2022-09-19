@@ -165,12 +165,14 @@ const AddAppointment = ({ navigation, route: { params } }) => {
           <View style={styles.middleWrapper}>
             <View style={styles.timeRow}>
               <View style={styles.flex}>
-                {dateMeta.mode && <DatePicker
-                  mode={dateMeta.mode}
-                  minimumDate={dateMeta.сurrent}
-                  value={dateMeta.date || dateMeta.сurrent}
-                  onChange={setDate}
-                />}
+                {dateMeta.mode && (
+                  <DatePicker
+                    mode={dateMeta.mode}
+                    minimumDate={dateMeta.сurrent}
+                    value={dateMeta.date || dateMeta.сurrent}
+                    onChange={setDate}
+                  />
+                )}
               </View>
             </View>
           </View>

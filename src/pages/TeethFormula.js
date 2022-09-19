@@ -1,9 +1,11 @@
-import React, { useCallback ,useState, useMemo, useEffect } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { Container } from '../components'
+import React, { useCallback ,useState, useMemo, useEffect, memo } from 'react'
+import { StyleSheet, View, ScrollView } from 'react-native'
+import { Text } from 'react-native-paper'
+import { Container, PatientAppointment } from '../components'
 import { Teeth } from '../components/Teeth/Teeth'
 import withObservables from '@nozbe/with-observables'
 import { switchMap } from 'rxjs/operators'
+import { useTheme } from 'react-native-paper'
 
 // selected: {
 //   fill:'red'
@@ -21,28 +23,44 @@ import { switchMap } from 'rxjs/operators'
 //   fill: '#3e9758'
 // },
 
+const initState = []
+const AppointmentWrapper = memo(({ tooth }) => {
+  const theme = useTheme()
+  const [appointments, setAppointments] = useState(initState)
+
+  //const renderItem = useCallback(({ item }) => <PatientAppointment theme={theme} appointment={item}/>, [])
+
+  useEffect(() => {
+    if(tooth) {
+      tooth.allAppointments.fetch().then(setAppointments)
+    } else {
+      setAppointments(initState)
+    }
+  }, [tooth])
+
+  return (
+    <View style={{ height: '90%' }}>
+      <Text variant="titleLarge" style={{ marginBottom: 10 }}>История лечения:</Text>
+      {appointments.map(appointment => <PatientAppointment appointment={appointment} theme={theme}/>)}
+    </View>
+  )
+})
+
 const styles = StyleSheet.create({
   container: { flex: 1 }
 })
 
 const TeethFormula = ({ formula, navigation, patient, teeth }) => {
-  
+
   const [selected, setSelected] = useState(null)
 
-  // const hashTeethInfo = useMemo(() => {
-  //   return teeth.reduce((acc, tooth) => {
-  //     acc.toothNo = tooth
-  //     return acc
-  //   }, {})
-  // }, [teeth])
+  const hashTeethInfo = useMemo(() => {
+    return teeth.reduce((acc, tooth) => {
+      acc[tooth.toothNo] = tooth
+      return acc
+    }, {})
+  }, [teeth])
 
-  const hashTest = {
-    55: { toothState: 'absent' },
-    54: { toothState: 'absent' },
-    53: { toothState: 'scheduled' },
-    52: { toothState: 'crown' },
-    51: { toothState: 'cured' }
-  }
   const pressHandler = useCallback((toothNo) => () => {
     setSelected(toothNo)
   }, [])
@@ -77,20 +95,20 @@ const TeethFormula = ({ formula, navigation, patient, teeth }) => {
   const viewBox = (formula.hasBabyJaw && !formula.hasAdultJaw) && `43.5 55.5 202 259`
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
         <Teeth
           withBabyTeeth={formula.hasBabyJaw}
           withAdultTeeth={formula.hasAdultJaw}
           selectedTooth={selected} 
           onPressTooth={pressHandler}
-          teethRecords={hashTest}
+          teethRecords={hashTeethInfo}
           viewBox={viewBox}
         />
       <Container>
         {/* <ToothStatePanel initalValue="O" /> */}
-        <Text>Privet</Text>
+        {hashTeethInfo[selected] && <AppointmentWrapper tooth={hashTeethInfo[selected]}/>}
       </Container>
-    </View>
+    </ScrollView>
   )
 }
 

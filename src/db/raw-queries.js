@@ -11,9 +11,9 @@ export const getSqlDateFn = ({ modifier, from } = {}) => {
 }
 
 export const appointmentsByDays = (from, to) => Q.unsafeSqlQuery(`SELECT * FROM appointments 
-  WHERE (_status != 'deleted' AND is_confirmed = false)
+  WHERE (_status != 'deleted')
   AND (date(date / 1000, 'unixepoch') BETWEEN ${getSqlDateFn({ modifier: from })} AND ${getSqlDateFn({ modifier: to })})
-  OR (is_confirmed = false)
+  OR (_status != 'deleted' AND is_confirmed = false)
   ORDER BY date ASC;`
 )
 

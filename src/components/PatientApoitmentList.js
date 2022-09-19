@@ -3,7 +3,7 @@ import { FlatList, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { PatientAppointment } from '../components/Appointment/PatientAppointments'
 import { useModal } from '../context/modal-context'
-import { defaultExtractor } from '../utils/defaultExtracror'
+import { defaultExtractor } from '../utils/defaultFn'
 import withObservables from '@nozbe/with-observables'
 
 const ObservablePatientAppointment = withObservables(['appointment'], ({ appointment }) => ({
@@ -22,6 +22,9 @@ export const PatientAppointmentList = ({
   const [actions, dispatch] = useModal()
 
   const onEditAppointment = useCallback((appointment) => {
+      if(appointment.isConfirmed) {
+        return navigation.navigate('ConfirmAppointment', { patient, appointment, edit: true })
+      }
       navigation.navigate('AddAppointment', { patient, appointment, edit: true })
   }, [patient])
 

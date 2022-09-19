@@ -5,7 +5,7 @@ import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import withObservables from '@nozbe/with-observables'
 import { Container, Autocomplete, FAB, EmptyList, Patient } from '../components'
 import { useIsFocused } from '@react-navigation/native'
-import { defaultExtractor } from '../utils/defaultExtracror'
+import { defaultExtractor } from '../utils/defaultFn'
 import { useModal } from '../context/modal-context'
 import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef'
 

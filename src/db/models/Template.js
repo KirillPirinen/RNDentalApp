@@ -1,6 +1,7 @@
 import { Model } from '@nozbe/watermelondb'
 import { text, writer } from '@nozbe/watermelondb/decorators'
 import { TAG_REGEX } from '../../utils/constants'
+import { defaultUpdater } from '../../utils/defaultFn'
 
 export default class Template extends Model {
   static table = 'templates'
@@ -13,11 +14,7 @@ export default class Template extends Model {
   }
 
   @writer async updateInstance(fields) {
-    await this.update(instance => {
-        Object.keys(fields).forEach((key) => {
-          instance[key] = fields[key]
-        })
-    })
+    await this.update(defaultUpdater(fields))
   }
 
   @writer async deleteInstance() {

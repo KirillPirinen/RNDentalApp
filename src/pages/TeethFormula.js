@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 })
 
 const TeethFormula = ({ formula, navigation, patient, teeth }) => {
-  console.log(teeth)
+  
   const [selected, setSelected] = useState(null)
 
   // const hashTeethInfo = useMemo(() => {

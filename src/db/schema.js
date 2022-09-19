@@ -1,7 +1,7 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb'
 
 export default appSchema({
-  version: 5,
+  version: 6,
   tables: [
     tableSchema({
       name: 'patients',
@@ -33,7 +33,11 @@ export default appSchema({
         { name: 'diagnosis', type: 'string', isOptional: true },
         { name: 'notes', type: 'string', isOptional: true },
         { name: 'teeth', type: 'string', isOptional: true }
-      ]
+      ],
+      unsafeSql: sql => {
+        console.log(sql)
+        return sql
+      }
     }),
     tableSchema({
       name: 'teeth',

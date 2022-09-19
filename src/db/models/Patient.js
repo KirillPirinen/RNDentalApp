@@ -3,6 +3,7 @@ import { text, writer, children, field, lazy } from '@nozbe/watermelondb/decorat
 import { phoneSanitazer } from '../../utils/sanitizers'
 import { Q } from '@nozbe/watermelondb'
 import { switchMap } from 'rxjs/operators'
+import { defaultUpdater } from '../../utils/defaultFn'
 
 export default class Patient extends Model {
   static table = 'patients'
@@ -41,11 +42,7 @@ export default class Patient extends Model {
   @writer async updateInstance(fields, phones) {
 
     if(!phones) {
-      return await this.update(instance => {
-        Object.keys(fields).forEach((key) => {
-          instance[key] = fields[key]
-        })
-      })
+      return await this.update(defaultUpdater(fields))
     }
 
     const batchPhones = phones.map(dirtyPhone => {
@@ -65,11 +62,7 @@ export default class Patient extends Model {
     })
 
     await this.batch(
-      this.prepareUpdate(instance => {
-        Object.keys(fields).forEach((key) => {
-          instance[key] = fields[key]
-        })
-      }),
+      this.prepareUpdate(defaultUpdater(fields)),
       ...batchPhones
     ) 
   }

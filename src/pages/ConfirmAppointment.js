@@ -1,28 +1,23 @@
 import { useState } from 'react'
-import { View, FlatList, Divider, ScrollView, StyleSheet } from 'react-native'
-import DatePicker from '@react-native-community/datetimepicker'
-import { Container, Autocomplete, Patient, EmptyList } from '../components'
+import { View, ScrollView, StyleSheet } from 'react-native'
+import { Container, Patient } from '../components'
 import { Button, TextInput as Input, Text, useTheme } from 'react-native-paper'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
-import formatRu from '../utils/formatRu'
-import { createAppointment } from '../db/actions'
 import Slider from '@react-native-community/slider'
-import { querySanitazer } from '../utils/sanitizers'
 import { useModal } from '../context/modal-context'
-import { Q } from '@nozbe/watermelondb'
 
 const ConfirmAppointment = ({ navigation, route: { params } }) => {
   const [actions, dispatch] = useModal()
 
   const appointment = params?.appointment || {}
   const patient = params?.patient
+  const isEdit = params?.edit
 
   const theme = useTheme()
 
-  const [notes, setNotes] = useState(appointment.notes || '')
-  const [diagnosis, setDiagnosis] = useState('')
-  const [price, setPrice] = useState('')
-  const [teeth, setTeeth] = useState('')
+  const [notes, setNotes] = useState(appointment.notes)
+  const [diagnosis, setDiagnosis] = useState(appointment.diagnosis)
+  const [price, setPrice] = useState(String(appointment.price))
+  const [teeth, setTeeth] = useState(appointment.teeth)
   const [duration, setDuration] = useState(appointment.duration)
 
   const onOpenSelection = () => dispatch({ 
@@ -30,21 +25,20 @@ const ConfirmAppointment = ({ navigation, route: { params } }) => {
     payload: { onSubmit:setTeeth, teeth } 
   })
 
-  const onSubmit = async () => {
-    const teeth = await patient.teeth.fetch()
-    console.log(teeth.length)
-    // const content = { notes, diagnosis, price, duration }
-    // appointment.updateInstance(content)
+  const onSubmit = () => {
+    appointment.updateInstance({ 
+      notes, diagnosis, price: parseInt(price), duration, isConfirmed: true 
+    }, teeth.split(', ')).then(navigation.goBack)
   }
 
   return (
     <Container>
         <ScrollView keyboardShouldPersistTaps='handled'>
-          <Patient 
+          {patient && <Patient 
             patient={patient} 
             theme={theme}
             onPress={() =>  navigation.navigate('Detail', { patient })}
-          />
+          />}
           <Button 
             style={{ marginTop: 40, borderColor: theme.colors.primary }} 
             icon="tooth-outline" 

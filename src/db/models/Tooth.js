@@ -1,5 +1,6 @@
 import { Model } from '@nozbe/watermelondb'
 import { text, writer, lazy } from '@nozbe/watermelondb/decorators'
+import { defaultUpdater } from '../../utils/defaultFn'
 
 export default class Tooth extends Model {
   static table = 'teeth'
@@ -19,11 +20,7 @@ export default class Tooth extends Model {
     .query(Q.on('appointments_teeth', 'tooth_id', this.id))
 
   @writer async updateInstance(fields) {
-    await this.update(instance => {
-        Object.keys(fields).forEach((key) => {
-          instance[key] = fields[key]
-        })
-    })
+    await this.update(defaultUpdater(fields))
   }
 
   @writer async deleteInstance() {

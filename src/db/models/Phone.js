@@ -1,5 +1,6 @@
 import { Model } from '@nozbe/watermelondb'
 import { text, field, writer, children } from '@nozbe/watermelondb/decorators'
+import { defaultUpdater } from '../../utils/defaultFn'
 
 export default class Phone extends Model {
   static table = 'phones'
@@ -29,11 +30,7 @@ export default class Phone extends Model {
   }
 
   @writer async updateInstance(fields) {
-    await this.update(instance => {
-        Object.keys(fields).forEach((key) => {
-          instance[key] = fields[key]
-        })
-    })
+    await this.update(defaultUpdater(fields))
   }
 
   @writer async deleteInstance() {

@@ -4,6 +4,7 @@ import { Text, Menu, IconButton, Divider, Surface } from 'react-native-paper'
 import Badge from '../Badge'
 import formatRu from '../../utils/formatRu'
 import { memo, useState } from 'react'
+import { APPOINTMENT_STATUS } from '../../utils/constants'
 
 export const PatientAppointment = ({ 
   appointment, 
@@ -11,7 +12,7 @@ export const PatientAppointment = ({
   onDeleteAppointment,
   theme: { colors }
 }) => {
-
+  const needsConfirmation = appointment.needsConfimation()
   return (
     <Surface 
       style={[
@@ -40,7 +41,7 @@ export const PatientAppointment = ({
           </Text>
         </AppointmentCardLabel>
       </AppointmentCardRow>
-      {Boolean(true/*appointment.teeth*/) && <Teeth teeth={appointment.teeth || '1,2,3,4'} />}
+      {Boolean(appointment.teeth) && <Teeth teeth={appointment.teeth} />}
       {Boolean(appointment.diagnosis) && <Diagnosis diagnosis={appointment.diagnosis} />}
       {Boolean(appointment.notes) && <Notes notes={appointment.notes} />}
       <AppointmentCardRow
@@ -50,7 +51,7 @@ export const PatientAppointment = ({
           {formatRu(appointment.date, 'PPpp')}
         </Badge>
       </AppointmentCardRow>
-      {true /*diagnosis*/ && <Badge style={styles.badgePrice} status="green">{appointment.price || 2000} &#8381;</Badge>}
+      {Boolean(appointment.price) && <Badge style={styles.badgePrice} status="green">{appointment.price} &#8381;</Badge>}
     </Surface>
   )
 }

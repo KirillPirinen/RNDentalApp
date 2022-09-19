@@ -26,8 +26,7 @@ export const SwipeableAppointment = enhancer(({
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const status = appointment.status
-  const isHistory = status === APPOINTMENT_STATUS.lasts || status === APPOINTMENT_STATUS.past
-  const needsConfirmation = !appointment.isConfirmed && isHistory
+  const needsConfirmation = appointment.needsConfimation(status)
 
   useEffect(() => {
     fadeAnim.setValue(0)
@@ -80,7 +79,7 @@ export const SwipeableAppointment = enhancer(({
     <GestureHandlerRootView>
       <Swipeable 
         renderRightActions={rightSwipeActions}
-        renderLeftActions={isHistory && leftSwipeActions}
+        renderLeftActions={needsConfirmation && leftSwipeActions}
         friction={2}
         overshootLeft={false}
         overshootRight={false}

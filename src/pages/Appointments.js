@@ -6,7 +6,7 @@ import { Q } from '@nozbe/watermelondb';
 import { groupAppointments } from '../utils/groupAppointments'
 import { useMemo, useCallback } from 'react'
 import { useForceUpdateByInterval } from '../utils/custom-hooks/useForceUpdate'
-import { defaultExtractor } from '../utils/defaultExtracror'
+import { defaultExtractor } from '../utils/defaultFn'
 import { useModal } from '../context/modal-context'
 import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef';
 import { useTheme } from 'react-native-paper';

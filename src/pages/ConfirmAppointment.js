@@ -17,7 +17,7 @@ const ConfirmAppointment = ({ navigation, route: { params } }) => {
   const [notes, setNotes] = useState(appointment.notes)
   const [diagnosis, setDiagnosis] = useState(appointment.diagnosis)
   const [price, setPrice] = useState(String(appointment.price))
-  const [teeth, setTeeth] = useState(appointment.teeth)
+  const [teeth, setTeeth] = useState(appointment.teeth?.split(',') || [])
   const [duration, setDuration] = useState(appointment.duration)
 
   const onOpenSelection = () => dispatch({ 
@@ -28,7 +28,7 @@ const ConfirmAppointment = ({ navigation, route: { params } }) => {
   const onSubmit = () => {
     appointment.updateInstance({ 
       notes, diagnosis, price: parseInt(price), duration, isConfirmed: true 
-    }, teeth.split(', ')).then(navigation.goBack)
+    }, teeth).then(navigation.goBack)
   }
 
   return (
@@ -45,7 +45,7 @@ const ConfirmAppointment = ({ navigation, route: { params } }) => {
             mode="outlined" 
             onPress={onOpenSelection}
           >
-            {teeth || 'Выбрать зубы'}
+            {teeth.toString() || 'Выбрать зубы'}
           </Button>
           <View style={styles.middleWrapper}>
             <Text variant="titleLarge">{`Длительность приема: ${duration} минут`}</Text>

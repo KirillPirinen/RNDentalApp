@@ -103,7 +103,7 @@ const Notes = ({ notes }) => (
 
 const MenuApointment = ({ onEditAppointment, appointment, onDeleteAppointment, ...rest }) => {
   const [visible, setVisible] = useState(false)
-  const hof = (fn) => () => (setVisible(false), fn(appointment))
+  const hof = (fn, isConfirmation) => () => (setVisible(false), fn(appointment, isConfirmation))
   return (
     <Menu
       visible={visible}
@@ -115,13 +115,11 @@ const MenuApointment = ({ onEditAppointment, appointment, onDeleteAppointment, .
       />}
       {...rest}
     >
-      <Menu.Item onPress={hof(onDeleteAppointment)} 
-        title="Удалить" 
-      />
+      <Menu.Item onPress={hof(onDeleteAppointment)} title="Удалить" />
       <Divider bold />
-      <Menu.Item onPress={hof(onEditAppointment)} 
-        title="Редактировать" 
-      />
+      <Menu.Item onPress={hof(onEditAppointment)} title="Изменить время" />
+      <Divider bold />
+      <Menu.Item onPress={hof(onEditAppointment, true)} title={!appointment.isConfirmed ? "Подтвердить прием" : "Редактировать"} />
     </Menu>
   )
 }

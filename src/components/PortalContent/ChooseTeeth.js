@@ -12,7 +12,7 @@ export const ChooseTeeth = ({
   teeth
 }) => {
   const [selected, setSelected] = useState(() => {
-    return teeth?.split(', ').filter(Boolean).reduce((acc, tooth) => {
+    return teeth?.filter(Boolean).reduce((acc, tooth) => {
       acc[tooth] = true
       return acc
     }, {}) || init
@@ -22,15 +22,15 @@ export const ChooseTeeth = ({
     setSelected(prev => ({...prev, [toothNo]: !prev[toothNo]}))
   }, [])
 
-  const selectedString = Object.keys(selected).reduce((acc, tooth) => {
+  const selectedArr = Object.keys(selected).reduce((acc, tooth) => {
     if(selected[tooth]) {
       acc.push(tooth)
     }
     return acc
-  }, []).join(', ')
+  }, [])
 
   const submitHandler = () => {
-    onSubmit?.(selectedString)
+    onSubmit?.(selectedArr)
     __defaultHandlers.current.clear()
   }
 
@@ -59,7 +59,7 @@ export const ChooseTeeth = ({
         multiSelect
       />
       <Surface style={styles.tooltip}>
-        {Boolean(selectedString.length) &&<Text>Вы выбрали: <Text style={styles.bold}>{selectedString}</Text></Text>}
+        {Boolean(selectedArr.length) &&<Text>Вы выбрали: <Text style={styles.bold}>{selectedArr.join(', ')}</Text></Text>}
       </Surface>
       <Button 
         style={styles.submit} 

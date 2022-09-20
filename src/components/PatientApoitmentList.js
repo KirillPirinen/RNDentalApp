@@ -21,8 +21,8 @@ export const PatientAppointmentList = ({
   const theme = useTheme()
   const [actions, dispatch] = useModal()
 
-  const onEditAppointment = useCallback((appointment) => {
-      if(appointment.isConfirmed) {
+  const onEditAppointment = useCallback((appointment, isConfirmation) => {
+      if(isConfirmation) {
         return navigation.navigate('ConfirmAppointment', { patient, appointment, edit: true })
       }
       navigation.navigate('AddAppointment', { patient, appointment, edit: true })

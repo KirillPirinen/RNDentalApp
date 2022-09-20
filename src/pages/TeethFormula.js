@@ -24,11 +24,9 @@ import { useTheme } from 'react-native-paper'
 // },
 
 const initState = []
-const AppointmentWrapper = memo(({ tooth }) => {
+const History = memo(({ tooth }) => {
   const theme = useTheme()
   const [appointments, setAppointments] = useState(initState)
-
-  //const renderItem = useCallback(({ item }) => <PatientAppointment theme={theme} appointment={item}/>, [])
 
   useEffect(() => {
     if(tooth) {
@@ -38,28 +36,22 @@ const AppointmentWrapper = memo(({ tooth }) => {
     }
   }, [tooth])
 
-  return (
-    <View style={{ height: '90%' }}>
-      <Text variant="titleLarge" style={{ marginBottom: 10 }}>История лечения:</Text>
-      {appointments.map(appointment => <PatientAppointment appointment={appointment} theme={theme}/>)}
+  return Boolean(appointments.length) && (
+    <View style={styles.historyWrapper}>
+      <Text variant="titleLarge" style={styles.historyTitle}>История лечения:</Text>
+      {appointments.map(appointment => <PatientAppointment key={appointment.id} appointment={appointment} theme={theme}/>)}
     </View>
   )
 })
 
-const styles = StyleSheet.create({
-  container: { flex: 1 }
-})
-
-const TeethFormula = ({ formula, navigation, patient, teeth }) => {
+const TeethFormula = ({ formula, navigation, teeth }) => {
 
   const [selected, setSelected] = useState(null)
 
-  const hashTeethInfo = useMemo(() => {
-    return teeth.reduce((acc, tooth) => {
-      acc[tooth.toothNo] = tooth
-      return acc
-    }, {})
-  }, [teeth])
+  const hashTeethInfo = teeth.reduce((acc, tooth) => {
+    acc[tooth.toothNo] = tooth
+    return acc
+  }, {})
 
   const pressHandler = useCallback((toothNo) => () => {
     setSelected(toothNo)
@@ -106,7 +98,7 @@ const TeethFormula = ({ formula, navigation, patient, teeth }) => {
         />
       <Container>
         {/* <ToothStatePanel initalValue="O" /> */}
-        {hashTeethInfo[selected] && <AppointmentWrapper tooth={hashTeethInfo[selected]}/>}
+        {hashTeethInfo[selected] && <History tooth={hashTeethInfo[selected]} />}
       </Container>
     </ScrollView>
   )
@@ -115,6 +107,11 @@ const TeethFormula = ({ formula, navigation, patient, teeth }) => {
 export default withObservables(['route'], ({ route }) => ({
   patient: route.params.patient,
   formula: route.params.patient.formulas.observe().pipe(switchMap(formulas => formulas[0].observe())),
-  teeth: route.params.patient.teeth
+  teeth: route.params.patient.teeth//.observeWithColumns(['tooth_state'])
 }))(TeethFormula)
 
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  historyWrapper: { height: '90%' },
+  historyTitle: { marginBottom: 10 }
+})

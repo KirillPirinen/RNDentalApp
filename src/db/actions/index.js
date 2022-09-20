@@ -1,6 +1,17 @@
 import { database } from '..'
 import { phoneSanitazer } from '../../utils/sanitizers'
 
+export const updateTeethState = async (id) => {
+  await database.write(async () => {
+    // sqlite:
+    await database.adapter.unsafeExecute({
+      sqls: [
+        [updateTeethState(id)]
+      ]
+    })
+  })
+}
+
 export const createPatient = async ({ fullName, phones, phoneNumbers, name, id }) => {
   const phonesToBatch = phones || phoneNumbers
   const recievedName = fullName || name

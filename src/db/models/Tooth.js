@@ -1,5 +1,5 @@
 import { Model } from '@nozbe/watermelondb'
-import { text, writer, lazy } from '@nozbe/watermelondb/decorators'
+import { text, writer, lazy, children } from '@nozbe/watermelondb/decorators'
 import { defaultUpdater } from '../../utils/defaultFn'
 import { Q } from '@nozbe/watermelondb'
 
@@ -15,7 +15,8 @@ export default class Tooth extends Model {
   @text('tooth_no') toothNo
   @text('tooth_state') toothState
   @text('notes') notes
-  
+  @children('appointments_teeth') associatedRecords
+
   @lazy allAppointments = this.collections.get('appointments')
     .query(Q.on('appointments_teeth', 'tooth_id', this.id))
 

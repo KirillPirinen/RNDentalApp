@@ -61,7 +61,7 @@ export default class Appointment extends Model {
       ])
       const batches = teethToReset.map((tooth) => {
           return tooth.prepareUpdate(instance => {
-            instance.toothState = 'cleaned'
+            instance.isTreated = false
           })
       })
       const recordsBatch = recordsToDelete.map((record) => {
@@ -105,21 +105,25 @@ export default class Appointment extends Model {
           instance.toothId = dict[tooth].id
           instance.appointmentId = this.id
         }))
-        if(dict[tooth].toothState !== 'cured') {
+        if(!dict[tooth].isTreated) {
           acc.push(dict[tooth].prepareUpdate((instance) => {
-            instance.toothState = 'cured'
+            instance.isTreated = true
           }))
         }
       } else {
+        let newToothId
+
         acc.push(this.collections.get('teeth').prepareCreate(instance => {
           instance.toothNo = tooth
           instance.formulaId = formulaId
-          instance.toothState = 'cured'
+          instance.isTreated = true
 
-          acc.push(this.collections.get('appointments_teeth').prepareCreate(instance => {
-            instance.toothId = instance.id
-            instance.appointmentId = this.id
-          }))
+          newToothId = instance.id
+        }))
+
+        acc.push(this.collections.get('appointments_teeth').prepareCreate(instance => {
+          instance.toothId = newToothId
+          instance.appointmentId = this.id
         }))
       }
       return acc

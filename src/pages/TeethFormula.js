@@ -1,4 +1,4 @@
-import React, { useCallback ,useState, useMemo, useEffect, memo } from 'react'
+import React, { useCallback, useState, useMemo, useEffect, memo } from 'react'
 import { StyleSheet, View, ScrollView } from 'react-native'
 import { Text } from 'react-native-paper'
 import { Container, PatientAppointment } from '../components'
@@ -6,34 +6,15 @@ import { Teeth } from '../components/Teeth/Teeth'
 import withObservables from '@nozbe/with-observables'
 import { switchMap } from 'rxjs/operators'
 import { useTheme } from 'react-native-paper'
+import { ToothStatePanel } from '../components/Teeth/ToothStatePanel.js'
+import { createTooth } from '../db/actions/index.js'
 
-// selected: {
-//   fill:'red'
-// },
-// absent: {
-//   fill: '#bbbbbb'
-// },
-// scheduled: {
-//   fill: '#9abd57'
-// },
-// treatment: {
-//   fill: '#d2e74c'
-// },
-// cured: {
-//   fill: '#3e9758'
-// },
-
-const initState = []
 const History = memo(({ tooth }) => {
   const theme = useTheme()
-  const [appointments, setAppointments] = useState(initState)
+  const [appointments, setAppointments] = useState([])
 
   useEffect(() => {
-    if(tooth) {
-      tooth.allAppointments.fetch().then(setAppointments)
-    } else {
-      setAppointments(initState)
-    }
+    tooth?.allAppointments.fetch().then(setAppointments)
   }, [tooth])
 
   return Boolean(appointments.length) && (
@@ -48,10 +29,10 @@ const TeethFormula = ({ formula, navigation, teeth }) => {
 
   const [selected, setSelected] = useState(null)
 
-  const hashTeethInfo = teeth.reduce((acc, tooth) => {
+  const hashTeethInfo = useMemo(() => teeth.reduce((acc, tooth) => {
     acc[tooth.toothNo] = tooth
     return acc
-  }, {})
+  }, {}), [teeth])
 
   const pressHandler = useCallback((toothNo) => () => {
     setSelected(toothNo)
@@ -84,7 +65,16 @@ const TeethFormula = ({ formula, navigation, teeth }) => {
     })
   }, [formula])
 
+  const selectedInstance = hashTeethInfo[selected]
   const viewBox = (formula.hasBabyJaw && !formula.hasAdultJaw) && `43.5 55.5 202 259`
+
+  const onValueChange = (toothState) => {
+    if(selectedInstance) {
+      selectedInstance.updateInstance({ toothState })
+    } else {
+      createTooth({ formulaId: formula.id, toothNo: selected, toothState })
+    }
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -96,9 +86,9 @@ const TeethFormula = ({ formula, navigation, teeth }) => {
           teethRecords={hashTeethInfo}
           viewBox={viewBox}
         />
+      <ToothStatePanel onValueChange={onValueChange} toothState={selectedInstance?.toothState} />
       <Container>
-        {/* <ToothStatePanel initalValue="O" /> */}
-        {hashTeethInfo[selected] && <History tooth={hashTeethInfo[selected]} />}
+        {selectedInstance && <History tooth={selectedInstance} />}
       </Container>
     </ScrollView>
   )
@@ -107,7 +97,7 @@ const TeethFormula = ({ formula, navigation, teeth }) => {
 export default withObservables(['route'], ({ route }) => ({
   patient: route.params.patient,
   formula: route.params.patient.formulas.observe().pipe(switchMap(formulas => formulas[0].observe())),
-  teeth: route.params.patient.teeth//.observeWithColumns(['tooth_state'])
+  teeth: route.params.patient.teeth.observeWithColumns(['tooth_state'])
 }))(TeethFormula)
 
 const styles = StyleSheet.create({

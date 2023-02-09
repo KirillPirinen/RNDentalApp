@@ -10,5 +10,4 @@ export const useFabControlsRef = () => {
     () => ref.current(true),
     () => ref.current(false)
   ]
-
 }

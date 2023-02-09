@@ -91,9 +91,12 @@ export const SwipeableAppointment = enhancer(({
             onLongPress={() => navigation.navigate('Detail', { patient })}
             status={status}
           >
-            {needsConfirmation && <View style={styles.badge}>
-              <Entypo name="arrow-bold-right" size={12} color="white" />
+            {needsConfirmation && <View style={styles.badgeLeft}>
+              <Entypo name="arrow-bold-right" size={10} color="white" />
             </View>}
+            <View style={[styles.badgeRight, { backgroundColor: theme.colors.backdrop }]}>
+              <Entypo name="arrow-bold-left" size={10} color="white" />
+            </View>
           </Appointment>
         </Animated.View>
       </Swipeable>
@@ -102,14 +105,25 @@ export const SwipeableAppointment = enhancer(({
 })
 
 const styles = StyleSheet.create({
-  badge: {
+  badgeLeft: {
     position: 'absolute',
-    width: 13,
+    width: 10,
     height:50,
     backgroundColor:'green',
     borderTopEndRadius: 10,
     borderBottomEndRadius: 10,
     justifyContent: 'center',
-    padding:0
+    padding:0,
+  },
+  badgeRight: {
+    position: 'absolute',
+    width: 10,
+    height:50,
+    backgroundColor:'red',
+    borderTopStartRadius: 10,
+    borderBottomStartRadius: 10,
+    justifyContent: 'center',
+    padding:0,
+    right:0,
   }
 })

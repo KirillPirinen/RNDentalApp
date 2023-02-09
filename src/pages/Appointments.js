@@ -47,11 +47,11 @@ const Appointments = ({ appointments, navigation }) => {
           sections={grouped}
           keyExtractor={defaultExtractor}
           renderItem={({ item }) => <SwipeableAppointment
-          navigation={navigation}
-          appointment={item}
-          onEdit={onEditAppointment}
-          onDelete={onConfirmDeleteAppointment}
-          theme={theme}
+            navigation={navigation}
+            appointment={item}
+            onEdit={onEditAppointment}
+            onDelete={onConfirmDeleteAppointment}
+            theme={theme}
         />} 
           renderSectionHeader={renderSectionHeader}
           onScrollBeginDrag={onDrag}

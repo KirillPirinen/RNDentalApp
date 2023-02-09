@@ -66,9 +66,9 @@ export const createAppointment = async ({ patientId, date, diagnosis, notes, dur
   )
 }
 
-export const createTooth = async ({ patientId, toothNo, toothState }) => {
+export const createTooth = async ({ formulaId, toothNo, toothState }) => {
   return await database.write(async () => await database.get('teeth').create(tooth => {
-      tooth.patientId = patientId
+      tooth.formulaId = formulaId
       tooth.toothNo = toothNo
       tooth.toothState = toothState
     })

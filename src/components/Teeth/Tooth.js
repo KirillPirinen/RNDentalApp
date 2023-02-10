@@ -13,7 +13,8 @@ export const Tooth = ({ paths, x, y, toothNo, onPress, selected, scale, record }
           styles.pathStyle, 
           toothFillColors[record?.toothState],
           record?.isTreated && toothFillColors.treated, 
-          selected && toothFillColors.selected]} 
+          selected && toothFillColors.selected,
+        ]}
       />)}
       <Text scale={scale} 
         xmlSpace="preserve" 

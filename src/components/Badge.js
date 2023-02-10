@@ -1,5 +1,5 @@
 import { StyleSheet, Text } from 'react-native'
-import { APPOINTMENT_STATUS } from '../utils/constants'
+import { APPOINTMENT_STATUS } from '../consts'
 
 const { lasts, future, past } = APPOINTMENT_STATUS
 

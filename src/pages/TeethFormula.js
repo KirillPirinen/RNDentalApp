@@ -1,12 +1,13 @@
 import React, { useCallback, useState, useMemo, useEffect, memo } from 'react'
 import { StyleSheet, View, ScrollView } from 'react-native'
-import { Text } from 'react-native-paper'
+import { Text, TextInput } from 'react-native-paper'
 import { Container, PatientAppointment } from '../components'
 import { Teeth } from '../components/Teeth/Teeth'
 import withObservables from '@nozbe/with-observables'
 import { switchMap } from 'rxjs/operators'
 import { useTheme } from 'react-native-paper'
 import { ToothStatePanel } from '../components/Teeth/ToothStatePanel.js'
+import { ToothNotesInput } from '../components/Teeth/ToothNotesInput.js'
 import { createTooth } from '../db/actions/index.js'
 
 const History = memo(({ tooth }) => {
@@ -70,9 +71,17 @@ const TeethFormula = ({ formula, navigation, teeth }) => {
 
   const onValueChange = (toothState) => {
     if(selectedInstance) {
-      selectedInstance.updateInstance({ toothState })
+      selectedInstance.updateInstance({ toothState: selectedInstance.toothState === toothState ? '' : toothState })
     } else {
       createTooth({ formulaId: formula.id, toothNo: selected, toothState })
+    }
+  }
+
+  const onSaveNotes = (notes) => {
+    if(selectedInstance) {
+      selectedInstance.updateInstance({ notes })
+    } else {
+      createTooth({ formulaId: formula.id, toothNo: selected, notes })
     }
   }
 
@@ -86,7 +95,14 @@ const TeethFormula = ({ formula, navigation, teeth }) => {
           teethRecords={hashTeethInfo}
           viewBox={viewBox}
         />
-      <ToothStatePanel onValueChange={onValueChange} toothState={selectedInstance?.toothState} />
+      {selected && (
+        <>
+          <ToothStatePanel onValueChange={onValueChange} toothState={selectedInstance?.toothState} />
+          <View style={styles.inputWrapper}>
+            <ToothNotesInput notes={selectedInstance?.notes} initial="notes" onSubmit={onSaveNotes} />
+          </View>
+        </>
+      )}
       <Container>
         {selectedInstance && <History tooth={selectedInstance} />}
       </Container>
@@ -103,5 +119,6 @@ export default withObservables(['route'], ({ route }) => ({
 const styles = StyleSheet.create({
   container: { flex: 1 },
   historyWrapper: { height: '90%' },
-  historyTitle: { marginBottom: 10 }
+  historyTitle: { marginBottom: 10 },
+  inputWrapper: { marginHorizontal: 10, marginTop: 10 }
 })

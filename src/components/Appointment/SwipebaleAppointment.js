@@ -6,9 +6,6 @@ import { SwipeViewButton } from "../Buttons"
 import withObservables from '@nozbe/with-observables';
 import { Animated, StyleSheet, View } from 'react-native'
 import { useEffect, useRef } from "react"
-import { APPOINTMENT_STATUS } from '../../utils/constants'
-import Badge from "../Badge"
-import { Text } from "react-native-paper"
 
 const enhancer = withObservables(['appointment'], ({ appointment }) => ({
   appointment,
@@ -61,6 +58,7 @@ export const SwipeableAppointment = enhancer(({
   }
 
   const leftSwipeActions = () => {
+
     return (
         <SwipeViewButton 
           onPress={() => onEdit(appointment, patient, true)} 

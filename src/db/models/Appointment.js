@@ -3,7 +3,7 @@ import { text, field, relation, date, writer, lazy, children } from '@nozbe/wate
 import { getAppointmentStatus } from '../../utils/getAppointmentStatus'
 import { Q } from '@nozbe/watermelondb'
 import { defaultUpdater } from '../../utils/defaultFn'
-import { APPOINTMENT_STATUS } from '../../utils/constants'
+import { APPOINTMENT_STATUS } from '../../consts'
 import { getTeethWithNoHistory, updateTeethState } from '../raw-queries'
 
 export default class Appointment extends Model {

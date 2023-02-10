@@ -4,7 +4,7 @@ import { Text, Menu, IconButton, Divider, Surface } from 'react-native-paper'
 import Badge from '../Badge'
 import formatRu from '../../utils/formatRu'
 import { memo, useState } from 'react'
-import { APPOINTMENT_STATUS } from '../../utils/constants'
+import { APPOINTMENT_STATUS } from '../../consts'
 
 export const PatientAppointment = ({ 
   appointment, 

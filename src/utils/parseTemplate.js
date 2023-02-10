@@ -1,4 +1,4 @@
-import { TAG_REGEX } from "./constants"
+import { TAG_REGEX } from "../consts"
 import formatRu from "./formatRu"
 
 const reg = new RegExp(TAG_REGEX.source, TAG_REGEX.flags + "g")

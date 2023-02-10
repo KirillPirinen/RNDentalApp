@@ -1,4 +1,4 @@
-import { APPOINTMENT_STATUS } from "./constants"
+import { APPOINTMENT_STATUS } from '../consts'
 import { addMinutes, isAfter, isBefore } from 'date-fns';
 
 export const getAppointmentStatus = (appointment) => {

@@ -3,7 +3,7 @@ import { Text, useTheme } from 'react-native-paper'
 import GrayText from '../GrayText'
 import Badge from '../Badge'
 import { addMinutes, format } from 'date-fns'
-import { APPOINTMENT_STATUS } from '../../utils/constants'
+import { APPOINTMENT_STATUS } from '../../consts'
 import { Avatar } from '../Avatar'
 
 export const Appointment = ({ onLongPress, patient, appointment, status, children }) => {

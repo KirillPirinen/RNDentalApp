@@ -3,24 +3,34 @@ import { toothStates } from '../consts'
 
 export const toothFillColors = StyleSheet.create({
   selected: {
-    fill: 'red'
+    stroke: '#000000',
+    fill: 'red',
+    strokeDasharray: undefined
   },
   treated: {
     fill: '#9abd57'
   },
   [toothStates.absent]: {
-    fill: '#bbbbbb'
+    stroke: '#bbbbbb'
   },
   [toothStates.caries]: {
-    fill: '#fba404'
+    fill: 'url(#caries)'
   },
   [toothStates.artificial]:{
     fill: '#3dc895'
   },
   [toothStates.pulpitis]: {
-    fill: 'grey'
+    fill: '#D99DBC'
   },
   [toothStates.root]: {
-    fill: 'brown'
+    stroke: 'brown',
+    strokeDasharray: "1,1.3"
   },
+  [toothStates.periodontitis]: {
+    fill: '#dd8800'
+  },
+  [toothStates.crown]: {
+    stroke: '#06876a',
+    strokeWidth: 1.1
+  }
 })

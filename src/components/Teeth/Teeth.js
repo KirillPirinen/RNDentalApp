@@ -1,8 +1,9 @@
 import React from 'react'
-import Svg from 'react-native-svg'
+import Svg, { Defs, Pattern, Image } from 'react-native-svg'
 import { teethKeysAdult, teethMetaAdult, teethKeysBaby, teethMetaBaby } from './paths-dict'
 import Tooth from './Tooth'
 import { Dimensions, View } from 'react-native'
+import dots from '../../assets/dots-filled.png'
 
 const originalWidth = 289
 const originalHeight = 370
@@ -36,6 +37,11 @@ export const Teeth = ({
         viewBox={viewBox || defaultViewBox}
         {...rest} 
       >
+        <Defs>
+          <Pattern id="caries" patternUnits="userSpaceOnUse" width="50" height="50">
+            <Image href={dots} x="0" y="0" width="100" height="100" fill="#ffdd88" />
+          </Pattern>
+        </Defs>
         {withAdultTeeth && teethKeysAdult.map(tooth => <Tooth 
           key={tooth}
           toothNo={tooth}

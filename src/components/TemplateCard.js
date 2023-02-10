@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Card, IconButton, Text } from 'react-native-paper'
-import { TAG_REGEX } from '../utils/constants'
+import { TAG_REGEX } from '../consts'
 import { parseTemplate } from '../utils/parseTemplate'
 import { ButtonRowPanel } from './Buttons'
 

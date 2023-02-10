@@ -1,8 +1,6 @@
 import { useState } from 'react'
-import { Searchbar, Surface, Divider, Text } from 'react-native-paper'
-import styled from 'styled-components/native'
-import { TouchableOpacity } from 'react-native'
-import { FlatList, View } from 'react-native'
+import { Searchbar } from 'react-native-paper'
+import { View } from 'react-native'
 import { useEffect } from 'react'
 
 export default ({ placeholder, renderList, onChange, initState, ...rest }) => {
@@ -24,16 +22,11 @@ export default ({ placeholder, renderList, onChange, initState, ...rest }) => {
       } else {
         setResult(onChange(prepQuery))
       }
-
+      
     } else {
       setResult(initState)
     }
     setSearchQuery(query)
-  }
-
-  const onSelectItem = () => () => {
-    setSearchQuery(text)
-    setResult()
   }
 
   const Output = renderList
@@ -45,7 +38,7 @@ export default ({ placeholder, renderList, onChange, initState, ...rest }) => {
         onChangeText={onChangeSearch}
         value={searchQuery}
       />
-      <Output {...rest} onSelect={onSelectItem} result={result} />
+      <Output {...rest} result={result} />
     </View>
   )
 }

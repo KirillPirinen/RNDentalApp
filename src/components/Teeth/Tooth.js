@@ -1,16 +1,27 @@
 import React, { memo } from 'react'
 import { Path, Text, TSpan } from "react-native-svg"
 import { StyleSheet } from 'react-native'
+import { toothFillColors } from '../../styles/teeth'
 
-export const Tooth = ({ paths, x, y, toothNo, onPress, selected, scale }) => {
+export const Tooth = ({ paths, x, y, toothNo, onPress, selected, scale, record }) => {
   return (
     <>
-      {paths.map((path, index) => <Path scale={scale} onPress={onPress(toothNo)} 
+      {paths.map((path, index) => <Path scale={scale} onPress={onPress?.(toothNo)} 
         key={index} 
         d={path} 
-        style={[styles.pathStyle, selected && styles.selected]} 
+        style={[
+          styles.pathStyle, 
+          toothFillColors[record?.toothState],
+          record?.isTreated && toothFillColors.treated, 
+          selected && toothFillColors.selected,
+        ]}
       />)}
-      <Text scale={scale} xmlSpace="preserve" x={x} y={y} style={styles.labelStyle}>
+      <Text scale={scale} 
+        xmlSpace="preserve" 
+        x={x} 
+        y={y} 
+        style={[styles.labelStyle, selected && styles.selected]}
+      >
         <TSpan x={x} y={y}>{toothNo}</TSpan>
       </Text>
     </>
@@ -20,9 +31,6 @@ export const Tooth = ({ paths, x, y, toothNo, onPress, selected, scale }) => {
 export default memo(Tooth)
 
 const styles = StyleSheet.create({
-  selected: {
-    fill:'red'
-  },
   pathStyle: {
     stroke: "#000",
     strokeWidth: 1,

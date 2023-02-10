@@ -1,32 +1,47 @@
-import styled from 'styled-components/native';
-import { Ionicons } from '@expo/vector-icons';
+import React, { Children, cloneElement } from 'react'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { IconButton, useTheme } from 'react-native-paper'
 
-export const SwipeViewButton = styled.TouchableOpacity`
-  width: 75px;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
+export const SwipeViewButton = ({ style, ...rest }) => <TouchableOpacity {...rest} style={[styles.swipe, style]}/>
 
-export const PlusButton = ({ onPress }) => (
-  <Circle onPress={onPress}>
-    <Ionicons name="ios-add" size={36} color="white" />
-  </Circle>
-)
+export const ButtonRowPanel = ({ onDelete, onEdit, children }) => {
+  const theme = useTheme()
+  return (
+  <View style={styles.actionsWrapper}>
+    {Children.map(children, (child) => {
+      if(child?.type === IconButton) {
+        return cloneElement(child, { 
+          size: 30,
+          style:styles.noPadding
+        })
+      }
+      return child
+    })}
+    {onEdit && <IconButton
+        icon="pencil-circle"
+        iconColor={theme.colors.backdrop}
+        size={30}
+        onPress={onEdit}
+        style={styles.noPadding}
+    />}
+    {onDelete && <IconButton
+        icon="delete"
+        iconColor={theme.colors.error}
+        size={30}
+        onPress={onDelete}
+        style={styles.noPadding}
+    />}
+  </View>
+)}
 
-const Circle = styled.TouchableOpacity`
-  align-items: center;
-  justify-content: center;
-  border-radius: 50px;
-  width: 64px;
-  height: 64px;
-  background: #2a86ff;
-  position: absolute;
-  right: 25px;
-  bottom: 25px;
-  shadow-color: #2a86ff;
-  elevation: 4;
-  shadow-opacity: 0.4;
-  shadow-radius: 3.5;
-`
+const styles = StyleSheet.create({
+  actionsWrapper: { flexDirection:'row', alignItems: 'center' },
+  noPadding: { padding: 0 },
+  swipe: {
+    width: 75,
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+})

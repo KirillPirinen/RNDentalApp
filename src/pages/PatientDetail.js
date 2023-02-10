@@ -1,14 +1,18 @@
-import { View, Linking } from 'react-native'
-import styled from 'styled-components/native'
-import { Foundation } from '@expo/vector-icons'
-import { IconButton } from 'react-native-paper'
-import withObservables from '@nozbe/with-observables';
-import { GrayText, Button, Container, PlusButton, PatientAppointmentList } from '../components'
-import { useState } from 'react';
-import { useModal } from '../context/modal-context';
+import React, { useEffect } from 'react'
+import { View, SafeAreaView, Linking, StyleSheet } from 'react-native'
+import withObservables from '@nozbe/with-observables'
+import { Text } from 'react-native-paper'
+import { Button, PatientAppointmentList, FAB, PhonesList,
+  CallButton, WhatsappButton, TelegramButtom, ButtonRowPanel } from '../components'
+import { useModal } from '../context/modal-context'
+import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef'
+import { getPrimaryPhoneNumber } from '../utils/getPrimaryPhoneNumber'
 
-const PatientDetail = ({ navigation, patient, appointments, formulas }) => {
-  const [openedMenu, setOpenedMenu] = useState(null)
+const ObservablePatientAppointmentList = withObservables(['patient'], ({ patient }) => ({
+  appointments: patient.sortedAppointments
+}))(PatientAppointmentList)
+
+const PatientDetail = ({ navigation, patient, phones }) => {
   const [actions, dispatch] = useModal()
 
   const onDeletePatient = () => patient.deleteInstance().then(() => {
@@ -17,101 +21,118 @@ const PatientDetail = ({ navigation, patient, appointments, formulas }) => {
   })
 
   const onConfirmDeletePatient = () => dispatch({ 
-    type: actions.CONFIRM_DELETE_PATIENT,
-    payload: { patient, onDelete: onDeletePatient }
+    type: actions.CONFIRM_DELETE,
+    payload: { patient, onDelete: onDeletePatient, mode: 'patient' }
   })
 
-  const onCall = () => Linking.openURL(`tel:${patient.phone}`)
+  const onCall = () => {
+    Linking.openURL(`tel:${getPrimaryPhoneNumber(phones)}`).catch(() => {
+      dispatch({ 
+        type: actions.INFO,
+        payload: { 
+          text: 'К сожалению мы не смогли открыть приложение для звонка',
+          color: 'errorContainer'
+        }
+      })
+    })
+  }
+
+  const onSendMessage = (mode) => () => dispatch({ 
+    type: actions.CHOOSE_TEMPLATE,
+    payload: { patient, mode, phone: getPrimaryPhoneNumber(phones) }
+  })
+
+  const [ref, onDrop, onDrag] = useFabControlsRef()
+
+  useEffect(() => {
+    
+    const onWhatsappCheck = () => {
+      patient.updateInstance({ hasWhatsapp: !patient.hasWhatsapp })
+    }
+    const onTelegramCheck = () => {
+      patient.updateInstance({ hasTelegram: !patient.hasTelegram })
+    }
+
+    navigation.setOptions({
+      menu: [{ 
+        type: 'TouchableCheckbox', 
+        title: 'Telegram', 
+        onPress: onTelegramCheck,
+        value: patient.hasTelegram
+      },
+      {
+        type: 'TouchableCheckbox', 
+        title: 'Whatsapp', 
+        onPress: onWhatsappCheck,
+        value: patient.hasWhatsapp
+      }]
+    })
+  }, [patient])
 
   return (
-      <View 
-        style={{ flex: 1, zIndex: 100 }} 
-        onStartShouldSetResponder={evt => setOpenedMenu(null)}>
-      <PatientDetails>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View>
-            <PatientFullname>
-              {patient.fullName}
-            </PatientFullname>
-            <GrayText>
-              {patient.phone}
-            </GrayText>
+      <SafeAreaView style={styles.pageWrapper}>
+        <View style={styles.patientDetails}>
+          <View style={styles.metaWrapper}>
+            <View style={styles.nameWrapper}>
+              <Text style={styles.patientFullname}>
+                {patient.fullName}
+              </Text>
+            </View>
+            <ButtonRowPanel 
+              onEdit={() => navigation.navigate('AddPatient', { patient, phones })}
+              onDelete={onConfirmDeletePatient}
+            />
           </View>
-          <View style={{ flexDirection:'row' }}>
-            <IconButton
-                icon="pencil-circle"
-                color="gray"
-                size={30}
-                onPress={() => navigation.navigate('AddPatient', { patient })}
-                style={{ padding: 0 }}
-            />
-            <IconButton
-                icon="delete"
-                color="red"
-                size={30}
-                onPress={onConfirmDeletePatient}
-                style={{ padding: 0 }}
-            />
+          <View style={styles.phoneListWrapper}>
+            <PhonesList phones={phones} />
+          </View>
+          <View style={styles.patientButtons}>
+            <View style={styles.formulaButtonView}>
+              <Button onPress={() => navigation.navigate('TeethFormula', { patient })}>Зубная формула</Button>
+            </View>
+            <CallButton onPress={onCall} />
+            {patient.hasWhatsapp && <WhatsappButton onPress={onSendMessage('whatsapp')} />}
+            {patient.hasTelegram && <TelegramButtom onPress={onSendMessage('telegram')} />}
           </View>
         </View>
-        <PatientButtons>
-          <FormulaButtonView>
-            <Button onPress={() => navigation.navigate('TeethFormula', { patient })}>Формула зубов</Button>
-          </FormulaButtonView>
-          <PhoneButtonView>
-            <Button
-              color="#84D269"
-              onPress={onCall}
-            >
-              <Foundation name="telephone" size={22} color="white" />
-            </Button>
-          </PhoneButtonView>
-        </PatientButtons>
-      </PatientDetails>
-      <Container>
-        <PatientAppointmentList 
-          appointments={appointments}
-          openedMenu={openedMenu}
-          setOpenedMenu={setOpenedMenu}
-          navigation={navigation}
-          patient={patient}
+        <View style={styles.patientListWrapper}>
+          <ObservablePatientAppointmentList 
+            navigation={navigation}
+            patient={patient}
+            onScrollBeginDrag={onDrag}
+            onScrollEndDrag={onDrop}
+          />
+        </View>
+        <FAB
+          ref={ref} 
+          label={`Записать ${patient.fullName}`}
+          onPress={() => navigation.navigate('AddAppointment', { patient })}
         />
-      </Container>
-      <PlusButton onPress={() => navigation.navigate('AddAppointment', { patient })}/>
-      </View>
+      </SafeAreaView>
   )
 }
 
-
-const PatientDetails = styled.View`
-  flex: 0.3;
-  padding: 25px;
-`;
-
-const FormulaButtonView = styled.View`
-  flex: 1;
-`;
-
-const PhoneButtonView = styled.View`
-  margin-left: 10px;
-  width: 45px;
-`;
-
-const PatientButtons = styled.View`
-  flex: 1;
-  flex-direction: row;
-  margin-top: 20px;
-`;
-
-const PatientFullname = styled.Text`
-  font-weight: 800;
-  font-size: 24px;
-  line-height: 30px;
-  margin-bottom: 3px;
-`;
-
+const styles = StyleSheet.create({
+  patientListWrapper: { paddingHorizontal: 25 },
+  pageWrapper: { flex: 1, zIndex: 100 },
+  patientDetails: { maxHeight: 300, padding: 25 },
+  formulaButtonView: { flex: 1 },
+  patientButtons: { flexDirection: 'row', marginTop: 20 },
+  nameWrapper: { flexShrink: 2 },
+  patientFullname: {
+    fontWeight:'800',
+    fontSize: 24,
+    lineHeight: 30,    
+    marginBottom: 3
+  },
+  phoneListWrapper: { flexDirection: 'row', flexWrap:'wrap', justifyContent:'space-between' },
+  metaWrapper: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between',
+  }
+})
 
 export default withObservables(['route'], ({ route }) => ({
     patient: route.params.patient,
-    appointments: route.params.patient.appointments
-}))(PatientDetail);
+    phones: route.params.patient.phones
+}))(PatientDetail)

@@ -1,6 +1,10 @@
 export default {
-  CONFIRM_DELETE_PATIENT: 'CONFIRM_DELETE_PATIENT',
-  CONFIRM_DELETE_APPOINTMENT: 'CONFIRM_DELETE_APPOINTMENT',
+  CONFIRM_DELETE: 'ConfirmDeleteCommon',
+  CHOOSE_ADD_PATIENT_METHOD: 'ChooseAddPatientMethod',
+  IMPORT_PROGRESS: 'ImportProgress',
+  CHOOSE_TEMPLATE: 'ChooseTemplate',
+  CHOOSE_TEETH: 'ChooseTeeth',
+  INFO: 'Info',
   HIDE: 'HIDE',
   CLEAR: 'CLEAR',
 }

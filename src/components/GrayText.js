@@ -1,6 +1,10 @@
-import styled from 'styled-components/native';
+import { Text } from 'react-native'
 
-export default styled.Text`
-  font-size: 16px;
-  color: #8b979f;
-`
+const defaultStyle = {
+  fontWeight: '800',
+  color: '#8b979f',
+}
+
+const GrayText = ({ children }) => <Text style={defaultStyle}>{children}</Text>
+
+export default GrayText

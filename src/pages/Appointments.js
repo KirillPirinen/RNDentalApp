@@ -1,18 +1,18 @@
 import withObservables from '@nozbe/with-observables'
-import { SafeAreaView, StatusBar, SectionList } from 'react-native'
-import styled from 'styled-components/native'
-import { PlusButton, SwipeableAppointment, SectionTitle, ConfirmDelete } from '../components'
+import { View, SectionList } from 'react-native'
+import { FAB, SwipeableAppointment, SectionTitle } from '../components'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import { Q } from '@nozbe/watermelondb';
 import { groupAppointments } from '../utils/groupAppointments'
 import { useMemo, useCallback } from 'react'
 import { useForceUpdateByInterval } from '../utils/custom-hooks/useForceUpdate'
-import { defaultExtractor } from '../utils/defaultExtracror'
+import { defaultExtractor } from '../utils/defaultFn'
 import { useModal } from '../context/modal-context'
+import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef';
+import { useTheme } from 'react-native-paper';
+import { appointmentsByDays } from '../db/raw-queries'
 
-const Container = styled.View`
-  flex: 1;
-`
+const wrapperStyle = { height: '100%'}
 
 const renderSectionHeader = ({ section: { day }}) => <SectionTitle>{day}</SectionTitle>
 
@@ -24,42 +24,53 @@ const Appointments = ({ appointments, navigation }) => {
 
   useForceUpdateByInterval(10000)
 
-  const onEditAppointment = useCallback((appointment, patient) => 
-    navigation.navigate('AddAppointment', { patient, appointment, edit: true }), [])
+  const onEditAppointment = useCallback((appointment, patient, confirm) => {
+    if(confirm) {
+      return navigation.navigate('ConfirmAppointment', { patient, appointment })
+    }
+    return navigation.navigate('AddAppointment', { patient, appointment, edit: true })
+  }, [])
 
   const onConfirmDeleteAppointment = useCallback((appointment, patient) => {
     const onDelete = () => appointment.deleteInstance().then(dispatch.bind(null, { type: actions.CLEAR }))
     dispatch({ 
-      type: actions.CONFIRM_DELETE_APPOINTMENT,
-      payload: { patient, appointment, onDelete }
+      type: actions.CONFIRM_DELETE,
+      payload: { patient, appointment, onDelete, mode: 'appointment' }
     })
   }, [])
 
+  const [ref, onDrop, onDrag] = useFabControlsRef()
+  const theme = useTheme()
   return (
-    <Container>
-      <StatusBar />
-      <SafeAreaView>
-      <SectionList
-        sections={grouped}
-        keyExtractor={defaultExtractor}
-        renderItem={({ item }) => <SwipeableAppointment
-        navigation={navigation}
-        appointment={item}
-        onEdit={onEditAppointment}
-        onDelete={onConfirmDeleteAppointment}
-      />} 
-        renderSectionHeader={renderSectionHeader}
-      />
-      </SafeAreaView>
-      <PlusButton onPress={() => navigation.navigate('AddAppointment')}/>
-    </Container>
+    <View style={wrapperStyle}>
+        <SectionList
+          sections={grouped}
+          keyExtractor={defaultExtractor}
+          renderItem={({ item }) => <SwipeableAppointment
+            navigation={navigation}
+            appointment={item}
+            onEdit={onEditAppointment}
+            onDelete={onConfirmDeleteAppointment}
+            theme={theme}
+        />} 
+          renderSectionHeader={renderSectionHeader}
+          onScrollBeginDrag={onDrag}
+          onScrollEndDrag={onDrop}
+        />
+        <FAB 
+          ref={ref} 
+          label="Добавить запись" 
+          onPress={() => navigation.navigate('AddAppointment')}
+        />
+    </View>
   )
 }
 
 export default withDatabase(
   withObservables([], ({ database }) => ({
-    appointments: database.get('appointments').query(
-      Q.sortBy('date', Q.asc)
-    ).observe()
+    appointments: database
+    .get('appointments')
+      .query(appointmentsByDays(0, 14))
+        .observeWithColumns(['date'])
   }))(Appointments),
-);
+)

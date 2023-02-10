@@ -1,13 +1,23 @@
-import Appointments from "./Appointments"
-import PatientDetail from "./PatientDetail"
-import AddAppointment from "./AddAppointment"
+import Appointments from './Appointments'
+import PatientDetail from './PatientDetail'
+import AddAppointment from './AddAppointment'
 import PatientsList from './PatientsList'
-import AddPatient from "./AddPatient"
+import AddPatient from './AddPatient'
+import ImportContacts from './ImportContacts'
+import Settings from './Settings'
+import AddTemplate from './AddTemplate'
+import TemplatesList from './TemplatesList'
+import ConfirmAppointment from './ConfirmAppointment'
 
 export {
   Appointments,
   PatientDetail,
   AddAppointment,
   PatientsList,
-  AddPatient
+  AddPatient,
+  ImportContacts,
+  Settings,
+  AddTemplate,
+  TemplatesList,
+  ConfirmAppointment
 }

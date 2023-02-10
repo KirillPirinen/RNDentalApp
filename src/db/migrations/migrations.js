@@ -137,5 +137,31 @@ export default schemaMigrations({
         })
       ]
     },
+    {
+      toVersion: 11,
+      steps: [
+        unsafeExecuteSql(
+          'drop table patients;'
+        ),
+        createTable({
+          name: 'patients',
+          columns: [
+            { name: 'full_name', type: 'string' }
+          ]
+        }),
+        createTable({
+          name: 'phones',
+          columns: [
+            { name: 'patient_id', type: 'string' },
+            { name: 'isPrimary', type: 'boolean' },
+            { name: 'number', type: 'string' },
+          ]
+        }),
+      ]
+    },
+    
+    
   ],
 })
+
+

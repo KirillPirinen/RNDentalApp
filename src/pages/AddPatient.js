@@ -1,66 +1,72 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { View } from "react-native"
 import { TextInput, Button } from "react-native-paper"
-import { Container } from "../components"
+import { PhoneInput } from "../components"
 import { createPatient } from "../db/actions"
+import { ScrollView } from "react-native-gesture-handler"
 
-export default ({ navigation, route: { params } }) => {
+const defObj = {}
+const wrapper = { padding: 25, flex: 1 }
 
-  const patient = params?.patient || {}
+const AddPatient = ({ navigation, route: { params } }) => {
+  
+  const patient = params?.patient || defObj
+  const phones = params?.phones
   const isEditMode = Boolean(params?.patient)
 
-  const [fname, setFirst] = useState(patient.fname || '')
-  const [lname, setLast] = useState(patient.lname || '')
-  const [phone, setPhone] = useState(patient.phone || '')
+  const [fullName, setName] = useState(patient.fullName || '')
 
-  const onClick = () => {
-    if(isEditMode) {
-      return patient.updateInstance({ fname, lname, phone }).then(navigation.goBack)
+  const sourceMap = useMemo(() => {
+    if(!phones) return {}
+
+    return phones.reduce((acc, phone) => {
+      acc[phone.id] = ({ id: phone.id, number: phone.number, link: phone })
+      return acc
+    }, {})
+
+  }, [phones])
+
+  const onChange = (key, value) => {
+    if(value === null) {
+      return delete sourceMap[key]
     }
-    createPatient({ fname, lname, phone }).then(patient => {
+
+    sourceMap[key] = value
+  }
+
+  const onSubmit = () => {
+    if(isEditMode) {
+      return patient.updateInstance({ fullName }, Object.values(sourceMap)).then(navigation.goBack)
+    }
+
+    createPatient({ fullName, phones: Object.values(sourceMap) }).then(patient => {
       navigation.replace('Detail', { patient })
     })
   }
 
   return (
-    <Container>
+    <ScrollView style={wrapper}>
       <View style={{ marginTop: 20, marginLeft: 0 }} floatingLabel>
         <TextInput
           mode="outlined"
           label="Имя"
           style={{ marginTop: 12 }}
-          onChangeText={setFirst}
-          value={fname}
+          onChangeText={setName}
+          value={fullName}
         />
       </View>
-      <View style={{ marginTop: 20, marginLeft: 0 }} floatingLabel>
-        <TextInput
-          mode="outlined"
-          label="Фамилия"
-          style={{ marginTop: 12 }}
-          onChangeText={setLast}
-          value={lname}
-        />
-      </View>
-      <View style={{ marginTop: 20, marginLeft: 0 }} floatingLabel>
-        <TextInput
-          mode="outlined"
-          label="Телефон"
-          style={{ marginTop: 12 }}
-          keyboardType="phone-pad"
-          onChangeText={setPhone}
-          value={phone}
-        />
-      </View>
-        <Button 
-          style={{ marginTop: 30 }} 
-          icon="plus-thick" 
-          mode="contained" 
-          onPress={onClick}
-          color={isEditMode && 'green'}
-        >
-          {isEditMode ? 'Редактировать данные' : 'Добавить пациента'}
-        </Button>
-    </Container>
+      <PhoneInput onChange={onChange} phones={sourceMap} />
+      <Button 
+        style={{ marginTop: 30 }} 
+        icon="plus-thick" 
+        mode="contained" 
+        onPress={onSubmit}
+        buttonColor={isEditMode && 'green'}
+      >
+        {isEditMode ? 'Сохранить изменения' : 'Добавить пациента'}
+      </Button>
+    </ScrollView>
   )
 }
+
+export default AddPatient

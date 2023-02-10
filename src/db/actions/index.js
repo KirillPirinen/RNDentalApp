@@ -1,21 +1,55 @@
 import { database } from '..'
+import { phoneSanitazer } from '../../utils/sanitizers'
 
-export const createPatient = async ({ fname, lname, phone }) => {
+export const updateTeethState = async (id) => {
+  await database.write(async () => {
+    // sqlite:
+    await database.adapter.unsafeExecute({
+      sqls: [
+        [updateTeethState(id)]
+      ]
+    })
+  })
+}
+
+export const createPatient = async ({ fullName, phones, phoneNumbers, name, id }) => {
+  const phonesToBatch = phones || phoneNumbers
+  const recievedName = fullName || name
 
   return await database.write(async () => {
     
       const newPatient = await database.get('patients').create(patient => {
-        patient.fname = fname
-        patient.lname = lname
-        patient.phone = phone
+        patient.fullName = recievedName
+        patient.hasWhatsapp = true
+        patient.hasTelegram = true
+        patient.contactId = id
       })
 
-      await database.get('formulas').create(formula => {
-        formula.patientId = newPatient.id
-        formula.hasAdultJaw = true
-        formula.hasBabyJaw = false
-      })
+      const batches = phonesToBatch?.map(phone => {
+          return database.get('phones').prepareCreate(instance => {
+            instance.patientId = newPatient.id
+            instance.number = phoneSanitazer(phone.number)
+            instance.isPrimary = Boolean(phone.isPrimary)
+          })
+        })
 
+        if (batches) {
+          await database.batch(
+            database.get('formulas').prepareCreate(formula => {
+              formula.patientId = newPatient.id
+              formula.hasAdultJaw = true
+              formula.hasBabyJaw = false
+            }),
+            ...batches
+          )
+        } else {
+          await database.get('formulas').create(formula => {
+            formula.patientId = newPatient.id
+            formula.hasAdultJaw = true
+            formula.hasBabyJaw = false
+          })
+        }
+      
       return newPatient
     } 
   )
@@ -32,7 +66,17 @@ export const createAppointment = async ({ patientId, date, diagnosis, notes, dur
   )
 }
 
-export const createTooth = async ({ patientId, toothNo, toothState }) => {
+export const createTooth = async ({ formulaId, toothNo, toothState, notes }) => {
+  return await database.write(async () => await database.get('teeth').create(tooth => {
+      tooth.formulaId = formulaId
+      tooth.toothNo = toothNo
+      tooth.toothState = toothState
+      tooth.notes = notes
+    })
+  )
+}
+
+export const findOrCreateTeeth = async (appointment, teeth) => {
   return await database.write(async () => await database.get('teeth').create(tooth => {
       tooth.patientId = patientId
       tooth.toothNo = toothNo
@@ -41,3 +85,19 @@ export const createTooth = async ({ patientId, toothNo, toothState }) => {
   )
 }
 
+export const createPhone = async ({ patientId, number, isPrimary = false }) => {
+  return await database.write(async () => await database.get('phones').create(phone => {
+      phone.patientId = patientId
+      phone.number = number
+      phone.isPrimary = isPrimary
+    })
+  )
+}
+
+export const createTemplate = async ({ text, name }) => {
+  return await database.write(async () => await database.get('templates').create(template => {
+      template.name = name
+      template.text = text
+    })
+  )
+}

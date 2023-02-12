@@ -18,7 +18,7 @@ export default ({ placeholder, renderList, onChange, initState, ...rest }) => {
       const recieved = onChange(prepQuery)
 
       if (recieved instanceof Promise) {
-        recieved.then(data => setResult(data))
+        recieved.then(setResult)
       } else {
         setResult(onChange(prepQuery))
       }

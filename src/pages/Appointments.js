@@ -2,7 +2,6 @@ import withObservables from '@nozbe/with-observables'
 import { View, SectionList } from 'react-native'
 import { FAB, SwipeableAppointment, SectionTitle } from '../components'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
-import { Q } from '@nozbe/watermelondb';
 import { groupAppointments } from '../utils/groupAppointments'
 import { useMemo, useCallback } from 'react'
 import { useForceUpdateByInterval } from '../utils/custom-hooks/useForceUpdate'
@@ -11,6 +10,8 @@ import { useModal } from '../context/modal-context'
 import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef';
 import { useTheme } from 'react-native-paper';
 import { appointmentsByDays } from '../db/raw-queries'
+
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 
 const wrapperStyle = { height: '100%'}
 
@@ -22,7 +23,7 @@ const Appointments = ({ appointments, navigation }) => {
 
   const grouped = useMemo(() => groupAppointments(appointments), [appointments])
 
-  useForceUpdateByInterval(10000)
+  useForceUpdateByInterval(10000, !appointments.length)
 
   const onEditAppointment = useCallback((appointment, patient, confirm) => {
     if(confirm) {
@@ -39,30 +40,34 @@ const Appointments = ({ appointments, navigation }) => {
     })
   }, [])
 
+  const renderItem = useCallback(({ item }) => <SwipeableAppointment
+    navigation={navigation}
+    appointment={item}
+    onEdit={onEditAppointment}
+    onDelete={onConfirmDeleteAppointment}
+    theme={theme}
+  />, [navigation, theme, onEditAppointment, onConfirmDeleteAppointment])
+
   const [ref, onDrop, onDrag] = useFabControlsRef()
   const theme = useTheme()
+
   return (
-    <View style={wrapperStyle}>
+    <GestureHandlerRootView style={wrapperStyle}>
         <SectionList
           sections={grouped}
           keyExtractor={defaultExtractor}
-          renderItem={({ item }) => <SwipeableAppointment
-            navigation={navigation}
-            appointment={item}
-            onEdit={onEditAppointment}
-            onDelete={onConfirmDeleteAppointment}
-            theme={theme}
-        />} 
+          renderItem={renderItem} 
           renderSectionHeader={renderSectionHeader}
           onScrollBeginDrag={onDrag}
           onScrollEndDrag={onDrop}
+          ListFooterComponent={<View style={{ height: 80 }}></View>}
         />
         <FAB 
           ref={ref} 
           label="Добавить запись" 
           onPress={() => navigation.navigate('AddAppointment')}
         />
-    </View>
+    </GestureHandlerRootView>
   )
 }
 

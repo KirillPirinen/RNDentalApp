@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Card, IconButton, Text } from 'react-native-paper'
-import { TAG_REGEX } from '../consts'
 import { parseTemplate } from '../utils/parseTemplate'
 import { ButtonRowPanel } from './Buttons'
 
@@ -14,10 +13,16 @@ export default function TemplateCard({ template, onDelete, onEdit, hasTags }) {
     <Card style={styles.card}>
       <Card.Content>
         <View style={styles.headerWrapper}>
-          <Text variant="titleLarge">{template.name}</Text>
+          <View style={styles.content}>
+            <Text variant="titleLarge" style={{ flexWrap: 'wrap' }}>{template.name}</Text>
+            <Text variant="titleSmall">Пример:</Text>
+            <Text variant="bodyMedium" selectable>{example || template.text}</Text>
+          </View>
           <ButtonRowPanel 
             onDelete={onDelete?.(template)} 
             onEdit={onEdit?.(template)}
+            style={styles.panel}
+            buttonsStyle={styles.buttons}
           >
             {template.hasTags && <IconButton 
               icon={example ? "application-variable" : "application-variable-outline"}
@@ -26,18 +31,27 @@ export default function TemplateCard({ template, onDelete, onEdit, hasTags }) {
             />}
           </ButtonRowPanel>
         </View>
-        <Text variant="titleSmall">Пример:</Text>
-        <Text variant="bodyMedium" selectable>{example || template.text}</Text>
       </Card.Content>
     </Card>
   )
 }
 
 const styles = StyleSheet.create({
-  headerWrapper: { 
+  headerWrapper: {
     flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'space-between'
+    justifyContent:'space-between',
   },
-  card: { margin: 5 }
+  content: {
+    flexShrink: 1
+  },
+  card: { margin: 5 },
+  panel: {
+    flexBasis: 35,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    marginLeft: 6
+  },
+  buttons: {
+    margin: 0
+  }
 })

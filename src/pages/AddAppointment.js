@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { View, FlatList, Divider, ScrollView, StyleSheet } from 'react-native'
 import DatePicker from '@react-native-community/datetimepicker'
 import { Container, Autocomplete, Patient, EmptyList } from '../components'
@@ -10,28 +10,77 @@ import formatRu from '../utils/formatRu'
 import { createAppointment } from '../db/actions'
 import Slider from '@react-native-community/slider'
 import { querySanitazer } from '../utils/sanitizers'
+import { defaultExtractor } from '../utils/defaultFn.js'
+import { useModal } from '../context/modal-context'
+import { getScheduledPatiens } from '../db/raw-queries.js'
 
 const onSearch = (db) => async (query) => {
   const sanitized = querySanitazer(query)
   return db.get('patients').query(Q.where('full_name', Q.like(`%${sanitized}%`)))
 }
 
-const renderList = ({ result, onChoose }) => {
+const renderList = ({ result, onChoose, db }) => {
   const navigation = useNavigation()
   const theme = useTheme()
-  return Boolean(result) && (
+  const [actions, dispatch] = useModal()
+
+  const [suggestions, setSuggestions] = useState([])
+
+  useEffect(() => {
+    db.get('patients').query(getScheduledPatiens()).then(data => {
+      const dict = {}
+      const res = []
+      for(const patient of data) {
+        if(!dict.hasOwnProperty(patient.id)) {
+          res.push(patient)
+          dict[patient.id] = true
+          if(res.length >= 3) break
+        }
+      }
+      setSuggestions(res)
+    })
+  }, [])
+
+  const onChoosePatientMethod = () => dispatch({ 
+    type: actions.CHOOSE_ADD_PATIENT_METHOD,
+    payload: { 
+      onAlone: () => navigation.navigate('AddPatient'), 
+      onBulk: () => navigation.navigate('ImportContacts')  
+    }
+  })
+
+  const renderItem = useCallback(({ item }) => <Patient
+    theme={theme}
+    patient={item}
+    onPress={() => onChoose(item)}
+    onLongPress={() => navigation.navigate('Detail', { patient: item })}
+  />, [onChoose])
+
+  const isSearching = Boolean(result)
+  const hasSuggestions = Boolean(suggestions.length)
+
+  return (
     <FlatList
-      data={result}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <Patient
-        theme={theme}
-        patient={item}
-        onPress={() => onChoose(item)}
-        onLongPress={() => navigation.navigate('Detail', { patient: item })}
-      />}
+      data={isSearching ? result : suggestions}
+      keyExtractor={defaultExtractor}
+      renderItem={renderItem}
       ItemSeparatorComponent={Divider}
       style={{ marginVertical: 12 }}
-      ListFooterComponent={!result.length && EmptyList}
+      ListHeaderComponent={!isSearching && hasSuggestions && <Text variant="titleMedium">Последние запланированные пациенты: </Text>}
+      ListFooterComponent={isSearching && !result.length && (
+        <EmptyList text="Пациент не найден. Хотите добавить нового?">
+          <Button 
+            icon="plus" 
+            mode="outlined"
+            buttonColor={theme.colors.primaryContainer}
+            textColor="white"
+            onPress={onChoosePatientMethod}
+            style={{ marginVertical: 10 }}
+          >
+            Добавить
+          </Button>
+        </EmptyList>
+      )}
     />
   )
 }
@@ -71,6 +120,12 @@ const AddAppointment = ({ navigation, route: { params } }) => {
     setButtonColor('green')
   }
 
+  useEffect(() => {
+    if(patient && !choosed) {
+      setChoosed(patient)
+    }
+  }, [patient])
+
   const onSubmit = () => {
 
     if (dateMeta.date) {
@@ -95,6 +150,7 @@ const AddAppointment = ({ navigation, route: { params } }) => {
         renderList={renderList} 
         onChoose={setChoosed}
         placeholder="Поиск пациента"
+        db={db}
       /> : (
         <ScrollView keyboardShouldPersistTaps='handled'>
           <Patient 

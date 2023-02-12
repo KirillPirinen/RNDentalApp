@@ -2,13 +2,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import CustomNavigationBar from './components/AppHeader'
 import { Appointments, PatientDetail, AddAppointment, PatientsList,
   AddPatient, ImportContacts, Settings, AddTemplate, TemplatesList, ConfirmAppointment } from './pages'
-import React from 'react'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import { useTheme } from 'react-native-paper'
+import { useTheme, Text } from 'react-native-paper'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import TeethFormula from './pages/TeethFormula'
 import { useModal } from './context/modal-context'
-import { Text } from 'react-native-paper'
 
 const renderIcon = (name) => ({ color }) => (
   <MaterialCommunityIcons name={name} color={color} size={22} />
@@ -37,8 +35,9 @@ function BottomTabs() {
       <Tab.Navigator
         sceneAnimationType="shifting"
         barStyle={{ 
-          height: 60,
           backgroundColor: theme.colors.primary,
+          paddingBottom: 4,
+          maxHeight: 60
         }}
         activeColor="white"
         inactiveColor="white"
@@ -83,13 +82,13 @@ const Router = () => {
       <Stack.Navigator
         screenOptions={{ header: renderHeader }}
         screenListeners={{
-          focus: (e) => dispatch({ type: actions.CLEAR })
+          focus: () => dispatch({ type: actions.CLEAR })
         }}
       >
         <Stack.Screen 
           name="Home" 
           component={BottomTabs} 
-          //options={{ headerShown: false }}
+          // options={{ headerShown: false }}
         />
         <Stack.Screen 
           name="Detail" 

@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     borderRightWidth: 1,
     marginLeft: 2,
-    minWidth: '13%'
+    minWidth: '12%'
   }
 })
 

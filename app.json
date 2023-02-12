@@ -26,6 +26,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
+      "softwareKeyboardLayoutMode":"pan",
       "package": "com.ak0man.dentalapp",
       "permissions": [
         "WRITE_CONTACTS"

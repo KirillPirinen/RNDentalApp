@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect } from 'react'
-import { FlatList } from 'react-native'
+import { FlatList, View } from 'react-native'
 import { useContacts } from '../utils/custom-hooks/useContacts'
 import { Container, Autocomplete, FAB, EmptyList } from '../components'
 import { List, Divider} from 'react-native-paper'
@@ -56,6 +56,7 @@ const RenderedList = memo(({result, buttonControls, ...rest }) => {
         onScrollBeginDrag={onDrag}
         onScrollEndDrag={onDrop}
         forceRerenderer={all}
+        ListFooterComponent={<View style={{ height: 120 }}></View>}
         {...rest}
       />
     </>
@@ -109,7 +110,7 @@ const ImportContacts = ({ navigation }) => {
       />
       <FAB
         ref={buttonControls} 
-        label={'Добавить пациентов'}
+        label="Добавить"
         onPress={onSubmit}
       />
     </Container>

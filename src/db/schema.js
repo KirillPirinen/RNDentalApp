@@ -32,7 +32,9 @@ export default appSchema({
         { name: 'price', type: 'number' },
         { name: 'diagnosis', type: 'string' },
         { name: 'notes', type: 'string' },
-        { name: 'teeth', type: 'string' }
+        { name: 'teeth', type: 'string' },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' },
       ],
     }),
     tableSchema({

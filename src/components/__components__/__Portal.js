@@ -1,6 +1,5 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef } from 'react'
 import { Portal, useTheme } from 'react-native-paper'
-import { StatusBar } from 'react-native'
 import { useModalContent, useModal } from '../../context/modal-context'
 import RegisterContent from '../PortalContent'
 import { useNavigation } from '@react-navigation/native'

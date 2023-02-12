@@ -1,6 +1,6 @@
 import React, { forwardRef, useState, useImperativeHandle, useEffect, useCallback, useRef } from 'react'
 import { StyleSheet } from 'react-native'
-import AnimatedFAB from './__components__/__FAB'
+import { AnimatedFAB } from 'react-native-paper'
 
 export const FAB = forwardRef(({ onPress, label, style }, ref) => {
   const [visible, setVisible] = useState(true)
@@ -21,7 +21,7 @@ export const FAB = forwardRef(({ onPress, label, style }, ref) => {
   return (
       <AnimatedFAB
         icon={expanded ? 'plus': 'arrow-expand-left'}
-        label={label}
+        label={expanded ? label : ''}
         extended={expanded}
         onPress={expanded ? onPress : __onPress}
         onLongPress={() => setExpanded(false)}
@@ -29,8 +29,6 @@ export const FAB = forwardRef(({ onPress, label, style }, ref) => {
         animateFrom={'right'}
         iconMode={'dynamic'}
         style={[styles.fabStyle, style]}
-        //variant="surface"
-        //color="black"
       />
   )
 })

@@ -105,7 +105,7 @@ const PatientDetail = ({ navigation, patient, phones }) => {
         </View>
         <FAB
           ref={ref} 
-          label={`Записать ${patient.fullName}`}
+          label={`Записать пациента`}
           onPress={() => navigation.navigate('AddAppointment', { patient })}
         />
       </SafeAreaView>

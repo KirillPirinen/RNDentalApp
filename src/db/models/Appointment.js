@@ -1,10 +1,9 @@
 import { Model } from '@nozbe/watermelondb'
-import { text, field, relation, date, writer, lazy, children } from '@nozbe/watermelondb/decorators'
+import { text, field, relation, date, writer, lazy, children, readonly } from '@nozbe/watermelondb/decorators'
 import { getAppointmentStatus } from '../../utils/getAppointmentStatus'
 import { Q } from '@nozbe/watermelondb'
 import { defaultUpdater } from '../../utils/defaultFn'
 import { APPOINTMENT_STATUS } from '../../consts'
-import { getTeethWithNoHistory, updateTeethState } from '../raw-queries'
 
 export default class Appointment extends Model {
   static table = 'appointments'
@@ -16,6 +15,8 @@ export default class Appointment extends Model {
 
   @text('patient_id') patientId
   @date('date') date
+  @readonly @date('created_at') createdAt
+  @readonly @date('updated_at') updatedAt
   @field('is_confirmed') isConfirmed
   @field('is_skipped') isSkipped
   @field('is_postponed') isPostponed

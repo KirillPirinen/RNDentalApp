@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import Svg, { Defs, Pattern, Image } from 'react-native-svg'
 import { teethKeysAdult, teethMetaAdult, teethKeysBaby, teethMetaBaby } from './paths-dict'
 import Tooth from './Tooth'

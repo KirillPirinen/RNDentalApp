@@ -1,6 +1,5 @@
 import { Appointment } from "./Appointment"
-import Swipeable from "react-native-gesture-handler/Swipeable"
-import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { Swipeable } from "react-native-gesture-handler"
 import { Ionicons, MaterialCommunityIcons, Entypo } from '@expo/vector-icons'
 import { SwipeViewButton } from "../Buttons"
 import withObservables from '@nozbe/with-observables';
@@ -12,16 +11,19 @@ const enhancer = withObservables(['appointment'], ({ appointment }) => ({
   patient: appointment.patient
 }))
 
+const noop = () => <View />
+
 export const SwipeableAppointment = enhancer(({ 
   navigation, 
   appointment, 
   patient, 
   onDelete,
   onEdit,
-  theme
+  theme,
 }) => {
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const swipe = useRef(null).current
   const status = appointment.status
   const needsConfirmation = appointment.needsConfimation(status)
 
@@ -48,7 +50,10 @@ export const SwipeableAppointment = enhancer(({
           />
         </SwipeViewButton>
         <SwipeViewButton 
-          onPress={() => onEdit(appointment, patient)} 
+          onPress={() => {
+            onEdit(appointment, patient)
+            swipe?.close()
+          }} 
           style={{ backgroundColor: theme.colors.backdrop }}
         >
           <Ionicons name="md-create" size={28} color="white" />
@@ -58,10 +63,12 @@ export const SwipeableAppointment = enhancer(({
   }
 
   const leftSwipeActions = () => {
-
     return (
         <SwipeViewButton 
-          onPress={() => onEdit(appointment, patient, true)} 
+          onPress={() => {
+            onEdit(appointment, patient, true)
+            swipe?.close()
+          }}
           style={{ backgroundColor: 'green' }}
         >
           <MaterialCommunityIcons 
@@ -72,15 +79,15 @@ export const SwipeableAppointment = enhancer(({
         </SwipeViewButton>
     )
   }
-
+  
   return (
-    <GestureHandlerRootView>
       <Swipeable 
         renderRightActions={rightSwipeActions}
-        renderLeftActions={needsConfirmation && leftSwipeActions}
+        renderLeftActions={needsConfirmation ? leftSwipeActions : noop}
         friction={2}
         overshootLeft={false}
         overshootRight={false}
+        ref={swipe}
       >
         <Animated.View style={{ opacity: fadeAnim }}>
           <Appointment 
@@ -98,7 +105,6 @@ export const SwipeableAppointment = enhancer(({
           </Appointment>
         </Animated.View>
       </Swipeable>
-    </GestureHandlerRootView>
   )
 })
 

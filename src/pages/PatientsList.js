@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Divider, useTheme } from 'react-native-paper'
-import { FlatList} from 'react-native'
+import { FlatList, Keyboard, View } from 'react-native'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import withObservables from '@nozbe/with-observables'
 import { Container, Autocomplete, FAB, EmptyList, Patient } from '../components'
@@ -13,8 +13,7 @@ const wrapper = { marginVertical: 12 }
 const renderDivider = () => <Divider bold />
 const renderList = ({ result, navigation, ...rest }) => {
   const theme = useTheme()
-  const renderItem = useCallback(({ item }) => 
-    <Patient patient={item} navigation={navigation} theme={theme} />, [])
+  const renderItem = useCallback(({ item }) => <Patient patient={item} navigation={navigation} theme={theme} />, [])
   return (
       <FlatList
         data={result}
@@ -23,9 +22,17 @@ const renderList = ({ result, navigation, ...rest }) => {
         ItemSeparatorComponent={renderDivider}
         style={wrapper}
         ListEmptyComponent={EmptyList}
+        ListFooterComponent={<View style={{ height: 100 }}></View>}
         {...rest}
       />
   )
+}
+
+const dissmisHandle = () => {
+  if(Keyboard.isVisible()) {
+    Keyboard.dismiss()
+  }
+  return true
 }
 
 export const PatientsList = ({ patients, navigation }) => {
@@ -47,7 +54,7 @@ export const PatientsList = ({ patients, navigation }) => {
   })
 
   return (
-      <Container>
+      <Container onStartShouldSetResponder={dissmisHandle}>
           {isFocused && <Autocomplete
             onChange={onChange}
             renderList={renderList}

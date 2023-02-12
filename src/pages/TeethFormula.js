@@ -1,6 +1,6 @@
-import React, { useCallback, useState, useMemo, useEffect, memo } from 'react'
+import { useCallback, useState, useMemo, useEffect, memo } from 'react'
 import { StyleSheet, View, ScrollView } from 'react-native'
-import { Text, TextInput } from 'react-native-paper'
+import { Text } from 'react-native-paper'
 import { Container, PatientAppointment } from '../components'
 import { Teeth } from '../components/Teeth/Teeth'
 import withObservables from '@nozbe/with-observables'
@@ -99,7 +99,7 @@ const TeethFormula = ({ formula, navigation, teeth }) => {
         <>
           <ToothStatePanel onValueChange={onValueChange} toothState={selectedInstance?.toothState} />
           <View style={styles.inputWrapper}>
-            <ToothNotesInput notes={selectedInstance?.notes} initial="notes" onSubmit={onSaveNotes} />
+            <ToothNotesInput notes={selectedInstance?.notes} onSubmit={onSaveNotes} />
           </View>
         </>
       )}

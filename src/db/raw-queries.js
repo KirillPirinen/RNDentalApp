@@ -18,15 +18,6 @@ export const appointmentsByDays = (from, to) => Q.unsafeSqlQuery(`
   ORDER BY date ASC;`
 )
 
-export const getTeethWithNoHistory = (id) => Q.unsafeSqlQuery(`
-  SELECT * FROM teeth 
-  LEFT JOIN appointments_teeth AS records ON teeth.id = records.tooth_id
-  WHERE teeth._status is not 'deleted' AND records.appointment_id = '${id}' 
-  AND (
-    SELECT count(*) FROM appointments_teeth 
-    WHERE teeth.id = appointments_teeth.tooth_id) = 1
-`)
-
 export const updateTeethState = (id) => Q.unsafeSqlQuery(`
   UPDATE teeth SET tooth_state = 'cleaned' WHERE teeth.id IN (
     SELECT teeth.id
@@ -36,4 +27,11 @@ export const updateTeethState = (id) => Q.unsafeSqlQuery(`
       SELECT COUNT(appointments_teeth.id) FROM appointments_teeth WHERE teeth.id = appointments_teeth.tooth_id
     ) = 1
   )
+`)
+
+export const getScheduledPatiens = () => Q.unsafeSqlQuery(`
+  SELECT patients.* FROM patients
+  INNER JOIN appointments ON patients.id = appointments.patient_id
+  WHERE appointments._status != 'deleted'
+  ORDER BY appointments.created_at DESC
 `)

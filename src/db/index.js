@@ -8,6 +8,7 @@ const adapter = new SQLiteAdapter({
   schema,
   dbName: 'dental',
   jsi: false,
+  //migrations,
   onSetUpError: error => {
     // Database failed to load -- offer the user to reload the app or log out
   }
@@ -15,5 +16,5 @@ const adapter = new SQLiteAdapter({
 
 export const database = new Database({
   adapter,
-  modelClasses
+  modelClasses,
 })

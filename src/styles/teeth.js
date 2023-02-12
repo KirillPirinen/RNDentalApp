@@ -8,7 +8,9 @@ export const toothFillColors = StyleSheet.create({
     strokeDasharray: undefined
   },
   treated: {
-    fill: '#9abd57'
+    fill: '#9abd57',
+    strokeDasharray: undefined,
+    stroke: '#000000',
   },
   [toothStates.absent]: {
     stroke: '#bbbbbb'

@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react"
+import { useFocusEffect } from "@react-navigation/native"
+import { useState, useEffect, useCallback } from "react"
 
 const inverse = (s) => !s
 
@@ -7,17 +8,21 @@ export const useForceUpdate = (initState) => {
   return [s, () => set(inverse)]
 }
 
-export const useForceUpdateByInterval = (delay) => {
+export const useForceUpdateByInterval = (delay, stop = false) => {
   const set = useState(false)[1]
-  const cb = () => set(inverse)
+  const render = () => set(inverse)
 
-  useEffect(() => {
+  useFocusEffect(
+    useCallback(() => {
+      render()
+      
+      const timer = !stop && setInterval(() => {
+        render()
+      }, delay)
+  
+      return () => clearInterval(timer)
+    }, [stop])
+  )
 
-    const timer = setInterval(() => cb(), delay)
-
-    return () => clearInterval(timer)
-
-  }, [])
-
-  return cb
+  return render
 }

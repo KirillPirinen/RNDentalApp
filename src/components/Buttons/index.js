@@ -4,15 +4,15 @@ import { IconButton, useTheme } from 'react-native-paper'
 
 export const SwipeViewButton = ({ style, ...rest }) => <TouchableOpacity {...rest} style={[styles.swipe, style]}/>
 
-export const ButtonRowPanel = ({ onDelete, onEdit, children }) => {
+export const ButtonRowPanel = ({ onDelete, onEdit, children, style, buttonsStyle }) => {
   const theme = useTheme()
   return (
-  <View style={styles.actionsWrapper}>
+  <View style={[styles.actionsWrapper, style]}>
     {Children.map(children, (child) => {
       if(child?.type === IconButton) {
         return cloneElement(child, { 
           size: 30,
-          style:styles.noPadding
+          style: [styles.noPadding, buttonsStyle]
         })
       }
       return child

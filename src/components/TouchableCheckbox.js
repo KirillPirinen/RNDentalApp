@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Checkbox, Text, TouchableRipple } from 'react-native-paper';
 
-export const TouchableCheckbox = ({ label, value, onPress }) => {
+export const TouchableCheckbox = ({ label, value, onPress, style, name }) => {
   const [_checked, setChecked] = useState(value)
   return (
     <TouchableRipple onPress={() => {
       const newValue = !_checked
       setChecked(newValue)
-      onPress(newValue)
-    }} style={styles.wrapper}>
+      onPress( name ? { name, value: newValue } : newValue)
+    }} style={[styles.wrapper, style]}>
       <>
         <Text style={styles.label}>{label}</Text>
         <Checkbox status={_checked ? 'checked' : 'unchecked'} />

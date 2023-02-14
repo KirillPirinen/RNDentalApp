@@ -1,4 +1,6 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb'
+import { DEFAULT_SETTINGS } from '../consts/index.js'
+import { insertSettings } from './raw-queries.js'
 
 export default appSchema({
   version: 2,
@@ -69,5 +71,22 @@ export default appSchema({
         { name: 'tooth_id', type: 'string', isIndexed: true }
       ]
     }),
-  ]
+    tableSchema({
+      name: 'settings',
+      columns: [
+        { name: 'value', type: 'string' }
+      ],
+    }),
+  ],
+  unsafeSql: (sql, kind) => {
+    switch (kind) {
+      case 'setup':
+        return sql + insertSettings(DEFAULT_SETTINGS)
+      case 'create_indices':
+      case 'drop_indices':
+        return sql
+      default:
+        throw new Error('unexpected unsafeSql kind')
+    }
+  },
 })

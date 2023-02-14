@@ -10,8 +10,10 @@ import { useModal } from '../context/modal-context'
 import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef';
 import { useTheme } from 'react-native-paper';
 import { appointmentsByDays } from '../db/raw-queries'
-
+import { switchMap } from 'rxjs/operators'
 import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { Q } from '@nozbe/watermelondb/index.js'
+import { DEFAULT_SETTINGS } from '../consts/index.js'
 
 const wrapperStyle = { height: '100%'}
 
@@ -74,8 +76,14 @@ const Appointments = ({ appointments, navigation }) => {
 export default withDatabase(
   withObservables([], ({ database }) => ({
     appointments: database
-    .get('appointments')
-      .query(appointmentsByDays(0, 14))
-        .observeWithColumns(['date'])
+      .get('settings')
+        .findAndObserve('trackingInterval')
+          .pipe(
+            switchMap((trackingInterval) => database
+              .get('appointments')
+                .query(appointmentsByDays(trackingInterval?.value || DEFAULT_SETTINGS.trackingInterval))
+                  .observeWithColumns(['date'])
+              )
+          )
   }))(Appointments),
 )

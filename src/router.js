@@ -76,6 +76,8 @@ function BottomTabs() {
   )
 }
 
+const getTitle = ({ route }) => ({ headerTitle: route.params?.edit ? 'Редактирование записи' : 'Добавление записи' })
+
 const Router = () => {
   const [actions, dispatch] = useModal()
   return (
@@ -95,7 +97,7 @@ const Router = () => {
           component={PatientDetail}
           options={{ headerTitle: 'Карточка пациента' }} 
         />
-        <Stack.Screen options={({ route }) => ({ headerTitle: route.params?.edit ? 'Редактирование записи' : 'Добавление записи' })} name="AddAppointment" component={AddAppointment} />
+        <Stack.Screen options={getTitle} name="AddAppointment" component={AddAppointment} />
         <Stack.Screen options={{ headerTitle: 'Добавление пациента' }} name="AddPatient" component={AddPatient} />
         <Stack.Screen options={{ headerTitle: 'Зубная формула' }} name="TeethFormula" component={TeethFormula} />
         <Stack.Screen options={{ headerTitle: 'Импорт контактов' }} name="ImportContacts" component={ImportContacts} />

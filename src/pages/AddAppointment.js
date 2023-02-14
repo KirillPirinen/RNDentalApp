@@ -210,7 +210,6 @@ const AddAppointment = ({ navigation, route: { params } }) => {
                 {dateMeta.mode && (
                   <DatePicker
                     mode={dateMeta.mode}
-                    minimumDate={dateMeta.сurrent}
                     value={dateMeta.date || dateMeta.сurrent}
                     onChange={setDate}
                   />

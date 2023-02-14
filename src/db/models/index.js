@@ -5,6 +5,7 @@ import Formula from './Formula'
 import Phone from './Phone'
 import Template from './Template'
 import AppointmentTooth from './AppointmentTooth'
+import Settings from './Settings.js'
 
 export default [
   Patient,
@@ -13,5 +14,6 @@ export default [
   Formula,
   Phone,
   Template,
-  AppointmentTooth
+  AppointmentTooth,
+  Settings
 ]

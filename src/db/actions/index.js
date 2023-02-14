@@ -101,3 +101,11 @@ export const createTemplate = async ({ text, name }) => {
     })
   )
 }
+
+export const createSetting = async ({ name, value }) => {
+  return await database.write(async () => await database.get('settings')?.create(template => {
+      template.name = name
+      template.value = value
+    })
+  )
+}

@@ -11,7 +11,7 @@ import { createAppointment } from '../db/actions'
 import Slider from '@react-native-community/slider'
 import { querySanitazer } from '../utils/sanitizers'
 import { defaultExtractor } from '../utils/defaultFn.js'
-import { useModal } from '../context/modal-context'
+import { useGeneralControl } from '../context/general-context'
 import { getScheduledPatiens } from '../db/raw-queries.js'
 
 const onSearch = (db) => async (query) => {
@@ -22,7 +22,7 @@ const onSearch = (db) => async (query) => {
 const renderList = ({ result, onChoose, db }) => {
   const navigation = useNavigation()
   const theme = useTheme()
-  const [actions, dispatch] = useModal()
+  const [actions, dispatch] = useGeneralControl()
 
   const [suggestions, setSuggestions] = useState([])
 

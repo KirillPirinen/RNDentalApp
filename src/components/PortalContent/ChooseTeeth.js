@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { IconButton, Modal, Surface, Text, Button } from 'react-native-paper'
 import { Teeth } from '../Teeth/Teeth'
@@ -7,7 +7,7 @@ const init = {}
 
 export const ChooseTeeth = ({ 
   __visible, 
-  __defaultHandlers,
+  __defaultProps,
   onSubmit,
   teeth
 }) => {
@@ -31,12 +31,12 @@ export const ChooseTeeth = ({
 
   const submitHandler = () => {
     onSubmit?.(selectedArr)
-    __defaultHandlers.current.clear()
+    __defaultProps.clear()
   }
 
   return (
     <Modal
-      onDismiss={__defaultHandlers.current.clear}
+      onDismiss={__defaultProps.clear}
       visible={__visible} 
       contentContainerStyle={styles.modal}
     >
@@ -47,7 +47,7 @@ export const ChooseTeeth = ({
       />
       <IconButton
         icon="window-close" 
-        onPress={__defaultHandlers.current.clear}
+        onPress={__defaultProps.clear}
         style={styles.cancel}
       />
       <Teeth

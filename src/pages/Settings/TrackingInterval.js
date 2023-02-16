@@ -1,23 +1,11 @@
-import { View } from 'react-native'
 import { withSetting } from '../../utils/hoc/withSetting'
-import { useRef, useCallback, useEffect } from 'react'
 import { Counter } from '../../components/Counter'
-import { DEFAULT_SETTINGS } from '../../consts'
-import debounce from 'lodash.debounce'
 import { List } from 'react-native-paper';
 import styles, { SettingsCheckbox } from './styles'
-
-const debouncedSave = debounce((setting, values) => {
-  setting?.updateInstance(values)
-}, 2000)
+import { useSettingUpdater } from '../../utils/custom-hooks/useSettingUpdater';
 
 export const TrackingInterval = withSetting('trackingInterval')(({ setting }) => {
-  const values = useRef({...setting.value})
-
-  const onChange = useCallback(({ name, value }) => {
-    values.current = {...values.current, [name]: value}
-    debouncedSave(setting, values.current)
-  }, [setting])
+  const [values, onChange] = useSettingUpdater(setting)
 
   return (
     <List.Accordion
@@ -29,7 +17,7 @@ export const TrackingInterval = withSetting('trackingInterval')(({ setting }) =>
         right={() => <Counter
           name="from"
           onChange={onChange}
-          initial={values.current.from || DEFAULT_SETTINGS.trackingInterval.from}
+          initial={values.from}
         />}
         style={styles.button}
       />
@@ -38,7 +26,7 @@ export const TrackingInterval = withSetting('trackingInterval')(({ setting }) =>
         right={() => <Counter
           name="to"
           onChange={onChange}
-          initial={values.current.to || DEFAULT_SETTINGS.trackingInterval.to}
+          initial={values.to}
         />}
         style={styles.button}
       />
@@ -47,7 +35,7 @@ export const TrackingInterval = withSetting('trackingInterval')(({ setting }) =>
         description="Без учета нижней границы"
         name="unconfirmed"
         onChange={onChange}
-        initial={values.current.unconfirmed || DEFAULT_SETTINGS.trackingInterval.unconfirmed}
+        initial={values.unconfirmed}
       />
     </List.Accordion>
   )

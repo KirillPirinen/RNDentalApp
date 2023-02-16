@@ -1,5 +1,5 @@
-import { database } from '..'
-import { phoneSanitazer } from '../../utils/sanitizers'
+import database from '..'
+import { getPatientBatches } from '../utils/batches.js'
 
 export const updateTeethState = async (id) => {
   await database.write(async () => {
@@ -12,47 +12,16 @@ export const updateTeethState = async (id) => {
   })
 }
 
-export const createPatient = async ({ fullName, phones, phoneNumbers, name, id }) => {
-  const phonesToBatch = phones || phoneNumbers
-  const recievedName = fullName || name
+export const createPatient = async (content) => {
+  let batches
 
-  return await database.write(async () => {
-    
-      const newPatient = await database.get('patients').create(patient => {
-        patient.fullName = recievedName
-        patient.hasWhatsapp = true
-        patient.hasTelegram = true
-        patient.contactId = id
-      })
+  if (Array.isArray(content)) {
+    batches = content.reduce((acc, el) => acc.concat(getPatientBatches(el)), [])
+  } else {
+    batches = getPatientBatches(content)
+  }
 
-      const batches = phonesToBatch?.map(phone => {
-          return database.get('phones').prepareCreate(instance => {
-            instance.patientId = newPatient.id
-            instance.number = phoneSanitazer(phone.number)
-            instance.isPrimary = Boolean(phone.isPrimary)
-          })
-        })
-
-        if (batches) {
-          await database.batch(
-            database.get('formulas').prepareCreate(formula => {
-              formula.patientId = newPatient.id
-              formula.hasAdultJaw = true
-              formula.hasBabyJaw = false
-            }),
-            ...batches
-          )
-        } else {
-          await database.get('formulas').create(formula => {
-            formula.patientId = newPatient.id
-            formula.hasAdultJaw = true
-            formula.hasBabyJaw = false
-          })
-        }
-      
-      return newPatient
-    } 
-  )
+  return await database.write(async () => await database.batch(batches))
 }
 
 export const createAppointment = async ({ patientId, date, diagnosis, notes, duration }) => {

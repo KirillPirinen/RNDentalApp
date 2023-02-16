@@ -1,19 +1,22 @@
-import React, { useEffect } from 'react'
-import { View, SafeAreaView, Linking, StyleSheet } from 'react-native'
+import React, { useCallback, useEffect } from 'react'
+import { View, SafeAreaView, Linking, StyleSheet, useWindowDimensions } from 'react-native'
 import withObservables from '@nozbe/with-observables'
 import { Text } from 'react-native-paper'
 import { Button, PatientAppointmentList, FAB, PhonesList,
-  CallButton, WhatsappButton, TelegramButtom, ButtonRowPanel } from '../components'
-import { useModal } from '../context/modal-context'
-import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef'
-import { getPrimaryPhoneNumber } from '../utils/getPrimaryPhoneNumber'
+  CallButton, WhatsappButton, TelegramButtom, ButtonRowPanel } from '../../components'
+import { useGeneralControl } from '../../context/general-context'
+import { useFabControlsRef } from '../../utils/custom-hooks/useSafeRef'
+import { getPrimaryPhoneNumber } from '../../utils/getPrimaryPhoneNumber'
+import ImagePickerExample from '../../components/ImagePicker.js'
+import { AppointmentsListTab } from './TabsContent/AppointmentsListTab'
 
 const ObservablePatientAppointmentList = withObservables(['patient'], ({ patient }) => ({
   appointments: patient.sortedAppointments
 }))(PatientAppointmentList)
 
+
 const PatientDetail = ({ navigation, patient, phones }) => {
-  const [actions, dispatch] = useModal()
+  const [actions, dispatch] = useGeneralControl()
 
   const onDeletePatient = () => patient.deleteInstance().then(() => {
     dispatch({ type: actions.CLEAR })
@@ -67,6 +70,25 @@ const PatientDetail = ({ navigation, patient, phones }) => {
         value: patient.hasWhatsapp
       }]
     })
+  }, [patient])
+
+  const layout = useWindowDimensions();
+
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: 'first', title: 'First' },
+    { key: 'second', title: 'Second' },
+  ]);
+
+  const renderScene = useCallback(({ route }) => {
+    switch (route.key) {
+      case 'first':
+        return <AppointmentsListTab patient={patient} />;
+      case 'second':
+        return <SecondRoute />;
+      default:
+        return null;
+    }
   }, [patient])
 
   return (

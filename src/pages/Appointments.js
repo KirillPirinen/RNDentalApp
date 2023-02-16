@@ -6,14 +6,13 @@ import { groupAppointments } from '../utils/groupAppointments'
 import { useMemo, useCallback } from 'react'
 import { useForceUpdateByInterval } from '../utils/custom-hooks/useForceUpdate'
 import { defaultExtractor } from '../utils/defaultFn'
-import { useModal } from '../context/modal-context'
+import { useGeneralControl } from '../context/general-context'
 import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef';
 import { useTheme } from 'react-native-paper';
 import { appointmentsByDays } from '../db/raw-queries'
 import { switchMap } from 'rxjs/operators'
 import { GestureHandlerRootView } from "react-native-gesture-handler"
-import { Q } from '@nozbe/watermelondb/index.js'
-import { DEFAULT_SETTINGS } from '../consts/index.js'
+import { extractSetting } from '../utils/hoc/withSetting'
 
 const wrapperStyle = { height: '100%'}
 
@@ -21,7 +20,7 @@ const renderSectionHeader = ({ section: { day }}) => <SectionTitle>{day}</Sectio
 
 const Appointments = ({ appointments, navigation }) => {
 
-  const [actions, dispatch] = useModal()
+  const [actions, dispatch] = useGeneralControl()
 
   const grouped = useMemo(() => groupAppointments(appointments), [appointments])
 
@@ -75,15 +74,14 @@ const Appointments = ({ appointments, navigation }) => {
 
 export default withDatabase(
   withObservables([], ({ database }) => ({
-    appointments: database
-      .get('settings')
-        .findAndObserve('trackingInterval')
-          .pipe(
-            switchMap((trackingInterval) => database
-              .get('appointments')
-                .query(appointmentsByDays(trackingInterval?.value || DEFAULT_SETTINGS.trackingInterval))
-                  .observeWithColumns(['date'])
-              )
-          )
+    appointments: extractSetting(
+      database, 'trackingInterval', 
+      switchMap((trackingInterval) => {
+        return database
+        .get('appointments')
+          .query(appointmentsByDays(trackingInterval.value))
+            .observeWithColumns(['date'])
+        }
+        ))
   }))(Appointments),
 )

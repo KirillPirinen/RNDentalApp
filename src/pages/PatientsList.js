@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Divider, useTheme } from 'react-native-paper'
 import { FlatList, Keyboard, View } from 'react-native'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
@@ -6,7 +6,7 @@ import withObservables from '@nozbe/with-observables'
 import { Container, Autocomplete, FAB, EmptyList, Patient } from '../components'
 import { useIsFocused } from '@react-navigation/native'
 import { defaultExtractor } from '../utils/defaultFn'
-import { useModal } from '../context/modal-context'
+import { useGeneralControl } from '../context/general-context'
 import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef'
 
 const wrapper = { marginVertical: 12 }
@@ -36,7 +36,7 @@ const dissmisHandle = () => {
 }
 
 export const PatientsList = ({ patients, navigation }) => {
-  const [actions, dispatch] = useModal()
+  const [actions, dispatch] = useGeneralControl()
   const isFocused = useIsFocused()
 
   const onChange = (query) => 

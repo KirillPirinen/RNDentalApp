@@ -3,7 +3,7 @@ import { DEFAULT_SETTINGS } from '../consts/index.js'
 import { insertSettings } from './raw-queries.js'
 
 export default appSchema({
-  version: 2,
+  version: 1,
   tables: [
     tableSchema({
       name: 'patients',
@@ -74,8 +74,10 @@ export default appSchema({
     tableSchema({
       name: 'settings',
       columns: [
+        { name: 'name', type: 'string' },
         { name: 'value', type: 'string' }
       ],
+      unsafeSql: sql => sql.replace('"name"', '"name" NOT NULL UNIQUE')
     }),
   ],
   unsafeSql: (sql, kind) => {

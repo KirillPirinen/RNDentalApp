@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { TextInput, Button, Menu, Divider } from 'react-native-paper'
 import { Container } from '../components'
-import { useModal } from '../context/modal-context'
+import { useGeneralControl } from '../context/general-context'
 import { createTemplate } from '../db/actions'
 import { useToggle } from '../utils/custom-hooks/useToggle'
 import { replaceStringByIndex } from '../utils/insertString'
@@ -17,7 +17,7 @@ const AddTemplate = ({ navigation, route: { params } }) => {
   const [text, setText] = useState(template?.text || '')
   const [visible, toggleVisible] = useToggle()
   const [error, setError] = useState({})
-  const [actions, dispatch] = useModal()
+  const [actions, dispatch] = useGeneralControl()
 
   const selection = useRef()
   const ref = useRef()

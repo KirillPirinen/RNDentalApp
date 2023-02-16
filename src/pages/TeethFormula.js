@@ -9,6 +9,7 @@ import { useTheme } from 'react-native-paper'
 import { ToothStatePanel } from '../components/Teeth/ToothStatePanel.js'
 import { ToothNotesInput } from '../components/Teeth/ToothNotesInput.js'
 import { createTooth } from '../db/actions/index.js'
+import { useSettings } from '../context/general-context'
 
 const History = memo(({ tooth }) => {
   const theme = useTheme()
@@ -27,8 +28,10 @@ const History = memo(({ tooth }) => {
 })
 
 const TeethFormula = ({ formula, navigation, teeth }) => {
-
+  const { teethColorFill } = useSettings()
   const [selected, setSelected] = useState(null)
+  const [history, setHistory] = useState(teethColorFill.history)
+  const [statusLocalis, setStatusLocalis] = useState(teethColorFill.statusLocalis)
 
   const hashTeethInfo = useMemo(() => teeth.reduce((acc, tooth) => {
     acc[tooth.toothNo] = tooth
@@ -61,10 +64,22 @@ const TeethFormula = ({ formula, navigation, teeth }) => {
         title: 'Постоянные зубы', 
         onPress: onAdultCheck,
         value: formula.hasAdultJaw
+      },
+      { 
+        type: 'TouchableCheckbox', 
+        title: 'Показывать с историей лечения', 
+        onPress: setHistory,
+        value: history
+      },
+      { 
+        type: 'TouchableCheckbox', 
+        title: 'Показывать status localis', 
+        onPress: setStatusLocalis,
+        value: statusLocalis
       }
     ]
     })
-  }, [formula])
+  }, [formula, history, statusLocalis])
 
   const selectedInstance = hashTeethInfo[selected]
   const viewBox = (formula.hasBabyJaw && !formula.hasAdultJaw) && `43.5 55.5 202 259`
@@ -94,6 +109,8 @@ const TeethFormula = ({ formula, navigation, teeth }) => {
           onPressTooth={pressHandler}
           teethRecords={hashTeethInfo}
           viewBox={viewBox}
+          showTreated={history}
+          showStyles={statusLocalis}
         />
       {selected && (
         <>
@@ -112,7 +129,7 @@ const TeethFormula = ({ formula, navigation, teeth }) => {
 
 export default withObservables(['route'], ({ route }) => ({
   patient: route.params.patient,
-  formula: route.params.patient.formulas.observe().pipe(switchMap(formulas => formulas[0].observe())),
+  formula: route.params.patient.formulas.observe().pipe(switchMap(([formula]) => formula.observe())),
   teeth: route.params.patient.teeth.observeWithColumns(['tooth_state'])
 }))(TeethFormula)
 

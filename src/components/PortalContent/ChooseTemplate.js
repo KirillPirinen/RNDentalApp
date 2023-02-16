@@ -2,9 +2,9 @@ import React, { useState, useLayoutEffect } from 'react'
 import { View, StyleSheet, Linking } from 'react-native'
 import { Modal, Text, Button, RadioButton, Divider, 
   Surface } from 'react-native-paper'
-import { database } from '../../db'
+import database from '../../db'
 import { parseTemplateByPatient } from '../../utils/parseTemplate'
-import actions from '../../context/modal-context/action-types'
+import actions from '../../context/general-context/action-types'
 import { setStringAsync } from 'expo-clipboard'
 
 const Links = {
@@ -22,7 +22,7 @@ const createDefaultAction = (mode) => ({
 
 export const ChooseTemplate = ({ 
   __visible, 
-  __defaultHandlers,
+  __defaultProps,
     patient,
     mode,
     phone
@@ -38,18 +38,18 @@ export const ChooseTemplate = ({
         await setStringAsync(choosed)
       }
       await Linking.openURL(Links[mode](phone, choosed))
-      __defaultHandlers.current.clear()
+      __defaultProps.clear()
     } catch {
-      __defaultHandlers.current.dispatch(createDefaultAction(mode))
+      __defaultProps.dispatch(createDefaultAction(mode))
     }
   }
 
   const onSendTemplateBare = async () => {    
     try {
       await Linking.openURL(Links[mode](phone, ''))
-      __defaultHandlers.current.clear()
+      __defaultProps.clear()
     } catch {
-      __defaultHandlers.current.dispatch(createDefaultAction(mode))
+      __defaultProps.dispatch(createDefaultAction(mode))
     }
   }
 
@@ -60,14 +60,14 @@ export const ChooseTemplate = ({
           parseTemplateByPatient(dbTemplates, patient).then(setTemplates)
         } else {
           onSendTemplateBare()
-          __defaultHandlers.current.clear()
+          __defaultProps.clear()
         }
       })
   }, [])
 
   return (
     <Modal
-      onDismiss={__defaultHandlers.current.clear}
+      onDismiss={__defaultProps.clear}
       visible={__visible && Boolean(templates.length)} 
       contentContainerStyle={styles.modal}
     > 
@@ -120,7 +120,7 @@ export const ChooseTemplate = ({
             icon="window-close"
             textColor="gray"
             size={24}
-            onPress={__defaultHandlers.current.clear}
+            onPress={__defaultProps.clear}
           > 
             Отмена
         </Button>

@@ -20,11 +20,11 @@ export const SettingsCheckbox = ({ onChange, style, name, initial, ...rest }) =>
 
 const styles = StyleSheet.create({
   button: {
-    paddingLeft: 40,
-    paddingRight: 24
+    paddingLeft: 24,
+    paddingRight: 16
   },
   checkbox: {
-    paddingRight: 24
+    paddingRight: 16
   }
 })
 

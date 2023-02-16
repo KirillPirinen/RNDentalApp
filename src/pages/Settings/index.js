@@ -1,7 +1,7 @@
-import { StyleSheet } from 'react-native'
 import { List } from 'react-native-paper'
 import { TrackingInterval } from './TrackingInterval'
 import styles from './styles'
+import { TeethColorFill } from './TeethColorFill.js'
 
 const Settings = ({ navigation }) => {
   return (
@@ -14,6 +14,7 @@ const Settings = ({ navigation }) => {
         <List.Item title="Управление шаблонами" onPress={() => navigation.navigate('TemplatesList')} style={styles.button} />
       </List.Accordion>
       <TrackingInterval />
+      <TeethColorFill />
     </List.Section>
   )
 }

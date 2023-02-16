@@ -6,7 +6,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { useTheme, Text } from 'react-native-paper'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import TeethFormula from './pages/TeethFormula'
-import { useModal } from './context/modal-context'
+import { useGeneralControl } from './context/general-context'
 
 const renderIcon = (name) => ({ color }) => (
   <MaterialCommunityIcons name={name} color={color} size={22} />
@@ -36,6 +36,7 @@ function BottomTabs() {
         sceneAnimationType="shifting"
         barStyle={{ 
           backgroundColor: theme.colors.primary,
+          paddingTop: -2,
           paddingBottom: 4,
           maxHeight: 60
         }}
@@ -79,7 +80,7 @@ function BottomTabs() {
 const getTitle = ({ route }) => ({ headerTitle: route.params?.edit ? 'Редактирование записи' : 'Добавление записи' })
 
 const Router = () => {
-  const [actions, dispatch] = useModal()
+  const [actions, dispatch] = useGeneralControl()
   return (
       <Stack.Navigator
         screenOptions={{ header: renderHeader }}

@@ -1,4 +1,5 @@
 import { Q } from '@nozbe/watermelondb';
+import randomId from '@nozbe/watermelondb/utils/common/randomId'
 
 export const getSqlDateFn = ({ modifier, from } = {}) => {
   from = from || 'now'
@@ -46,17 +47,21 @@ export const getScheduledPatiens = () => Q.unsafeSqlQuery(`
 `)
 
 export const insertSettings = (object) => {
-  const baseSql = 'INSERT INTO settings (id, value) VALUES'
+  const baseSql = 'INSERT INTO settings (id, name, value) VALUES'
   const keys = Object.keys(object)
 
   let result = keys.slice(0, -1).reduce((acc, settingName) => {
-    acc += ` ("${settingName}", '${JSON.stringify(object[settingName])}'),`
+    acc += ` ("${randomId()}", "${settingName}", '${JSON.stringify(object[settingName])}'),`
     return acc
   }, baseSql)
 
   const lastSetting = keys[keys.length - 1]
 
-  if(lastSetting) result += ` ("${lastSetting}", '${JSON.stringify(object[lastSetting])}');`
+  if(lastSetting) result += ` ("${randomId()}", "${lastSetting}", '${JSON.stringify(object[lastSetting])}');`
 
-  return result !== baseSql && result
+  return result !== baseSql ? result : ''
 } 
+
+export const findById = (id, table) => Q.unsafeSqlQuery(`
+  SELECT * FROM "${table}" WHERE id = "${id}";
+`)

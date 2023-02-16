@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { FlatList, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { PatientAppointment } from '../components/Appointment/PatientAppointments'
-import { useModal } from '../context/modal-context'
+import { useGeneralControl } from '../context/general-context'
 import { defaultExtractor } from '../utils/defaultFn'
 import withObservables from '@nozbe/with-observables'
 
@@ -19,7 +19,7 @@ export const PatientAppointmentList = ({
   ...rest
 }) => {
   const theme = useTheme()
-  const [actions, dispatch] = useModal()
+  const [actions, dispatch] = useGeneralControl()
 
   const onEditAppointment = useCallback((appointment, isConfirmation) => {
       if(isConfirmation) {

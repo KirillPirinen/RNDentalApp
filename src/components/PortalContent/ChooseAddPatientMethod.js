@@ -1,10 +1,9 @@
-import React from 'react'
 import { Confirm } from '../Confirm'
 import { Button } from 'react-native-paper'
 
 export const ChooseAddPatientMethod = ({ 
   __visible, 
-  __defaultHandlers,
+  __defaultProps,
   onAlone,
   onBulk
 }) => (
@@ -12,7 +11,7 @@ export const ChooseAddPatientMethod = ({
     title="Добавить пациента из контактов устройства?" 
     question={`Вы можете добавить несколько пациентов за раз.\nДля этого потребуется Ваше разрешение на чтение данных из контактов устройства.`} 
     visible={__visible}
-    onClose={__defaultHandlers.current.hide}
+    onClose={__defaultProps.hide}
   >
     <Button
       icon="import"

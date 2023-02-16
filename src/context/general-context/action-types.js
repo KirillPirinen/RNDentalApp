@@ -7,4 +7,6 @@ export default {
   INFO: 'Info',
   HIDE: 'HIDE',
   CLEAR: 'CLEAR',
+  UPDATE_SETTINGS: 'UPDATE_SETTINGS',
+  SET_SETTING: 'SET_SETTINGS',
 }

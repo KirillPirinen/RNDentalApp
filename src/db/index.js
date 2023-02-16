@@ -6,15 +6,21 @@ import modelClasses from './models'
 
 const adapter = new SQLiteAdapter({
   schema,
-  dbName: 'dental',
-  jsi: false,
+  dbName: 'dental_app_v1',
+  jsi: true,
   //migrations,
   onSetUpError: error => {
     // Database failed to load -- offer the user to reload the app or log out
   }
 })
 
-export const database = new Database({
+const database = new Database({
   adapter,
   modelClasses,
 })
+
+adapter.initializingPromise.then(() => {
+  console.log(adapter)
+})
+
+export default database

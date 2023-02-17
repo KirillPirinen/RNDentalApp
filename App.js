@@ -15,7 +15,7 @@ const App = () => {
       <DatabaseProvider database={database}>
         <ThemeAdapter>
           <GeneralContextProvider>
-            <Router />
+                <Router />
             <ContextedPortal />
           </GeneralContextProvider>
         </ThemeAdapter>

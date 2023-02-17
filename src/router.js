@@ -96,7 +96,9 @@ const Router = () => {
         <Stack.Screen 
           name="Detail" 
           component={PatientDetail}
-          options={{ headerTitle: 'Карточка пациента' }} 
+          options={{ 
+            headerTitle: 'Карточка пациента',
+          }} 
         />
         <Stack.Screen options={getTitle} name="AddAppointment" component={AddAppointment} />
         <Stack.Screen options={{ headerTitle: 'Добавление пациента' }} name="AddPatient" component={AddPatient} />

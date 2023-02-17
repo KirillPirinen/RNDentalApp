@@ -1,22 +1,29 @@
-import React, { useCallback, useEffect } from 'react'
-import { View, SafeAreaView, Linking, StyleSheet, useWindowDimensions } from 'react-native'
+import React, { useCallback, useEffect, useMemo } from 'react'
+import { View, Linking, StyleSheet, useWindowDimensions } from 'react-native'
 import withObservables from '@nozbe/with-observables'
-import { Text } from 'react-native-paper'
+import { Text, useTheme } from 'react-native-paper'
 import { Button, PatientAppointmentList, FAB, PhonesList,
   CallButton, WhatsappButton, TelegramButtom, ButtonRowPanel } from '../../components'
 import { useGeneralControl } from '../../context/general-context'
 import { useFabControlsRef } from '../../utils/custom-hooks/useSafeRef'
 import { getPrimaryPhoneNumber } from '../../utils/getPrimaryPhoneNumber'
 import ImagePickerExample from '../../components/ImagePicker.js'
-import { AppointmentsListTab } from './TabsContent/AppointmentsListTab'
+import AppointmentsListTab from './TabsContent/AppointmentsListTab'
+import { TabView, TabBar } from 'react-native-tab-view';
 
 const ObservablePatientAppointmentList = withObservables(['patient'], ({ patient }) => ({
   appointments: patient.sortedAppointments
 }))(PatientAppointmentList)
 
+const tabs = [
+  { key: 0, title: 'Записи' },
+  { key: 1, title: 'Файлы' },
+]
 
 const PatientDetail = ({ navigation, patient, phones }) => {
   const [actions, dispatch] = useGeneralControl()
+  const layout = useWindowDimensions();
+  const theme = useTheme()
 
   const onDeletePatient = () => patient.deleteInstance().then(() => {
     dispatch({ type: actions.CLEAR })
@@ -45,7 +52,7 @@ const PatientDetail = ({ navigation, patient, phones }) => {
     payload: { patient, mode, phone: getPrimaryPhoneNumber(phones) }
   })
 
-  const [ref, onDrop, onDrag] = useFabControlsRef()
+  const [ref, showFab, hideFab] = useFabControlsRef()
 
   useEffect(() => {
     
@@ -72,27 +79,47 @@ const PatientDetail = ({ navigation, patient, phones }) => {
     })
   }, [patient])
 
-  const layout = useWindowDimensions();
-
   const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'first', title: 'First' },
-    { key: 'second', title: 'Second' },
-  ]);
 
   const renderScene = useCallback(({ route }) => {
     switch (route.key) {
-      case 'first':
-        return <AppointmentsListTab patient={patient} />;
-      case 'second':
-        return <SecondRoute />;
-      default:
-        return null;
+      case 0:
+        return <AppointmentsListTab 
+          navigation={navigation} 
+          patient={patient} 
+          onScrollBeginDrag={hideFab} 
+          onScrollEndDrag={showFab} 
+        />;
+      case 1:
+        return <Text>12312</Text>
     }
-  }, [patient])
+  }, [patient, showFab, hideFab]);
+
+  const {
+    onIndexChange,
+    renderTabBar
+  } = useMemo(() => {
+    const renderLabel = ({ route, focused, color }) => <Text variant='titleMedium' style={{ color }}>{route.title}</Text>
+    return {
+      onIndexChange: (index) => {
+        index === 0 ? showFab() : hideFab()
+        setIndex(index)
+      },
+      renderTabBar: props => {
+        return (
+          <TabBar
+            {...props}
+            indicatorStyle={{ backgroundColor: theme.colors.primary }}
+            style={{ backgroundColor: theme.colors.primary, height: 50 }}
+            renderLabel={renderLabel}
+          />
+        )
+      }
+    }
+  }, [showFab, hideFab])
 
   return (
-      <SafeAreaView style={styles.pageWrapper}>
+      <View style={styles.pageWrapper}>
         <View style={styles.patientDetails}>
           <View style={styles.metaWrapper}>
             <View style={styles.nameWrapper}>
@@ -117,20 +144,27 @@ const PatientDetail = ({ navigation, patient, phones }) => {
             {patient.hasTelegram && <TelegramButtom onPress={onSendMessage('telegram')} />}
           </View>
         </View>
-        <View style={styles.patientListWrapper}>
-          <ObservablePatientAppointmentList 
-            navigation={navigation}
-            patient={patient}
-            onScrollBeginDrag={onDrag}
-            onScrollEndDrag={onDrop}
+         <TabView
+            initialLayout={{ width: layout.width }}
+            navigationState={{ index, routes: tabs }}
+            onIndexChange={onIndexChange}
+            renderScene={renderScene}
+            onSwipeStart={hideFab}
+            activeColor="red"
+            inactiveColor="black"
+            pressColor="green"
+            tabStyle={{ backgroundColor: 'red' }}
+            indicatorStyle={{ backgroundColor: 'red' }}
+            indicatorContainerStyle={{ backgroundColor: 'red' }}
+            labelStyle={{ backgroundColor: 'red' }}
+            renderTabBar={renderTabBar}
           />
-        </View>
         <FAB
           ref={ref} 
           label={`Записать пациента`}
           onPress={() => navigation.navigate('AddAppointment', { patient })}
-        />
-      </SafeAreaView>
+        /> 
+      </View>
   )
 }
 

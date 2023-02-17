@@ -1,8 +1,8 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  patientListWrapper: { paddingHorizontal: 25, paddingTop: 5 },
-  pageWrapper: { zIndex: 100, },
+  patientListWrapper: { paddingHorizontal: 25, paddingTop: 10, height: '100%' },
+  pageWrapper: { zIndex: 100, flex: 1 },
   patientDetails: { maxHeight: 300, padding: 25 },
   formulaButtonView: { flex: 1 },
   patientButtons: { flexDirection: 'row', marginTop: 20 },

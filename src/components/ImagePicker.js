@@ -1,30 +1,69 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Image, View, Platform } from 'react-native';
+import { Button, Image, View, Platform, StyleSheet, RNFS } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+
+
+const saveImage = async (assset) => {
+
+    const fileName = assset.uri.split('/').pop();
+    const newPath = `${FileSystem.documentDirectory}${fileName}`;
+    try {
+
+      // const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory)
+      // console.log(files, 'files')
+      const res = await FileSystem.moveAsync({
+        from: assset.uri,
+        to: newPath,
+      });
+
+      console.log(res, 'res')
+    } catch (err) {
+      console.log(err);
+    }
+  
+};
 
 export default function ImagePickerExample() {
-  const [image, setImage] = useState();
+  const [image, setImage] = useState([]);
 
+  useEffect(() => {
+    FileSystem.readDirectoryAsync(FileSystem.documentDirectory).then(setImage)
+  }, [])
+
+  const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
+
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      allowsMultipleSelection: true
     });
 
-    console.log(result);
-
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      saveImage(result.assets[0])
     }
   };
-  //file:///data/user/0/com.rndiffapp/cache/ImagePicker/7e5d8ff6-af6e-48e4-baaf-ecaf6896db7a.jpeg
+  
   return (
     <View>
       <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+      <View style={styles.imagesWrapper}>
+        {image.map(fileName => <Image key={fileName} source={{ uri: `${FileSystem.documentDirectory}${fileName}` }} style={styles.image} />)}
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  imagesWrapper: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 5
+  },
+  image: {
+    width: 100, 
+    height: 100
+  }
+})

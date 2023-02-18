@@ -1,5 +1,5 @@
 import database from '..'
-import { getPatientBatches } from '../utils/batches.js'
+import { getPatientBatches, getPatientRelationsBatches } from '../utils/batches.js'
 
 export const updateTeethState = async (id) => {
   await database.write(async () => {
@@ -12,16 +12,40 @@ export const updateTeethState = async (id) => {
   })
 }
 
-export const createPatient = async (content) => {
-  let batches
+export const createPatientsBulk = async (contentArray) => {
+  const batches = contentArray.reduce((acc, el) => acc.concat(getPatientBatches(el)), [])
+  return await database.write(async () => await database.batch(batches))
+}
 
-  if (Array.isArray(content)) {
-    batches = content.reduce((acc, el) => acc.concat(getPatientBatches(el)), [])
-  } else {
-    batches = getPatientBatches(content)
+export const createPatient = async ({ fullName, phones, phoneNumbers, name, id }, { withReturn } = {}) => {
+  const recievedName = fullName || name
+  const phonesToBatch = phones || phoneNumbers
+
+  if(!withReturn) {
+    return await database.write(async () => await database.batch(...getPatientBatches({ 
+      fullName: recievedName, 
+      phones: phonesToBatch, 
+      id 
+    })))
   }
 
-  return await database.write(async () => await database.batch(batches))
+  return await database.write(async () => {
+
+    const patient = await database.get('patients').create(patient => {
+      patient.fullName = recievedName
+      patient.hasWhatsapp = true
+      patient.hasTelegram = true
+      patient.contactId = id
+    })
+
+    await database.batch(...getPatientRelationsBatches({ 
+      phones: phonesToBatch, 
+      patientId: patient.id 
+    }))
+    
+    return patient
+  })
+
 }
 
 export const createAppointment = async ({ patientId, date, diagnosis, notes, duration }) => {

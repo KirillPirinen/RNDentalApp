@@ -2,18 +2,15 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 import { View, Linking, StyleSheet, useWindowDimensions } from 'react-native'
 import withObservables from '@nozbe/with-observables'
 import { Text, useTheme } from 'react-native-paper'
-import { Button, PatientAppointmentList, FAB, PhonesList,
-  CallButton, WhatsappButton, TelegramButtom, ButtonRowPanel } from '../../components'
+import { Button, FAB, PhonesList, CallButton, WhatsappButton, TelegramButtom, ButtonRowPanel } from '../../components'
 import { useGeneralControl } from '../../context/general-context'
 import { useFabControlsRef } from '../../utils/custom-hooks/useSafeRef'
 import { getPrimaryPhoneNumber } from '../../utils/getPrimaryPhoneNumber'
 import ImagePickerExample from '../../components/ImagePicker.js'
 import AppointmentsListTab from './TabsContent/AppointmentsListTab'
-import { TabView, TabBar } from 'react-native-tab-view';
+import FilesTab from './TabsContent/FilesTab'
 
-const ObservablePatientAppointmentList = withObservables(['patient'], ({ patient }) => ({
-  appointments: patient.sortedAppointments
-}))(PatientAppointmentList)
+import { TabView, TabBar } from 'react-native-tab-view';
 
 const tabs = [
   { key: 0, title: 'Записи' },
@@ -91,7 +88,7 @@ const PatientDetail = ({ navigation, patient, phones }) => {
           onScrollEndDrag={showFab} 
         />;
       case 1:
-        return <Text>12312</Text>
+        return <FilesTab patient={patient} />
     }
   }, [patient, showFab, hideFab]);
 
@@ -109,7 +106,7 @@ const PatientDetail = ({ navigation, patient, phones }) => {
         return (
           <TabBar
             {...props}
-            indicatorStyle={{ backgroundColor: theme.colors.primary }}
+            indicatorStyle={{ backgroundColor: theme.colors.surface, height: 3 }}
             style={{ backgroundColor: theme.colors.primary, height: 50 }}
             renderLabel={renderLabel}
           />
@@ -150,13 +147,6 @@ const PatientDetail = ({ navigation, patient, phones }) => {
             onIndexChange={onIndexChange}
             renderScene={renderScene}
             onSwipeStart={hideFab}
-            activeColor="red"
-            inactiveColor="black"
-            pressColor="green"
-            tabStyle={{ backgroundColor: 'red' }}
-            indicatorStyle={{ backgroundColor: 'red' }}
-            indicatorContainerStyle={{ backgroundColor: 'red' }}
-            labelStyle={{ backgroundColor: 'red' }}
             renderTabBar={renderTabBar}
           />
         <FAB

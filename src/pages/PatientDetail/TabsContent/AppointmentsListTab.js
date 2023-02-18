@@ -10,14 +10,14 @@ const ObservablePatientAppointmentList = withObservables(['patient'], ({ patient
 
 export const AppointmentsListTab = ({ patient, navigation, ...rest }) => {
   return (
-        <View style={styles.patientListWrapper}>
-          <ObservablePatientAppointmentList 
-            navigation={navigation}
-            patient={patient}
-            style={{ marginBottom: -60 }}
-            {...rest}
-          />
-        </View>
+    <View style={styles.patientListWrapper}>
+      <ObservablePatientAppointmentList 
+        navigation={navigation}
+        patient={patient}
+        style={{ marginBottom: -60 }}
+        {...rest}
+      />
+    </View>
   )
 }
 

@@ -39,7 +39,7 @@ const AddPatient = ({ navigation, route: { params } }) => {
       return patient.updateInstance({ fullName }, Object.values(sourceMap)).then(navigation.goBack)
     }
 
-    createPatient({ fullName, phones: Object.values(sourceMap) }).then(patient => {
+    createPatient({ fullName, phones: Object.values(sourceMap) }, { withReturn: true }).then(patient => {
       navigation.replace('Detail', { patient })
     })
   }

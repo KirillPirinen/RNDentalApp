@@ -31,6 +31,7 @@ export const saveImages = (assets, dirPath) => {
 
 };
 
+export const deleteImage = async (filePath) => await FileSystem.deleteAsync(filePath)
 
 export const usePatientImages = (patient) => {
   const [images, setImages] = useState([]);
@@ -61,5 +62,10 @@ export const usePatientImages = (patient) => {
     fetchImgs(dirPath)
   }, [dirPath])
 
-  return { images, addImages, dirPath }
+  const removeImage = useCallback(async (fileName) => {
+    await deleteImage(`${dirPath}${fileName}`)
+    fetchImgs(dirPath)
+  }, [dirPath])
+
+  return { images, addImages, dirPath, removeImage }
 }

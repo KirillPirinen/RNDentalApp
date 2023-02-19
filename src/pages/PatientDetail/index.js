@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { View, Linking, StyleSheet, useWindowDimensions } from 'react-native'
 import withObservables from '@nozbe/with-observables'
 import { Text, useTheme } from 'react-native-paper'
@@ -21,7 +21,8 @@ const PatientDetail = ({ navigation, patient, phones }) => {
   const [actions, dispatch] = useGeneralControl()
   const layout = useWindowDimensions();
   const theme = useTheme()
-
+  const [collapsed, setCollapsed] = useState(true)
+  
   const onDeletePatient = () => patient.deleteInstance().then(() => {
     dispatch({ type: actions.CLEAR })
     navigation.popToTop()
@@ -72,9 +73,15 @@ const PatientDetail = ({ navigation, patient, phones }) => {
         title: 'Whatsapp', 
         onPress: onWhatsappCheck,
         value: patient.hasWhatsapp
+      },
+      {
+        type: 'TouchableCheckbox', 
+        title: collapsed ? 'Скрыть информацию    ' : 'Показать информацию', 
+        onPress: setCollapsed,
+        value: collapsed
       }]
     })
-  }, [patient])
+  }, [patient, collapsed])
 
   const [index, setIndex] = React.useState(0);
 
@@ -117,7 +124,7 @@ const PatientDetail = ({ navigation, patient, phones }) => {
 
   return (
       <View style={styles.pageWrapper}>
-        <View style={styles.patientDetails}>
+        <View style={[styles.patientDetails, !collapsed && { display: 'none' }]}>
           <View style={styles.metaWrapper}>
             <View style={styles.nameWrapper}>
               <Text style={styles.patientFullname}>

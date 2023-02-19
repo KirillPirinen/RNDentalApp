@@ -20,10 +20,12 @@
     "expo": "~47.0.13",
     "expo-clipboard": "~4.0.1",
     "expo-contacts": "~11.0.1",
+    "expo-file-system": "~15.1.1",
     "expo-image-picker": "~14.0.2",
     "expo-splash-screen": "~0.17.5",
     "expo-status-bar": "~1.4.2",
     "lodash.debounce": "^4.0.8",
+    "plural-ru": "^2.0.2",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-native": "0.70.5",
@@ -35,8 +37,7 @@
     "react-native-screens": "~3.11.1",
     "react-native-svg": "13.8.0",
     "react-native-tab-view": "^3.5.0",
-    "react-native-web": "0.17.7",
-    "expo-file-system": "~15.1.1"
+    "react-native-web": "0.17.7"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

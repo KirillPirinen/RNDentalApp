@@ -1,10 +1,13 @@
-import { Button, Image, View, StyleSheet, Dimensions, ScrollView, Pressable } from 'react-native';
+import { Image, View, StyleSheet, Dimensions, ScrollView, Pressable, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { usePatientImages } from '../../../utils/custom-hooks/usePatientImages.js';
+import { usePatientFiles } from '../../../utils/custom-hooks/usePatientFiles';
+import { useFilesPicker } from '../../../utils/custom-hooks/useFilesPicker';
 import { useCallback, useEffect, useState, memo } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { SegmentedButtons } from 'react-native-paper';
+import { types } from 'react-native-document-picker'
 import plural from 'plural-ru';
+import { getExtension, parseFileName } from '../../../utils/fileHelpers.js';
 
 const width = Dimensions.get('window').width
 
@@ -43,8 +46,7 @@ const styles = StyleSheet.create({
   },
   smoke: {
     display: 'none',
-    backgroundColor: 'white',
-    opacity: 0.5,
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
     zIndex: 100,
     position: 'absolute',
     top: 0,
@@ -55,14 +57,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   buttonsPanel: {
-    marginTop: 10, 
     justifyContent: 'center'
   },
   button: {
     backgroundColor: 'white',
     flexShrink: 1,
     borderRadius:0,
-    minWidth: '12%'
+    minWidth: '12%',
+    borderWidth: 0
   }
 })
 
@@ -96,98 +98,93 @@ const selectButtons = (count) => [
   }
 ]
 
+const stubMap = {
+  pdf: <MaterialCommunityIcons name='file-pdf-box' size={imageWidth / 2} color="red" />
+}
+
 const FilesTab = ({ patient }) => {
-  const { images, addImages, dirPath } = usePatientImages(patient);
-  const [{
-    isEdit,
-    selectedImages,
-    count
-  }, setSelected] = useState(defaultState)
+  const { files, addFiles, dirPath, removeFiles } = usePatientFiles(patient);
+  const [{ isEdit, selectedImages, count }, setSelected] = useState(defaultState)
+  const pickFiles = useFilesPicker([types.doc, types.docx, types.images, types.pdf])
 
-  const pickImageLibrary = async () => {
-
-    let result = await ImagePicker.launchImageLibraryAsync(imagesImportOptions);
-
-    if (!result.canceled) {
-      addImages(result.assets)
-    }
-  };
+  const pickFromLibrary = async () => {
+    const res = await pickFiles()
+    res?.length > 0 && addFiles(res)
+  }
 
   const pickImageCamera = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync()
 
     if(status === 'granted') {
-      let result = await ImagePicker.launchCameraAsync(imagesImportOptions);
+      const res = await ImagePicker.launchCameraAsync(imagesImportOptions);
   
-      if (!result.canceled) {
-        addImages(result.assets)
+      if (!res.canceled && res.assets?.length > 0) {
+        addFiles(res.assets)
       }
     }  
   };
   
-  const toggleEdit = (name) => {
+  const toggleEdit = (id) => {
     if(isEdit) {
       return setSelected(defaultState)
     }
-    setSelected({ isEdit: true, count: 1, selectedImages: {[name]: true }})
+    setSelected({ isEdit: true, count: 1, selectedImages: {[id]: true }})
   }
 
-  const toggleSelect = (name) => {
+  const toggleSelect = (id) => {
     if(isEdit) {
       setSelected(prev => {
-        const prevNameState = prev.selectedImages[name]
-        const count = prevNameState ? prev.count - 1 : prev.count + 1
+        const prevIdState = prev.selectedImages[id]
+        const count = prevIdState ? prev.count - 1 : prev.count + 1
         return { 
-          isEdit: true, 
-          selectedImages: {...prev.selectedImages, [name]: !prevNameState },
+          isEdit: true,
+          selectedImages: {...prev.selectedImages, [id]: !prevIdState },
           count
         }
       }) 
     }
   }
 
-  const [buttons, setButtons] = useState(addButtons)
+  const [buttons, setButtons] = useState(null)
 
   useEffect(() => {
     if(count) {
       return setButtons(selectButtons(count))
     } 
-    setButtons(addButtons)
+    setButtons(null)
   }, [count])
 
   const onButtonPanelPress = useCallback((value) => {
       switch(value) {
-        case 'cancel': return setSelected(defaultState)
-        case 'library': return pickImageLibrary()
+        case 'library': return pickFromLibrary()
         case 'camera': return pickImageCamera()
+        case 'delete': removeFiles(files.filter((instance) => selectedImages[instance.id]))
+        case 'cancel': return setSelected(defaultState)
       }
-  }, [])
+  }, [selectedImages])
 
   return (
     <View style={styles.tabWrapper}>
-      <SegmentedButtons
-        onValueChange={onButtonPanelPress}
-        buttons={buttons}
-        style={styles.buttonsPanel}
-      />
+      {buttons && <SegmentedButtons onValueChange={onButtonPanelPress} buttons={buttons} style={styles.buttonsPanel} />}
       <ScrollView>
+        {!buttons && <SegmentedButtons onValueChange={onButtonPanelPress} buttons={addButtons} style={styles.buttonsPanel} />}
         <View style={styles.imagesWrapper}>
-          {images.map(fileName => (
+          {files.map(({ name, id, type }) => {
+            const image = stubMap[type] || <Image source={{ uri: `${dirPath}${name}` }} style={styles.image} />
+            return (
               <Pressable
-                onPress={() => toggleSelect(fileName)}
-                onLongPress={() => toggleEdit(fileName)}
+                key={id}
+                onPress={() => toggleSelect(id)}
+                onLongPress={() => toggleEdit(id)}
                 style={styles.imagePressableArea}
                 >
-                <Image 
-                  key={fileName} 
-                  source={{ uri: `${dirPath}${fileName}` }}
-                  style={styles.image}
-                />
-                <View style={[styles.smoke, selectedImages[fileName] && { display: 'flex' }]}>
-                  <MaterialCommunityIcons name='check-circle' size={imageWidth / 2} />
+                {image}
+                <View style={[styles.smoke, selectedImages[id] && { display: 'flex' }]}>
+                  <MaterialCommunityIcons name='check-circle' size={imageWidth / 2} color="white" />
                 </View>
               </Pressable>
             )
+          }
           )}
         </View>
       </ScrollView>

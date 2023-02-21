@@ -1,6 +1,6 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb'
-import { DEFAULT_SETTINGS } from '../consts/index.js'
-import { insertSettings } from './raw-queries.js'
+import { DEFAULT_SETTINGS } from '../../consts/index.js'
+import { insertSettings } from '../raw-queries.js'
 
 export default appSchema({
   version: 1,
@@ -78,6 +78,16 @@ export default appSchema({
         { name: 'value', type: 'string' }
       ],
       unsafeSql: sql => sql.replace('"name"', '"name" NOT NULL UNIQUE')
+    }),
+    tableSchema({
+      name: 'files',
+      columns: [
+        { name: 'patient_id', type: 'string', isIndexed: true },
+        { name: 'name', type: 'string' },
+        { name: 'type', type: 'string' },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' }
+      ],
     }),
   ],
   unsafeSql: (sql, kind) => {

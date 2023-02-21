@@ -6,7 +6,6 @@ import { Button, FAB, PhonesList, CallButton, WhatsappButton, TelegramButtom, Bu
 import { useGeneralControl } from '../../context/general-context'
 import { useFabControlsRef } from '../../utils/custom-hooks/useSafeRef'
 import { getPrimaryPhoneNumber } from '../../utils/getPrimaryPhoneNumber'
-import ImagePickerExample from '../../components/ImagePicker.js'
 import AppointmentsListTab from './TabsContent/AppointmentsListTab'
 import FilesTab from './TabsContent/FilesTab'
 

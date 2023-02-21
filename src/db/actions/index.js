@@ -96,9 +96,19 @@ export const createTemplate = async ({ text, name }) => {
 }
 
 export const createSetting = async ({ name, value }) => {
-  return await database.write(async () => await database.get('settings')?.create(template => {
+  return await database.write(async () => await database.get('settings').create(template => {
       template.name = name
       template.value = value
     })
   )
 }
+
+export const createFile = async ({ name, type, patientId }) => {
+  return await database.write(async () => await database.get('files').create(template => {
+      template.name = name
+      template.type = type
+      template.patientId = patientId
+    })
+  )
+}
+

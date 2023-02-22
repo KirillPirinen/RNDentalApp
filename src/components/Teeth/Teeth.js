@@ -65,7 +65,8 @@ export const Teeth = ({
           onPress={onPressTooth}
           selected={selectedTooth === tooth || multiSelect && selectedTooth[tooth]}
           scale={scale}
-          record={teethRecords[tooth]}
+          toothState={showStyles ? teethRecords[tooth]?.toothState : undefined}
+          isTreated={showTreated && Boolean(teethRecords[tooth]?.isTreated)}
         />)}
       </Svg>
     </View>

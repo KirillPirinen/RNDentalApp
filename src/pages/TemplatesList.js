@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import { TemplateCard } from '../components'
 import withObservables from '@nozbe/with-observables'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
-import { useModal } from '../context/modal-context'
+import { useGeneralControl } from '../context/general-context'
 import { ScrollView } from 'react-native-gesture-handler'
 
 const ObservableTemplate = withObservables(['template'], ({ template }) => ({
@@ -11,7 +11,7 @@ const ObservableTemplate = withObservables(['template'], ({ template }) => ({
 }))(TemplateCard)
 
 const TemplatesList = ({ templates, navigation }) => {
-  const [actions, dispatch] = useModal()
+  const [actions, dispatch] = useGeneralControl()
   
   const onDelete = useCallback((template) => {
 

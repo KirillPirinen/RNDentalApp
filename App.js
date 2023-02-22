@@ -1,9 +1,9 @@
 import ThemeAdapter from './src/components/ThemeAdapter'
 import Router from './src/router'
 import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
-import { database } from './src/db'
+import database from './src/db'
 import { LogBox } from 'react-native'
-import { ModalContextProvider } from './src/context/modal-context'
+import { GeneralContextProvider } from './src/context/general-context'
 import { ContextedPortal } from './src/components/__components__/__Portal'
 
 LogBox.ignoreLogs([
@@ -14,10 +14,10 @@ const App = () => {
   return (
       <DatabaseProvider database={database}>
         <ThemeAdapter>
-          <ModalContextProvider>
-            <Router />
+          <GeneralContextProvider>
+                <Router />
             <ContextedPortal />
-          </ModalContextProvider>
+          </GeneralContextProvider>
         </ThemeAdapter>
       </DatabaseProvider>
   )

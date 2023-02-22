@@ -3,10 +3,10 @@ import { View, ScrollView, StyleSheet } from 'react-native'
 import { Container, Patient } from '../components'
 import { Button, TextInput as Input, Text, useTheme } from 'react-native-paper'
 import Slider from '@react-native-community/slider'
-import { useModal } from '../context/modal-context'
+import { useGeneralControl } from '../context/general-context'
 
 const ConfirmAppointment = ({ navigation, route: { params } }) => {
-  const [actions, dispatch] = useModal()
+  const [actions, dispatch] = useGeneralControl()
 
   const appointment = params?.appointment || {}
   const patient = params?.patient

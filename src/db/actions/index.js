@@ -1,5 +1,5 @@
-import { database } from '..'
-import { phoneSanitazer } from '../../utils/sanitizers'
+import database from '..'
+import { getPatientBatches, getPatientRelationsBatches } from '../utils/batches.js'
 
 export const updateTeethState = async (id) => {
   await database.write(async () => {
@@ -12,47 +12,40 @@ export const updateTeethState = async (id) => {
   })
 }
 
-export const createPatient = async ({ fullName, phones, phoneNumbers, name, id }) => {
-  const phonesToBatch = phones || phoneNumbers
+export const createPatientsBulk = async (contentArray) => {
+  const batches = contentArray.reduce((acc, el) => acc.concat(getPatientBatches(el)), [])
+  return await database.write(async () => await database.batch(batches))
+}
+
+export const createPatient = async ({ fullName, phones, phoneNumbers, name, id }, { withReturn } = {}) => {
   const recievedName = fullName || name
+  const phonesToBatch = phones || phoneNumbers
+
+  if(!withReturn) {
+    return await database.write(async () => await database.batch(...getPatientBatches({ 
+      fullName: recievedName, 
+      phones: phonesToBatch, 
+      id 
+    })))
+  }
 
   return await database.write(async () => {
+
+    const patient = await database.get('patients').create(patient => {
+      patient.fullName = recievedName
+      patient.hasWhatsapp = true
+      patient.hasTelegram = true
+      patient.contactId = id
+    })
+
+    await database.batch(...getPatientRelationsBatches({ 
+      phones: phonesToBatch, 
+      patientId: patient.id 
+    }))
     
-      const newPatient = await database.get('patients').create(patient => {
-        patient.fullName = recievedName
-        patient.hasWhatsapp = true
-        patient.hasTelegram = true
-        patient.contactId = id
-      })
+    return patient
+  })
 
-      const batches = phonesToBatch?.map(phone => {
-          return database.get('phones').prepareCreate(instance => {
-            instance.patientId = newPatient.id
-            instance.number = phoneSanitazer(phone.number)
-            instance.isPrimary = Boolean(phone.isPrimary)
-          })
-        })
-
-        if (batches) {
-          await database.batch(
-            database.get('formulas').prepareCreate(formula => {
-              formula.patientId = newPatient.id
-              formula.hasAdultJaw = true
-              formula.hasBabyJaw = false
-            }),
-            ...batches
-          )
-        } else {
-          await database.get('formulas').create(formula => {
-            formula.patientId = newPatient.id
-            formula.hasAdultJaw = true
-            formula.hasBabyJaw = false
-          })
-        }
-      
-      return newPatient
-    } 
-  )
 }
 
 export const createAppointment = async ({ patientId, date, diagnosis, notes, duration }) => {
@@ -101,3 +94,21 @@ export const createTemplate = async ({ text, name }) => {
     })
   )
 }
+
+export const createSetting = async ({ name, value }) => {
+  return await database.write(async () => await database.get('settings').create(template => {
+      template.name = name
+      template.value = value
+    })
+  )
+}
+
+export const createFile = async ({ name, type, patientId }) => {
+  return await database.write(async () => await database.get('files').create(template => {
+      template.name = name
+      template.type = type
+      template.patientId = patientId
+    })
+  )
+}
+

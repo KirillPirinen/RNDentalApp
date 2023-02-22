@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import * as Contacts from 'expo-contacts'
-import { database } from "../../db"
+import database from "../../db"
 
 let hashPatients = {}
 let savedContacts = { data: [] }

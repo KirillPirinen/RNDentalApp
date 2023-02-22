@@ -18,3 +18,9 @@ export const APPOINTMENT_STATUS = {
 }
 
 export const TAG_REGEX = /\[\-(.*?)\-]/
+
+export const DEFAULT_SETTINGS = {
+  trackingInterval: { from: 0, to: 14, unconfirmed: true },
+  teethColorFill: { statusLocalis: true, history: true },
+  activityButton: { helperText: true }
+}

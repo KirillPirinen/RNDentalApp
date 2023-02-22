@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { View } from "react-native"
-import { TextInput, Button } from "react-native-paper"
+import { TextInput, Button, HelperText } from "react-native-paper"
 import { PhoneInput } from "../components"
 import { createPatient } from "../db/actions"
 import { ScrollView } from "react-native-gesture-handler"
@@ -15,7 +15,14 @@ const AddPatient = ({ navigation, route: { params } }) => {
   const isEditMode = Boolean(params?.patient)
 
   const [fullName, setName] = useState(patient.fullName || '')
+  const [error, setError] = useState('')
 
+  useEffect(() => {
+    if(error) {
+      setError('')
+    }
+  }, [fullName])
+  
   const sourceMap = useMemo(() => {
     if(!phones) return {}
 
@@ -35,14 +42,21 @@ const AddPatient = ({ navigation, route: { params } }) => {
   }
 
   const onSubmit = () => {
+
+    if(!fullName) {
+      return setError('Имя не может быть пустым')
+    }
+
     if(isEditMode) {
       return patient.updateInstance({ fullName }, Object.values(sourceMap)).then(navigation.goBack)
     }
 
-    createPatient({ fullName, phones: Object.values(sourceMap) }).then(patient => {
+    createPatient({ fullName, phones: Object.values(sourceMap) }, { withReturn: true }).then(patient => {
       navigation.replace('Detail', { patient })
     })
   }
+
+  const hasError = Boolean(error)
 
   return (
     <ScrollView style={wrapper}>
@@ -53,7 +67,9 @@ const AddPatient = ({ navigation, route: { params } }) => {
           style={{ marginTop: 12 }}
           onChangeText={setName}
           value={fullName}
+          error={hasError}
         />
+        <HelperText type="error" visible={hasError}>{error}</HelperText>
       </View>
       <PhoneInput onChange={onChange} phones={sourceMap} />
       <Button 

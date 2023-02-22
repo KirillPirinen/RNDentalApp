@@ -1,4 +1,3 @@
-import React from 'react'
 import { View } from 'react-native'
 import { Foundation, FontAwesome5, Fontisto } from '@expo/vector-icons'
 import Button from '../Button'
@@ -21,8 +20,8 @@ export const WhatsappButton = ({ onPress }) => (
   </View>
 )
 
-export const TelegramButtom = ({ onPress }) => (
-  <View style={styles}>
+export const TelegramButton = ({ onPress, style }) => (
+  <View style={[styles, style]}>
     <Button color="#0088cc" onPress={onPress}>
       <FontAwesome5 name="telegram-plane" size={24} color="white" />
     </Button>

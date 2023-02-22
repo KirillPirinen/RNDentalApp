@@ -3,7 +3,7 @@ import { Path, Text, TSpan } from "react-native-svg"
 import { StyleSheet } from 'react-native'
 import { toothFillColors } from '../../styles/teeth'
 
-export const Tooth = ({ paths, x, y, toothNo, onPress, selected, scale, record }) => {
+export const Tooth = ({ paths, x, y, toothNo, onPress, selected, scale, isTreated, toothState }) => {
   return (
     <>
       {paths.map((path, index) => <Path scale={scale} onPress={onPress?.(toothNo)} 
@@ -11,8 +11,8 @@ export const Tooth = ({ paths, x, y, toothNo, onPress, selected, scale, record }
         d={path} 
         style={[
           styles.pathStyle, 
-          toothFillColors[record?.toothState],
-          record?.isTreated && toothFillColors.treated, 
+          toothFillColors[toothState],
+          isTreated && toothFillColors.treated, 
           selected && toothFillColors.selected,
         ]}
       />)}

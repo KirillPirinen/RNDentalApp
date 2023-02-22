@@ -1,8 +1,8 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 import { Appbar, useTheme, IconButton } from 'react-native-paper'
 import { StatusBar } from 'react-native'
 import { HeaderMenu } from './HeaderMenu'
-import { useModalContent } from '../context/modal-context'
+import { useModalContent } from '../context/general-context'
 import { getStatusBarStyle } from '../utils/getStatusBarStyle'
 
 const AppHeader = ({ navigation, options: { menu, headerTitle }, route, style }) => {

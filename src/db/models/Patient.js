@@ -2,8 +2,8 @@ import { Model } from '@nozbe/watermelondb'
 import { text, writer, children, field, lazy } from '@nozbe/watermelondb/decorators'
 import { phoneSanitazer } from '../../utils/sanitizers'
 import { Q } from '@nozbe/watermelondb'
-import { switchMap } from 'rxjs/operators'
 import { defaultUpdater } from '../../utils/defaultFn'
+import * as FileSystem from 'expo-file-system';
 
 export default class Patient extends Model {
   static table = 'patients'
@@ -12,6 +12,7 @@ export default class Patient extends Model {
     appointments: { type: 'has_many', foreignKey: 'patient_id' },
     formulas: { type: 'has_many', foreignKey: 'patient_id' },
     phones: { type: 'has_many', foreignKey: 'patient_id' },
+    files: { type: 'has_many', foreignKey: 'patient_id' },
   }
   
   @text('full_name') fullName
@@ -22,6 +23,11 @@ export default class Patient extends Model {
   @children('phones') phones
   @children('appointments') appointments
   @children('formulas') formulas
+  @children('files') files
+
+  @lazy sortedFiles = this.files.extend(
+    Q.sortBy('created_at', Q.desc)
+  )
 
   @lazy teeth = this.collections.get('teeth').query(
     Q.on('formulas', 'patient_id', this.id)
@@ -37,6 +43,10 @@ export default class Patient extends Model {
 
   get separateNames () {
     return this.fullName.split(' ')
+  }
+
+  get filesPath () {
+    return `${FileSystem.documentDirectory}${this.id}/`
   }
 
   @writer async updateInstance(fields, phones) {

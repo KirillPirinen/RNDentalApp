@@ -19,7 +19,7 @@ const defaultTextsResolvers = {
 
 export const ConfirmDeleteCommon = ({ 
   __visible, 
-  __defaultHandlers, 
+  __defaultProps, 
   mode,
   ...rest 
 }) => {
@@ -27,7 +27,7 @@ export const ConfirmDeleteCommon = ({
   return (
     <ConfirmDelete
       visible={__visible}
-      onClose={__defaultHandlers.current.clear}
+      onClose={__defaultProps.clear}
       {...defaultProps}
       {...rest}
     />

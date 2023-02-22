@@ -1,7 +1,9 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb'
+import { DEFAULT_SETTINGS } from '../../consts/index.js'
+import { insertSettings } from '../raw-queries.js'
 
 export default appSchema({
-  version: 2,
+  version: 1,
   tables: [
     tableSchema({
       name: 'patients',
@@ -69,5 +71,34 @@ export default appSchema({
         { name: 'tooth_id', type: 'string', isIndexed: true }
       ]
     }),
-  ]
+    tableSchema({
+      name: 'settings',
+      columns: [
+        { name: 'name', type: 'string' },
+        { name: 'value', type: 'string' }
+      ],
+      unsafeSql: sql => sql.replace('"name"', '"name" NOT NULL UNIQUE')
+    }),
+    tableSchema({
+      name: 'files',
+      columns: [
+        { name: 'patient_id', type: 'string', isIndexed: true },
+        { name: 'name', type: 'string' },
+        { name: 'type', type: 'string' },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' }
+      ],
+    }),
+  ],
+  unsafeSql: (sql, kind) => {
+    switch (kind) {
+      case 'setup':
+        return sql + insertSettings(DEFAULT_SETTINGS)
+      case 'create_indices':
+      case 'drop_indices':
+        return sql
+      default:
+        throw new Error('unexpected unsafeSql kind')
+    }
+  },
 })

@@ -7,16 +7,16 @@ const homeTabs = Object.values(TabsName)
 
 export const Info = ({ 
   __visible, 
-  __defaultHandlers, 
+  __defaultProps, 
   color,
   action,
   text,
   ...rest
 }) => {
-  const routeName = __defaultHandlers.current.navigation.getCurrentRoute().name
+  const routeName = __defaultProps.navigation.getCurrentRoute().name
   const __action = action || {
     label: 'Cкрыть',
-    onPress: __defaultHandlers.current.clear
+    onPress: __defaultProps.clear
   }
   const theme = useTheme()
   
@@ -34,7 +34,7 @@ export const Info = ({
           colorStyle
         ]}
         visible={__visible}
-        onDismiss={rest.onClose || __defaultHandlers.current.clear}
+        onDismiss={rest.onClose || __defaultProps.clear}
         action={__action}>
         {text}
       </Snackbar>

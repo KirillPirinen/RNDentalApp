@@ -1,16 +1,16 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { Portal, useTheme } from 'react-native-paper'
-import { useModalContent, useModal } from '../../context/modal-context'
+import { useModalContent, useGeneralControl } from '../../context/general-context'
 import RegisterContent from '../PortalContent'
 import { useNavigation } from '@react-navigation/native'
 
 export const ContextedPortal = () => {
   const state = useModalContent()
-  const [actions, dispatch] = useModal()
+  const [actions, dispatch] = useGeneralControl()
   const navigation = useNavigation()
   const theme = useTheme()
 
-  const __defaultHandlers = useRef({
+  const __defaultProps = useRef({
     hide: dispatch.bind(null, { type: actions.HIDE }),
     clear: dispatch.bind(null, { type: actions.CLEAR }),
     dispatch,
@@ -19,20 +19,13 @@ export const ContextedPortal = () => {
   })
 
   const Content = RegisterContent[state?.as]
-  
-  // useEffect(() => {
-  //   if(Content) {
-  //     StatusBar.setBackgroundColor('#000000', true)
-  //   }
-  //   return () => StatusBar.setBackgroundColor(theme.colors.primary, true)
-  // }, [Content])
 
   return (
     <Portal>
         {Content && <Content 
           {...state.props || {}}
           __visible={state.__visible}
-          __defaultHandlers={__defaultHandlers}
+          __defaultProps={__defaultProps.current}
         />}
     </Portal>
   )

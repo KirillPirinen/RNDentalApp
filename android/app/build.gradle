@@ -200,6 +200,9 @@ android {
                 }
             }
         }
+        packagingOptions {
+            pickFirst '**/libc++_shared.so'
+        }
     }
 
     splits {
@@ -251,6 +254,12 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
+    //fileViewer
+    implementation project(':react-native-file-viewer')
+
+    //watermelondb
+    implementation project(':watermelondb-jsi')
+    
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 

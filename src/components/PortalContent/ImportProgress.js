@@ -1,15 +1,15 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
-import { Button, Modal, Text, ProgressBar } from 'react-native-paper'
+import { Button, Modal, Text, ActivityIndicator } from 'react-native-paper'
 import { createPatient } from '../../db/actions'
 
 export const ImportProgress = ({ 
   __visible, 
-  __defaultHandlers,
+  __defaultProps,
   choosed,
   onDone
 }) => {
-  
+
   const container = useRef({
     success: 0,
     fail: 0,
@@ -17,33 +17,28 @@ export const ImportProgress = ({
     failedIndexes: []
   }).current
 
-  const [progress, setProgress] = useState(0)
+  const [done, setDone] = useState(false)
   const hasErrors = Boolean(container.failedIndexes.length)
 
-  let done = false
-
-  if(container.total === choosed.length) {
-    done = true
-  }
-
   useEffect(() => {
-    const step = 1 / choosed.length
-    choosed.reduce(async (prev, contact, index) => {
-      try {
-        await prev
-        container.success++
-      } catch(e) {
-        container.failedIndexes.push(index - 1)
-      } finally {
-        container.total++
-        setProgress(prev => prev + step)
-        return createPatient(contact)
-      }
-    }, Promise.resolve())
+    const timer = setTimeout(() => {
+      Promise.all(choosed.reduce(async (prev, contact, index) => {
+        try {
+          await prev
+          container.success++
+        } catch(e) {
+          container.failedIndexes.push(index - 1)
+        } finally {
+          container.total++
+          return createPatient(contact)
+        }
+      }, Promise.resolve()).then(() => setDone(true)))
+    }, 500)
+    return () => clearTimeout(timer)
   }, [])
 
   const onExit = done && function () {
-    __defaultHandlers.current.clear()
+    __defaultProps.clear()
     onDone()
   }
 
@@ -54,19 +49,22 @@ export const ImportProgress = ({
       visible={__visible} 
       contentContainerStyle={styles.modal}
     > 
-      <ProgressBar progress={progress} color={hasErrors ? '#ffcc00' : '#339900'} />
-      <Text>Успешно добавлено: {`${container.success} из ${choosed.length}`} </Text>
-      {done && hasErrors && (
+      {done ? (
         <>
-          <Text>Данные контакты импортированы с ошибками:</Text>
-          <ScrollView>
-            {container.failedIndexes.map(index => {
-              return (<Text key={index}>{choosed[index].name}</Text>)
-            })}
-          </ScrollView>
+          <Text variant="bodyLarge">Успешно добавлено: {`${container.success} из ${choosed.length}`} </Text>
+          {hasErrors && (
+            <>
+              <Text variant="bodyLarge">Данные контакты импортированы с ошибками:</Text>
+              <ScrollView>
+                {container.failedIndexes.map(index => {
+                  return (<Text key={index}>{choosed[index].name}</Text>)
+                })}
+              </ScrollView>
+            </>
+          )}
+          <Button onPress={onExit}>Выйти</Button>
         </>
-      )}
-      {done && <Button onPress={onExit}>Выйти</Button>}
+      ): <ActivityIndicator size="large" color={__defaultProps.theme.colors.primary} />}
     </Modal>
   ) 
 

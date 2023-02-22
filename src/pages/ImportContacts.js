@@ -4,7 +4,7 @@ import { useContacts } from '../utils/custom-hooks/useContacts'
 import { Container, Autocomplete, FAB, EmptyList } from '../components'
 import { List, Divider} from 'react-native-paper'
 import { defaultExtractor } from '../utils/defaultFn'
-import { useModal } from '../context/modal-context'
+import { useGeneralControl } from '../context/general-context'
 import { useForceUpdate } from '../utils/custom-hooks/useForceUpdate'
 import { useSafeRefCB } from '../utils/custom-hooks/useSafeRef'
 import { useToggle } from '../utils/custom-hooks/useToggle'
@@ -67,36 +67,33 @@ const renderItem = ({ item }) => <Item item={item} checked={item.checked} />
 const renderSeparator = () => <Divider bold />
 
 const ImportContacts = ({ navigation }) => {
-    const [isUnique, setUnique] = useToggle(true)
-    const [status, contacts] = useContacts(isUnique)
-    const [actions, dispatch] = useModal()
+  const [isUnique, setUnique] = useToggle(true)
+  const [status, contacts] = useContacts(isUnique)
+  const [actions, dispatch] = useGeneralControl()
 
-    useEffect(() => {
-      navigation.setOptions({
-        menu: [
-        { 
-          type: 'TouchableCheckbox', 
-          title: 'Скрыть добавленные', 
-          onPress: setUnique,
-          value: isUnique
-        }
-      ]
-      })
-    }, [])
+  useEffect(() => {
+    navigation.setOptions({
+      menu: [
+      { 
+        type: 'TouchableCheckbox', 
+        title: 'Скрыть добавленные', 
+        onPress: setUnique,
+        value: isUnique
+      }
+    ]
+    })
+  }, [isUnique])
 
-    const onChange = (query) => 
-      contacts.filter(contact => contact.name.toLowerCase().includes(query))
-    
-    const onSubmit = () => {
-      const choosed = contacts.filter(contact => contact.checked)
-      const onDone = () => navigation.popToTop()
-
-      dispatch({ type: actions.IMPORT_PROGRESS, payload: { 
-        choosed,
-        onDone
-      }})
-
-    }
+  const onChange = (query) => 
+    contacts.filter(contact => contact.name.toLowerCase().includes(query))
+  
+  const onSubmit = () => {
+    const choosed = contacts.filter(contact => contact.checked)
+    dispatch({ type: actions.IMPORT_PROGRESS, payload: { 
+      choosed,
+      onDone: navigation.popToTop
+    }})
+  }
   
   const buttonControls = useSafeRefCB()
 

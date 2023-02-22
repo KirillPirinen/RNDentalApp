@@ -1,10 +1,14 @@
-import React, { forwardRef, useState, useImperativeHandle, useEffect, useCallback, useRef } from 'react'
+import { forwardRef, useState, useImperativeHandle, useEffect } from 'react'
 import { StyleSheet } from 'react-native'
 import { AnimatedFAB } from 'react-native-paper'
+import { useSettings } from '../context/general-context/index.js'
 
 export const FAB = forwardRef(({ onPress, label, style }, ref) => {
   const [visible, setVisible] = useState(true)
   const [expanded, setExpanded] = useState(false)
+  const { activityButton } = useSettings()
+
+  const expandable = activityButton.helperText
 
   useImperativeHandle(ref, () => setVisible)
 
@@ -20,11 +24,11 @@ export const FAB = forwardRef(({ onPress, label, style }, ref) => {
 
   return (
       <AnimatedFAB
-        icon={expanded ? 'plus': 'arrow-expand-left'}
+        icon={!expandable || expanded ? 'plus': 'arrow-expand-left'}
         label={expanded ? label : ''}
-        extended={expanded}
-        onPress={expanded ? onPress : __onPress}
-        onLongPress={() => setExpanded(false)}
+        extended={expandable && expanded}
+        onPress={!expandable || expanded ? onPress : __onPress}
+        onLongPress={expandable ? () => setExpanded(false) : undefined}
         visible={visible}
         animateFrom={'right'}
         iconMode={'dynamic'}

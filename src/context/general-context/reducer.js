@@ -7,15 +7,19 @@ export default (state, action) => {
       if(action.payload?.length) {
         return {
           ...state,
-          settings: action.payload.reduce((acc, setting) => {
-            acc[setting.name] = setting.value
-            return acc
-          }, {})
+          settings: {
+            ...state.settings, 
+            ...action.payload.reduce((acc, setting) => {
+              acc[setting.name] = setting.value
+              return acc
+            }, {})
+          }
         }
       }
       return state
     }
 
+    case actions.ABOUT_INFO:
     case actions.INFO:
     case actions.CHOOSE_TEETH:
     case actions.IMPORT_PROGRESS:

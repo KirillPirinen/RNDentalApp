@@ -27,7 +27,7 @@ export const getPatientRelationsBatches = ({ patientId, phones }) => {
       formula.hasBabyJaw = false
     }),
     ...(phones?.map(phone => database.get('phones').prepareCreate(instance => {
-      instance.patientId = newPatientId
+      instance.patientId = patientId
       instance.number = phoneSanitazer(phone.number)
       instance.isPrimary = Boolean(phone.isPrimary)
     })) || [])

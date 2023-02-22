@@ -4,6 +4,7 @@ import { ImportProgress } from './ImportProgress'
 import { Info } from './Info'
 import { ChooseTemplate } from './ChooseTemplate'
 import { ChooseTeeth } from './ChooseTeeth'
+import { AboutInfo } from './AboutInfo'
 
 export default {
   ChooseAddPatientMethod,
@@ -11,5 +12,6 @@ export default {
   ImportProgress,
   Info,
   ChooseTemplate,
-  ChooseTeeth
+  ChooseTeeth,
+  AboutInfo
 }

@@ -1,5 +1,3 @@
-import * as FileSystem from 'expo-file-system';
-
 export const toothStates = {
   pulpitis: 'pulpitis',
   caries: 'caries',
@@ -23,7 +21,6 @@ export const TAG_REGEX = /\[\-(.*?)\-]/
 
 export const DEFAULT_SETTINGS = {
   trackingInterval: { from: 0, to: 14, unconfirmed: true },
-  teethColorFill: { statusLocalis: true, history: true }
+  teethColorFill: { statusLocalis: true, history: true },
+  activityButton: { helperText: true }
 }
-
-//export const PATIENT_FILES_DIR = 

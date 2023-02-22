@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { View, Linking, StyleSheet, useWindowDimensions } from 'react-native'
 import withObservables from '@nozbe/with-observables'
 import { Text, useTheme } from 'react-native-paper'
-import { Button, FAB, PhonesList, CallButton, WhatsappButton, TelegramButtom, ButtonRowPanel } from '../../components'
+import { Button, FAB, PhonesList, CallButton, WhatsappButton, TelegramButton, ButtonRowPanel } from '../../components'
 import { useGeneralControl } from '../../context/general-context'
 import { useFabControlsRef } from '../../utils/custom-hooks/useSafeRef'
 import { getPrimaryPhoneNumber } from '../../utils/getPrimaryPhoneNumber'
@@ -144,7 +144,7 @@ const PatientDetail = ({ navigation, patient, phones }) => {
             </View>
             <CallButton onPress={onCall} />
             {patient.hasWhatsapp && <WhatsappButton onPress={onSendMessage('whatsapp')} />}
-            {patient.hasTelegram && <TelegramButtom onPress={onSendMessage('telegram')} />}
+            {patient.hasTelegram && <TelegramButton onPress={onSendMessage('telegram')} />}
           </View>
         </View>
          <TabView

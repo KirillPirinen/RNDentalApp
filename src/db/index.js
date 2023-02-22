@@ -19,8 +19,4 @@ const database = new Database({
   modelClasses,
 })
 
-adapter.initializingPromise.then(() => {
-  console.log(adapter)
-})
-
 export default database

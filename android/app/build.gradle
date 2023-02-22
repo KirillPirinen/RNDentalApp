@@ -254,6 +254,9 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
+    //fileViewer
+    implementation project(':react-native-file-viewer')
+
     //watermelondb
     implementation project(':watermelondb-jsi')
     

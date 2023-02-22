@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { Portal, useTheme } from 'react-native-paper'
 import { useModalContent, useGeneralControl } from '../../context/general-context'
 import RegisterContent from '../PortalContent'

@@ -1,4 +1,4 @@
-import { Image, View, StyleSheet, Dimensions, ScrollView, Pressable, Text } from 'react-native';
+import { View, StyleSheet, Dimensions, ScrollView, Pressable } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { usePatientFiles } from '../../../utils/custom-hooks/usePatientFiles';
 import { useFilesPicker } from '../../../utils/custom-hooks/useFilesPicker';
@@ -7,7 +7,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { SegmentedButtons } from 'react-native-paper';
 import { types } from 'react-native-document-picker'
 import plural from 'plural-ru';
-import { getExtension, parseFileName } from '../../../utils/fileHelpers.js';
+import { ImagePreviewCard } from '../../../components'
+import FileViewer from 'react-native-file-viewer';
+import { useGeneralControl } from '../../../context/general-context/index.js';
 
 const width = Dimensions.get('window').width
 
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
   },
   smoke: {
     display: 'none',
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
     zIndex: 100,
     position: 'absolute',
     top: 0,
@@ -98,14 +100,11 @@ const selectButtons = (count) => [
   }
 ]
 
-const stubMap = {
-  pdf: <MaterialCommunityIcons name='file-pdf-box' size={imageWidth / 2} color="red" />
-}
-
 const FilesTab = ({ patient }) => {
+  const [actions, dispatch] = useGeneralControl()
   const { files, addFiles, dirPath, removeFiles } = usePatientFiles(patient);
   const [{ isEdit, selectedImages, count }, setSelected] = useState(defaultState)
-  const pickFiles = useFilesPicker([types.doc, types.docx, types.images, types.pdf])
+  const pickFiles = useFilesPicker([types.xls, types.xlsx, types.doc, types.docx, types.images, types.pdf])
 
   const pickFromLibrary = async () => {
     const res = await pickFiles()
@@ -145,12 +144,23 @@ const FilesTab = ({ patient }) => {
     }
   }
 
+  const onOpen = (uri, type) => FileViewer.open(uri, { showOpenWithDialog: true }).catch(error => {
+    dispatch({ 
+      type: actions.INFO,
+      payload: { 
+        text: `На устройстве не найдено приложение для открытия типа ${type}`,
+        color: 'errorContainer'
+      }
+    })
+  })
+
   const [buttons, setButtons] = useState(null)
 
   useEffect(() => {
     if(count) {
       return setButtons(selectButtons(count))
-    } 
+    }
+    setSelected(defaultState)
     setButtons(null)
   }, [count])
 
@@ -169,16 +179,21 @@ const FilesTab = ({ patient }) => {
       <ScrollView>
         {!buttons && <SegmentedButtons onValueChange={onButtonPanelPress} buttons={addButtons} style={styles.buttonsPanel} />}
         <View style={styles.imagesWrapper}>
-          {files.map(({ name, id, type }) => {
-            const image = stubMap[type] || <Image source={{ uri: `${dirPath}${name}` }} style={styles.image} />
+          {files.map(({ name, id, type, uri }) => {
             return (
               <Pressable
                 key={id}
-                onPress={() => toggleSelect(id)}
+                onPress={() => isEdit ? toggleSelect(id) : onOpen(uri, type)}
                 onLongPress={() => toggleEdit(id)}
                 style={styles.imagePressableArea}
                 >
-                {image}
+                <ImagePreviewCard 
+                  name={name} 
+                  type={type} 
+                  uri={uri} 
+                  style={styles.image}
+                  size={imageWidth / 2.5}
+                />
                 <View style={[styles.smoke, selectedImages[id] && { display: 'flex' }]}>
                   <MaterialCommunityIcons name='check-circle' size={imageWidth / 2} color="white" />
                 </View>

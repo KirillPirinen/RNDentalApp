@@ -13,7 +13,7 @@ export const Appointment = ({ onLongPress, patient, appointment, status, childre
   return (
     <TouchableHighlight onLongPress={onLongPress}>
       <View style={[styles.groupItem, { backgroundColor }]}>
-        <Avatar fullName={patient.fullName} />
+        <Avatar fullName={patient.fullName} src={patient.avatar} />
         <View style={{ flex: 1 }}>
           <Text style={styles.fullName}>{patient.fullName}</Text>
           {Boolean(appointment.notes) && <GrayText>{appointment.notes}</GrayText>}

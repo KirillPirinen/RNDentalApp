@@ -1,7 +1,7 @@
 import database from '..'
 import { phoneSanitazer } from '../../utils/sanitizers'
 
-export const getPatientBatches = ({ phones, fullName, id }) => {
+export const getPatientBatches = ({ phones, fullName, id, image }) => {
 
   let patientId
 
@@ -11,6 +11,10 @@ export const getPatientBatches = ({ phones, fullName, id }) => {
       patient.hasWhatsapp = true
       patient.hasTelegram = true
       patient.contactId = id
+
+      if(image?.uri) {
+        patient.avatar = image.uri
+      }
 
       patientId = patient.id
     }),

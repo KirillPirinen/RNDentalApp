@@ -4,6 +4,7 @@ import styles from './styles'
 import { TeethColorFill } from './TeethColorFill.js'
 import { ActivityButton } from './ActivityButton.js'
 import { useGeneralControl } from '../../context/general-context/index.js'
+import { Sync } from './Sync.js'
 
 const Settings = ({ navigation }) => {
   const [actions, dispatch] = useGeneralControl()
@@ -18,6 +19,7 @@ const Settings = ({ navigation }) => {
       </List.Accordion>
       <TrackingInterval />
       <TeethColorFill />
+      <Sync />
       <ActivityButton />
       <Button onPress={() => dispatch({ type: actions.ABOUT_INFO })}>О приложении</Button>
     </List.Section>

@@ -13,13 +13,24 @@ import { querySanitazer } from '../utils/sanitizers'
 import { defaultExtractor } from '../utils/defaultFn.js'
 import { useGeneralControl } from '../context/general-context'
 import { getScheduledPatiens } from '../db/raw-queries.js'
+import { HighlightedText } from '../components/ HighlightedText.js'
+import { PatientPhones } from '../components/PatientPhones.js'
 
 const onSearch = (db) => async (query) => {
   const sanitized = querySanitazer(query)
+
+  if(/^\d/.test(query)) {
+    const res = await db.get('patients').query(
+      Q.experimentalJoinTables(['phones']),
+      Q.on('phones', 'number', Q.like(`%${sanitized}%`))
+    ).fetch()
+    return res
+  }
+
   return db.get('patients').query(Q.where('full_name', Q.like(`%${sanitized}%`)))
 }
 
-const renderList = ({ result, onChoose, db }) => {
+const renderList = ({ result, onChoose, db, searchQuery }) => {
   const navigation = useNavigation()
   const theme = useTheme()
   const [actions, dispatch] = useGeneralControl()
@@ -49,13 +60,6 @@ const renderList = ({ result, onChoose, db }) => {
     }
   })
 
-  const renderItem = useCallback(({ item }) => <Patient
-    theme={theme}
-    patient={item}
-    onPress={() => onChoose(item)}
-    onLongPress={() => navigation.navigate('Detail', { patient: item })}
-  />, [onChoose])
-
   const isSearching = Boolean(result)
   const hasSuggestions = Boolean(suggestions.length)
 
@@ -63,7 +67,18 @@ const renderList = ({ result, onChoose, db }) => {
     <FlatList
       data={isSearching ? result : suggestions}
       keyExtractor={defaultExtractor}
-      renderItem={renderItem}
+      renderItem={({ item }) => (
+        <Patient 
+          patient={item} 
+          navigation={navigation} 
+          theme={theme}
+          renderName={(name) => <HighlightedText text={name} query={searchQuery} />}
+          onPress={() => onChoose(item)}
+          onLongPress={() => navigation.navigate('Detail', { patient: item })}
+        >
+          <PatientPhones patient={item} query={searchQuery} />
+        </Patient>
+        )}
       ItemSeparatorComponent={Divider}
       style={{ marginVertical: 12 }}
       ListHeaderComponent={!isSearching && hasSuggestions && <Text variant="titleMedium">Последние запланированные пациенты: </Text>}

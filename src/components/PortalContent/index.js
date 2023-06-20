@@ -5,6 +5,7 @@ import { Info } from './Info'
 import { ChooseTemplate } from './ChooseTemplate'
 import { ChooseTeeth } from './ChooseTeeth'
 import { AboutInfo } from './AboutInfo'
+import { ChooseSync } from './ChooseSync'
 
 export default {
   ChooseAddPatientMethod,
@@ -13,5 +14,6 @@ export default {
   Info,
   ChooseTemplate,
   ChooseTeeth,
-  AboutInfo
+  AboutInfo,
+  ChooseSync
 }

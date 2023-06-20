@@ -65,3 +65,9 @@ export const insertSettings = (object) => {
 export const findById = (id, table) => Q.unsafeSqlQuery(`
   SELECT * FROM "${table}" WHERE id = "${id}";
 `)
+
+// export const getPatientsByPhone = (phone) => Q.unsafeSqlQuery(`
+//   SELECT patients.* 
+//   FROM patients JOIN phones ON patients.id = phones.patient_id 
+//   WHERE phones.number LIKE '%${querySanitazer(phone)}%';
+// `)

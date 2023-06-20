@@ -17,7 +17,7 @@ export const createPatientsBulk = async (contentArray) => {
   return await database.write(async () => await database.batch(batches))
 }
 
-export const createPatient = async ({ fullName, phones, phoneNumbers, name, id }, { withReturn } = {}) => {
+export const createPatient = async ({ fullName, phones, phoneNumbers, name, id, image }, { withReturn } = {}) => {
   const recievedName = fullName || name
   const phonesToBatch = phones || phoneNumbers
 
@@ -25,7 +25,8 @@ export const createPatient = async ({ fullName, phones, phoneNumbers, name, id }
     return await database.write(async () => await database.batch(...getPatientBatches({ 
       fullName: recievedName, 
       phones: phonesToBatch, 
-      id 
+      id,
+      image
     })))
   }
 
@@ -36,6 +37,7 @@ export const createPatient = async ({ fullName, phones, phoneNumbers, name, id }
       patient.hasWhatsapp = true
       patient.hasTelegram = true
       patient.contactId = id
+      patient.avatar = image?.uri
     })
 
     await database.batch(...getPatientRelationsBatches({ 

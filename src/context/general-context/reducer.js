@@ -19,6 +19,7 @@ export default (state, action) => {
       return state
     }
 
+    case actions.CHOOSE_SYNC:
     case actions.ABOUT_INFO:
     case actions.INFO:
     case actions.CHOOSE_TEETH:

@@ -38,7 +38,7 @@ export default ({ placeholder, renderList, onChange, initState, ...rest }) => {
         onChangeText={onChangeSearch}
         value={searchQuery}
       />
-      <Output {...rest} result={result} />
+      <Output {...rest} result={result} searchQuery={searchQuery} />
     </View>
   )
 }

@@ -17,10 +17,17 @@ export const APPOINTMENT_STATUS = {
   ended: 'ended'
 }
 
+export const CONTACT_SYNC_STRATEGY = {
+  ask: 'ask',
+  never: 'never',
+  always: 'always'
+}
+
 export const TAG_REGEX = /\[\-(.*?)\-]/
 
 export const DEFAULT_SETTINGS = {
   trackingInterval: { from: 0, to: 14, unconfirmed: true },
   teethColorFill: { statusLocalis: true, history: true },
-  activityButton: { helperText: true }
+  activityButton: { helperText: true },
+  sync: { contactStrategyType: CONTACT_SYNC_STRATEGY.ask }
 }

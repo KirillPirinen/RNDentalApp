@@ -10,7 +10,7 @@ export const useContacts = (isUnique) => {
 
   const setContactsFiltered = (status) => {
     
-    if(isUnique) {
+    if (isUnique) {
       return setContacts([status, savedContacts.data.filter((contact) => !hashPatients[contact.id])])
     }
 
@@ -37,9 +37,12 @@ export const useContacts = (isUnique) => {
         savedContacts = await Contacts.getContactsAsync({
           fields: [
             Contacts.Fields.PhoneNumbers,
+            Contacts.Fields.ImageAvailable,
+            Contacts.Fields.Image,
+            Contacts.Fields.id,
           ],
         })
-
+        
       }
 
       setContactsFiltered(status)

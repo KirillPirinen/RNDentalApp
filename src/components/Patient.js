@@ -4,7 +4,16 @@ import { Surface } from 'react-native-paper'
 import { Avatar } from './Avatar'
 import { memo } from 'react'
 
-export const Patient = ({ patient, onLongPress, onPress, navigation, theme, style }) => {
+export const Patient = ({ 
+  patient, 
+  onLongPress, 
+  onPress, 
+  navigation, 
+  theme, 
+  style, 
+  children,
+  renderName
+}) => {
   const __onPress = onPress || function () { navigation?.navigate('Detail', { patient }) }
 
   return (
@@ -21,9 +30,11 @@ export const Patient = ({ patient, onLongPress, onPress, navigation, theme, styl
             style={{ marginRight: 16 }} 
             size={40} 
             fullName={patient.fullName}
+            src={patient.avatar}
           />
           <View style={{ flex: 1 }}>
-            <Text style={styles.fullName}>{patient.fullName}</Text>
+            {renderName?.(patient.fullName) ?? <Text style={styles.fullName}>{patient.fullName}</Text>}
+            {children}
           </View>
         </Surface>
       </TouchableHighlight>

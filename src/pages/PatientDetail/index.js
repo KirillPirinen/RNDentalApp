@@ -3,13 +3,15 @@ import { View, Linking, StyleSheet, useWindowDimensions } from 'react-native'
 import withObservables from '@nozbe/with-observables'
 import { Text, useTheme } from 'react-native-paper'
 import { Button, FAB, PhonesList, CallButton, WhatsappButton, TelegramButton, ButtonRowPanel } from '../../components'
-import { useGeneralControl } from '../../context/general-context'
+import { useGeneralControl, useSettings } from '../../context/general-context'
 import { useFabControlsRef } from '../../utils/custom-hooks/useSafeRef'
 import { getPrimaryPhoneNumber } from '../../utils/getPrimaryPhoneNumber'
 import AppointmentsListTab from './TabsContent/AppointmentsListTab'
 import FilesTab from './TabsContent/FilesTab'
 
 import { TabView, TabBar } from 'react-native-tab-view';
+
+import { CONTACT_SYNC_STRATEGY } from '../../consts/index.js'
 
 const tabs = [
   { key: 0, title: 'Записи' },
@@ -18,10 +20,26 @@ const tabs = [
 
 const PatientDetail = ({ navigation, patient, phones }) => {
   const [actions, dispatch] = useGeneralControl()
+  const { sync } = useSettings()
   const layout = useWindowDimensions();
   const theme = useTheme()
   const [collapsed, setCollapsed] = useState(true)
   
+  useEffect(() => {
+    if(patient?.contactId && sync.contactStrategyType !== CONTACT_SYNC_STRATEGY.never) {
+      patient.getSyncBatches().then(batches => {
+        if(sync.contactStrategyType === CONTACT_SYNC_STRATEGY.ask && batches?.length) {
+          return dispatch({ type: actions.CHOOSE_SYNC, payload: {
+            onSync: () => patient.syncWithContact(batches).finally(() => {
+              dispatch({ type: actions.CLEAR })
+            })
+          }})
+        }
+        patient.syncWithContact(batches)
+      })
+    }
+  }, [patient?.contactId])
+
   const onDeletePatient = () => patient.deleteInstance().then(() => {
     dispatch({ type: actions.CLEAR })
     navigation.popToTop()

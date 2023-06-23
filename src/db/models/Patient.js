@@ -4,8 +4,8 @@ import { phoneSanitazer } from '../../utils/sanitizers'
 import { Q } from '@nozbe/watermelondb'
 import { defaultUpdater } from '../../utils/defaultFn'
 import * as FileSystem from 'expo-file-system';
-
 import * as Contacts from 'expo-contacts'
+import { allSettledWithSummary } from '../../utils/allSettledWithSummary'
 
 export default class Patient extends Model {
   static table = 'patients'
@@ -99,7 +99,7 @@ export default class Patient extends Model {
 
     const batches = []
 
-    if(this.fullName !== name || (image?.uri && this.avatar !== image?.uri)) {
+    if (this.fullName !== name || (image?.uri && this.avatar !== image?.uri)) {
       batches.push(this.prepareUpdate(defaultUpdater({ fullName: name, avatar: image?.uri })))
     }
 
@@ -119,5 +119,17 @@ export default class Patient extends Model {
   @writer async syncWithContact(batches) {
     const syncBatches = batches ?? await this.getSyncBatches()
     await this.batch(...syncBatches)
+  }
+
+  async exportFiles(dir, files) {
+    const resFiles = files ?? await this.files.fetch()
+
+    if (resFiles.length === 0) return 
+
+    const { granted, directoryUri } = dir ? { granted: true, directoryUri: dir } : await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+
+    if (granted) {
+      return await allSettledWithSummary(resFiles.map(file => file.copyTo(directoryUri, `${this.fullName}_`)))
+    }
   }
 }

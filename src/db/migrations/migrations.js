@@ -1,7 +1,5 @@
-import { addColumns, schemaMigrations, unsafeExecuteSql } from '@nozbe/watermelondb/Schema/migrations'
-import { insertSettings } from '../raw-queries.js'
-import { DEFAULT_SETTINGS } from '../../consts/index.js'
-import { addSetting } from '../utils/addSetting.js'
+import { addColumns, schemaMigrations } from '@nozbe/watermelondb/Schema/migrations'
+import { addSetting } from '../utils/addSetting'
 
 export default schemaMigrations({
   migrations: [

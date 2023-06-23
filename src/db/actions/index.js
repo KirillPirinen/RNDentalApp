@@ -1,5 +1,6 @@
 import database from '..'
-import { getPatientBatches, getPatientRelationsBatches } from '../utils/batches.js'
+import { getPatientBatches, getPatientRelationsBatches } from '../utils/batches'
+import * as FileSystem from 'expo-file-system';
 
 export const updateTeethState = async (id) => {
   await database.write(async () => {
@@ -114,3 +115,59 @@ export const createFile = async ({ name, type, patientId }) => {
   )
 }
 
+export const exportPatiensFiles = async () => {
+  const patients = await database.get('patients').query().fetch()
+  
+  const { granted, directoryUri } = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync()
+  
+  if (!granted) return
+
+  const container = {
+    success: 0,
+    fail: 0,
+    total: 0,
+    failedValues: []
+  }
+
+  for (let i = 0; i < patients.length; i++) {
+    const patient = patients[i]
+    const summary = await patient.exportFiles(directoryUri)
+
+    if (summary) {
+      const { rejected, fulfilled } = summary
+      container.total += rejected + fulfilled
+      container.success += fulfilled
+      container.fail += rejected
+
+      rejected && container.failedValues.push(patient.fullName)
+    }
+    
+  }
+
+  return container
+}
+
+export const importContacts = async (choosed) => {
+  const container = {
+    success: 0,
+    fail: 0,
+    total: 0,
+    failedValues: []
+  }
+
+  for (let i = 0; i < choosed.length; i++) {
+    const contact = choosed[i]
+
+    try {
+      await createPatient(contact)
+      container.success++
+    } catch(e) {
+      container.failedValues.push(contact.name)
+    } finally {
+      container.total++
+    }
+
+  }
+
+  return container
+}

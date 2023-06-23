@@ -1,7 +1,7 @@
 import { IconButton, Text, TextInput } from 'react-native-paper'
 import { StyleSheet, View } from 'react-native'
 import { useEffect, useState } from 'react'
-import { useToggle } from '../../utils/custom-hooks/useToggle.js'
+import { useToggle } from '../../utils/custom-hooks/useToggle'
 
 export const ToothNotesInput = ({ notes, onSubmit }) => {
   const [active, toggleActive] = useToggle(false)

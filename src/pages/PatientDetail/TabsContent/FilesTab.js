@@ -4,12 +4,14 @@ import { usePatientFiles } from '../../../utils/custom-hooks/usePatientFiles';
 import { useFilesPicker } from '../../../utils/custom-hooks/useFilesPicker';
 import { useCallback, useEffect, useState, memo } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { SegmentedButtons } from 'react-native-paper';
+import { SegmentedButtons, Text } from 'react-native-paper';
 import { types } from 'react-native-document-picker'
 import plural from 'plural-ru';
 import { ImagePreviewCard } from '../../../components'
 import FileViewer from 'react-native-file-viewer';
-import { useGeneralControl } from '../../../context/general-context/index.js';
+import { useGeneralControl } from '../../../context/general-context/index';
+import * as FileSystem from 'expo-file-system';
+import { getSummaryExportText } from '../../../utils/getSummaryExportText';
 
 const width = Dimensions.get('window').width
 
@@ -59,15 +61,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   buttonsPanel: {
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   button: {
     backgroundColor: 'white',
     flexShrink: 1,
-    borderRadius:0,
-    minWidth: '12%',
-    borderWidth: 0
-  }
+    borderRadius: 0,
+    minWidth: '8%',
+    borderWidth: 0.5
+  },
+  selectActionButtonPanel: { justifyContent: 'flex-start', alignItems: 'center' },
+  selectedText: { paddingVertical: 5 }
 })
 
 const addButtons = [
@@ -85,22 +89,37 @@ const addButtons = [
   }
 ]
 
-const selectButtons = (count) => [
+const selectButtons = [
   {
-    value: 'delete',
-    icon: () => <MaterialCommunityIcons name='delete-alert' size={20} />,
-    label: `Удалить ${count} ${plural(count, 'файл', 'файла', 'файлов')}`,
+    value: 'selectAll',
+    label: 'Выделить все',
+    icon: () => <MaterialCommunityIcons name='check-all' size={20} />,
     style: styles.button
   },
   {
     value: 'cancel',
     label: 'Отменить',
-    icon: () => <MaterialCommunityIcons name='debug-step-over' size={20} />,
+    icon: () => <MaterialCommunityIcons name='cancel' size={20} />,
     style: styles.button
-  }
+  },
 ]
 
-const FilesTab = ({ patient }) => {
+const actionsButtons = [
+  {
+    value: 'delete',
+    icon: () => <MaterialCommunityIcons name='delete-alert' size={20} />,
+    label: 'Удалить',
+    style: styles.button
+  },
+  {
+    value: 'export',
+    label: 'Экспорт',
+    icon: () => <MaterialCommunityIcons name='export' size={20} color="blue" />,
+    style: styles.button
+  },
+]
+
+const FilesTab = ({ patient, setCollapsed }) => {
   const [actions, dispatch] = useGeneralControl()
   const { files, addFiles, dirPath, removeFiles } = usePatientFiles(patient);
   const [{ isEdit, selectedImages, count }, setSelected] = useState(defaultState)
@@ -125,9 +144,12 @@ const FilesTab = ({ patient }) => {
   
   const toggleEdit = (id) => {
     if(isEdit) {
-      return setSelected(defaultState)
+      setSelected(defaultState)
+      setCollapsed(true)
+      return
     }
-    setSelected({ isEdit: true, count: 1, selectedImages: {[id]: true }})
+    setSelected({ isEdit: true, count: 1, selectedImages: { [id]: true }})
+    setCollapsed(false)
   }
 
   const toggleSelect = (id) => {
@@ -158,24 +180,65 @@ const FilesTab = ({ patient }) => {
 
   useEffect(() => {
     if(count) {
-      return setButtons(selectButtons(count))
+      return setButtons(selectButtons)
     }
     setSelected(defaultState)
     setButtons(null)
+    setCollapsed(true)
   }, [count])
 
   const onButtonPanelPress = useCallback((value) => {
       switch(value) {
         case 'library': return pickFromLibrary()
         case 'camera': return pickImageCamera()
+        case 'selectAll': return setSelected(prev => ({
+          ...prev, 
+          count: files.length, 
+          selectedImages: files.reduce((acc, file) => ((acc[file.id] = true), acc), {})
+        }))
+        case 'export': {
+          return FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync().then(({ granted, directoryUri }) => {
+            if(!granted) return
+
+            const selectedFiles = files.filter((instance) => selectedImages[instance.id])
+
+            patient.exportFiles(directoryUri, selectedFiles)
+              .then((summary) => {
+                const text = getSummaryExportText(summary.fulfilled, summary.rejected)
+                text && dispatch({ 
+                  type: actions.INFO,
+                  payload: { text }
+                })
+              })
+              .catch((e) => {
+                dispatch({ 
+                  type: actions.INFO,
+                  payload: { 
+                    text: `Произошла неизвестная ошибка. Попробуйте выбрать другую директорию`,
+                    color: 'errorContainer'
+                  }
+                })
+              })
+              .finally(() => setSelected(defaultState))
+            
+          });
+        }
         case 'delete': removeFiles(files.filter((instance) => selectedImages[instance.id]))
         case 'cancel': return setSelected(defaultState)
       }
-  }, [selectedImages])
+  }, [selectedImages, patient])
 
   return (
     <View style={styles.tabWrapper}>
-      {buttons && <SegmentedButtons onValueChange={onButtonPanelPress} buttons={buttons} style={styles.buttonsPanel} />}
+      {buttons && (
+        <>
+          <View style={styles.selectActionButtonPanel}>
+            <Text variant='titleSmall' style={styles.selectedText}>{`${plural(count, 'Выделен', 'Выделено')}: ${count} ${plural(count, 'файл', 'файла', 'файлов')}`}</Text>
+            <SegmentedButtons onValueChange={onButtonPanelPress} buttons={selectButtons} style={styles.buttonsPanel} />
+          </View>
+          <SegmentedButtons onValueChange={onButtonPanelPress} buttons={actionsButtons} style={styles.buttonsPanel} />
+        </>
+      )}
       <ScrollView>
         {!buttons && <SegmentedButtons onValueChange={onButtonPanelPress} buttons={addButtons} style={styles.buttonsPanel} />}
         <View style={styles.imagesWrapper}>
@@ -188,7 +251,7 @@ const FilesTab = ({ patient }) => {
                 style={styles.imagePressableArea}
                 >
                 <ImagePreviewCard 
-                  name={name} 
+                  name={name}
                   type={type} 
                   uri={uri} 
                   style={styles.image}
@@ -201,6 +264,7 @@ const FilesTab = ({ patient }) => {
             )
           }
           )}
+          {files?.length === 0 && <Text style={{ marginTop: 12 }}>Файлов нет</Text>}
         </View>
       </ScrollView>
     </View>

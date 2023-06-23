@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 import { useEffect, useState } from 'react'
-import { HighlightedText } from './ HighlightedText.js'
+import { HighlightedText } from './ HighlightedText'
 
 export const PatientPhones = ({ patient, query }) => {
   const [phones, setPhones] = useState('')

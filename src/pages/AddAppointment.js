@@ -10,11 +10,11 @@ import formatRu from '../utils/formatRu'
 import { createAppointment } from '../db/actions'
 import Slider from '@react-native-community/slider'
 import { querySanitazer } from '../utils/sanitizers'
-import { defaultExtractor } from '../utils/defaultFn.js'
+import { defaultExtractor } from '../utils/defaultFn'
 import { useGeneralControl } from '../context/general-context'
-import { getScheduledPatiens } from '../db/raw-queries.js'
-import { HighlightedText } from '../components/ HighlightedText.js'
-import { PatientPhones } from '../components/PatientPhones.js'
+import { getScheduledPatiens } from '../db/raw-queries'
+import { HighlightedText } from '../components/ HighlightedText'
+import { PatientPhones } from '../components/PatientPhones'
 
 const onSearch = (db) => async (query) => {
   const sanitized = querySanitazer(query)

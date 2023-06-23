@@ -1,7 +1,7 @@
 import { forwardRef, useState, useImperativeHandle, useEffect } from 'react'
 import { StyleSheet } from 'react-native'
 import { AnimatedFAB } from 'react-native-paper'
-import { useSettings } from '../context/general-context/index.js'
+import { useSettings } from '../context/general-context/index'
 
 export const FAB = forwardRef(({ onPress, label, style }, ref) => {
   const [visible, setVisible] = useState(true)

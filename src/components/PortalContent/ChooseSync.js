@@ -1,7 +1,7 @@
 import { View, StyleSheet } from 'react-native'
 import { Confirm } from '../Confirm'
 import { Button as PaperButton, Checkbox, Dialog } from 'react-native-paper'
-import { withSetting } from '../../utils/hoc/withSetting.js'
+import { withSetting } from '../../utils/hoc/withSetting'
 
 export const ChooseSync = withSetting('sync')(({ 
   __visible, 

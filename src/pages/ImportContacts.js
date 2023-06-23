@@ -8,6 +8,7 @@ import { useGeneralControl } from '../context/general-context'
 import { useForceUpdate } from '../utils/custom-hooks/useForceUpdate'
 import { useSafeRefCB } from '../utils/custom-hooks/useSafeRef'
 import { useToggle } from '../utils/custom-hooks/useToggle'
+import { importContacts } from '../db/actions'
 
 const eqCompare = (prev, next) => prev.checked === next.checked
 
@@ -89,8 +90,8 @@ const ImportContacts = ({ navigation }) => {
   
   const onSubmit = () => {
     const choosed = contacts.filter(contact => contact.checked)
-    dispatch({ type: actions.IMPORT_PROGRESS, payload: { 
-      choosed,
+    dispatch({ type: actions.PROGRESS, payload: { 
+      runJob: () => importContacts(choosed),
       onDone: navigation.popToTop
     }})
   }

@@ -1,7 +1,7 @@
 import { withSetting } from '../../utils/hoc/withSetting'
 import { SettingsRadioGroup } from './styles'
 import { useSettingUpdater } from '../../utils/custom-hooks/useSettingUpdater';
-import { CONTACT_SYNC_STRATEGY } from '../../consts/index.js';
+import { CONTACT_SYNC_STRATEGY } from '../../consts';
 import { List } from 'react-native-paper';
 
 export const Sync = withSetting('sync')(({ setting }) => {

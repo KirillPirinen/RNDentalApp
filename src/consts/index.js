@@ -31,3 +31,18 @@ export const DEFAULT_SETTINGS = {
   activityButton: { helperText: true },
   sync: { contactStrategyType: CONTACT_SYNC_STRATEGY.ask }
 }
+
+export const mimeTypes = {
+  txt: 'text/plain',
+  pdf: 'application/pdf',
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  png: 'image/png',
+  gif: 'image/gif',
+  bmp: 'image/bmp',
+  tiff: 'image/tiff',
+  xls: 'application/vnd.ms-excel',
+  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  doc: 'application/msword',
+  docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+};

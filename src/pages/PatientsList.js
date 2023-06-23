@@ -5,13 +5,12 @@ import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import withObservables from '@nozbe/with-observables'
 import { Container, Autocomplete, FAB, EmptyList, Patient } from '../components'
 import { useIsFocused } from '@react-navigation/native'
-import { defaultExtractor } from '../utils/defaultFn'
 import { useGeneralControl } from '../context/general-context'
 import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef'
 import { Q } from '@nozbe/watermelondb'
-import { querySanitazer } from '../utils/sanitizers.js'
-import { PatientPhones } from '../components/PatientPhones.js'
-import { HighlightedText } from '../components/ HighlightedText.js'
+import { querySanitazer } from '../utils/sanitizers'
+import { PatientPhones } from '../components/PatientPhones'
+import { HighlightedText } from '../components/ HighlightedText'
 
 const wrapper = { marginVertical: 12 }
 const renderDivider = () => <Divider bold />

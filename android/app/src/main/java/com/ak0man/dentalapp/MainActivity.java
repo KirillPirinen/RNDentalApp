@@ -1,4 +1,4 @@
-package com.ak0man.dentalapp;
+package com.dental.office;
 
 import android.os.Build;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package com.ak0man.dentalapp.newarchitecture.modules;
+package com.dental.office.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;

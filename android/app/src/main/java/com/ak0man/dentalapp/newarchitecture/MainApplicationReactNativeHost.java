@@ -1,4 +1,4 @@
-package com.ak0man.dentalapp.newarchitecture;
+package com.dental.office.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.ak0man.dentalapp.BuildConfig;
-import com.ak0man.dentalapp.newarchitecture.components.MainComponentsRegistry;
-import com.ak0man.dentalapp.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.dental.office.BuildConfig;
+import com.dental.office.newarchitecture.components.MainComponentsRegistry;
+import com.dental.office.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

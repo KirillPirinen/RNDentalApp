@@ -19,7 +19,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ak0man.dentalapp"
+      "bundleIdentifier": "com.dental.office"
     },
     "android": {
       "adaptiveIcon": {
@@ -27,7 +27,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "softwareKeyboardLayoutMode":"pan",
-      "package": "com.ak0man.dentalapp",
+      "package": "com.dental.office",
       "permissions": [
         "WRITE_CONTACTS"
       ]

@@ -19,10 +19,11 @@ export default (state, action) => {
       return state
     }
 
+    case actions.CHOOSE_SYNC:
     case actions.ABOUT_INFO:
     case actions.INFO:
     case actions.CHOOSE_TEETH:
-    case actions.IMPORT_PROGRESS:
+    case actions.PROGRESS:
     case actions.CHOOSE_ADD_PATIENT_METHOD: return {
       ...state,
       modal: {

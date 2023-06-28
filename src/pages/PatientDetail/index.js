@@ -1,15 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { View, Linking, StyleSheet, useWindowDimensions } from 'react-native'
+import { View, Linking, StyleSheet, useWindowDimensions, Image } from 'react-native'
+import { Avatar as PaperAvatar } from 'react-native-paper'
 import withObservables from '@nozbe/with-observables'
 import { Text, useTheme } from 'react-native-paper'
 import { Button, FAB, PhonesList, CallButton, WhatsappButton, TelegramButton, ButtonRowPanel } from '../../components'
-import { useGeneralControl } from '../../context/general-context'
+import { useGeneralControl, useSettings } from '../../context/general-context'
 import { useFabControlsRef } from '../../utils/custom-hooks/useSafeRef'
 import { getPrimaryPhoneNumber } from '../../utils/getPrimaryPhoneNumber'
 import AppointmentsListTab from './TabsContent/AppointmentsListTab'
 import FilesTab from './TabsContent/FilesTab'
 
 import { TabView, TabBar } from 'react-native-tab-view';
+
+import { CONTACT_SYNC_STRATEGY } from '../../consts'
 
 const tabs = [
   { key: 0, title: 'Записи' },
@@ -18,10 +21,26 @@ const tabs = [
 
 const PatientDetail = ({ navigation, patient, phones }) => {
   const [actions, dispatch] = useGeneralControl()
+  const { sync } = useSettings()
   const layout = useWindowDimensions();
   const theme = useTheme()
   const [collapsed, setCollapsed] = useState(true)
   
+  useEffect(() => {
+    if(patient?.contactId && sync.contactStrategyType !== CONTACT_SYNC_STRATEGY.never) {
+      patient.getSyncBatches().then(batches => {
+        if(sync.contactStrategyType === CONTACT_SYNC_STRATEGY.ask && batches?.length) {
+          return dispatch({ type: actions.CHOOSE_SYNC, payload: {
+            onSync: () => patient.syncWithContact(batches).finally(() => {
+              dispatch({ type: actions.CLEAR })
+            })
+          }})
+        }
+        patient.syncWithContact(batches)
+      })
+    }
+  }, [patient?.contactId])
+
   const onDeletePatient = () => patient.deleteInstance().then(() => {
     dispatch({ type: actions.CLEAR })
     navigation.popToTop()
@@ -94,9 +113,9 @@ const PatientDetail = ({ navigation, patient, phones }) => {
           onScrollEndDrag={showFab} 
         />;
       case 1:
-        return <FilesTab patient={patient} />
+        return <FilesTab patient={patient} setCollapsed={setCollapsed} />
     }
-  }, [patient, showFab, hideFab]);
+  }, [patient, showFab, hideFab, setCollapsed]);
 
   const {
     onIndexChange,
@@ -123,9 +142,15 @@ const PatientDetail = ({ navigation, patient, phones }) => {
 
   return (
       <View style={styles.pageWrapper}>
-        <View style={[styles.patientDetails, !collapsed && { display: 'none' }]}>
+        <View style={[styles.patientDetails]}>
           <View style={styles.metaWrapper}>
             <View style={styles.nameWrapper}>
+              {patient.avatar && collapsed && (
+                <Image 
+                  source={{ uri: patient.avatar }} 
+                  style={styles.avatar}
+                />
+              )}
               <Text style={styles.patientFullname}>
                 {patient.fullName}
               </Text>
@@ -135,10 +160,10 @@ const PatientDetail = ({ navigation, patient, phones }) => {
               onDelete={onConfirmDeletePatient}
             />
           </View>
-          <View style={styles.phoneListWrapper}>
+          <View style={[styles.phoneListWrapper, !collapsed && { display: 'none' }]}>
             <PhonesList phones={phones} />
           </View>
-          <View style={styles.patientButtons}>
+          <View style={[styles.patientButtons, !collapsed && { display: 'none' }]}>
             <View style={styles.formulaButtonView}>
               <Button onPress={() => navigation.navigate('TeethFormula', { patient })}>Зубная формула</Button>
             </View>
@@ -170,12 +195,15 @@ const styles = StyleSheet.create({
   patientDetails: { maxHeight: 300, padding: 25 },
   formulaButtonView: { flex: 1 },
   patientButtons: { flexDirection: 'row', marginTop: 20 },
-  nameWrapper: { flexShrink: 2 },
+  nameWrapper: { flexShrink: 3, flexDirection: 'row', marginRight: 4, alignItems: 'center' },
+  avatar: { width: 60, height: 50, marginRight: 6, borderRadius: 6 },
   patientFullname: {
     fontWeight:'800',
-    fontSize: 24,
-    lineHeight: 30,    
-    marginBottom: 3
+    fontSize: 18,
+    lineHeight: 22,    
+    marginBottom: 3,
+    flexWrap: 'wrap',
+    paddingRight: 56
   },
   phoneListWrapper: { flexDirection: 'row', flexWrap:'wrap', justifyContent:'space-between' },
   metaWrapper: {

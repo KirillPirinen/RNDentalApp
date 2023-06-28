@@ -1,9 +1,9 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb'
-import { DEFAULT_SETTINGS } from '../../consts/index.js'
-import { insertSettings } from '../raw-queries.js'
+import { DEFAULT_SETTINGS } from '../../consts/index'
+import { insertSettings } from '../raw-queries'
 
 export default appSchema({
-  version: 1,
+  version: 2,
   tables: [
     tableSchema({
       name: 'patients',
@@ -11,7 +11,8 @@ export default appSchema({
         { name: 'full_name', type: 'string' },
         { name: 'has_telegram', type: 'boolean' },
         { name: 'has_whatsapp', type: 'boolean' },
-        { name: 'contact_id', type: 'string', isOptional: true }
+        { name: 'contact_id', type: 'string', isOptional: true },
+        { name: 'avatar', type: 'string', isOptional: true }
       ]
     }),
     tableSchema({

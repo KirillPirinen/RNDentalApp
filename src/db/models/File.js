@@ -2,6 +2,8 @@ import { Model } from '@nozbe/watermelondb'
 import { text, writer, date, readonly } from '@nozbe/watermelondb/decorators'
 import { defaultUpdater } from '../../utils/defaultFn'
 import * as FileSystem from 'expo-file-system';
+import { StorageAccessFramework } from 'expo-file-system'
+import { mimeTypes } from '../../consts/index';
 
 export default class File extends Model {
   static table = 'files'
@@ -32,4 +34,10 @@ export default class File extends Model {
     }
   }
 
+  async copyTo (directoryUri, fileNamePrefix = '') {
+    const base64 = await FileSystem.readAsStringAsync(this.uri, { encoding: FileSystem.EncodingType.Base64 })
+    const newFileUri = await StorageAccessFramework.createFileAsync(directoryUri, fileNamePrefix + this.name, mimeTypes[this.type])
+    await StorageAccessFramework.writeAsStringAsync(newFileUri, base64, { encoding: FileSystem.EncodingType.Base64 });
+  }
+  
 }

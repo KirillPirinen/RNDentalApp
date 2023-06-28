@@ -1,4 +1,4 @@
-package com.ak0man.dentalapp.newarchitecture.components;
+package com.dental.office.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

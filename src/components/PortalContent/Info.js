@@ -21,7 +21,7 @@ export const Info = ({
   const theme = useTheme()
   
   const colorStyle = {
-    backgroundColor: theme.colors[color] || theme.colors.onPrimaryContainer
+    backgroundColor: theme.colors[color] || theme.colors.primaryContainer
   }
 
   const hasTabs = homeTabs.includes(routeName)

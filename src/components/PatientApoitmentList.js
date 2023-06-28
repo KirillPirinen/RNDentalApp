@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { FlatList, View } from 'react-native'
-import { useTheme } from 'react-native-paper'
+import { useTheme, Text } from 'react-native-paper'
 import { PatientAppointment } from '../components/Appointment/PatientAppointments'
 import { useGeneralControl } from '../context/general-context'
 import { defaultExtractor } from '../utils/defaultFn'
@@ -51,6 +51,7 @@ export const PatientAppointmentList = ({
 
   return (
     <View style={{ height: '90%' }}>
+      {!Boolean(appointments?.length) && <Text style={{ marginTop: 12, textAlign: 'center', width: '100%' }}>Записей нет</Text>}
       <FlatList
         data={appointments}
         renderItem={renderAppointments}

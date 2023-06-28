@@ -6,9 +6,9 @@ import { Teeth } from '../components/Teeth/Teeth'
 import withObservables from '@nozbe/with-observables'
 import { switchMap } from 'rxjs/operators'
 import { useTheme } from 'react-native-paper'
-import { ToothStatePanel } from '../components/Teeth/ToothStatePanel.js'
-import { ToothNotesInput } from '../components/Teeth/ToothNotesInput.js'
-import { createTooth } from '../db/actions/index.js'
+import { ToothStatePanel } from '../components/Teeth/ToothStatePanel'
+import { ToothNotesInput } from '../components/Teeth/ToothNotesInput'
+import { createTooth } from '../db/actions'
 import { useSettings } from '../context/general-context'
 
 const History = memo(({ tooth }) => {

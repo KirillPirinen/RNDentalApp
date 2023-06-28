@@ -3,7 +3,7 @@ import withObservables from '@nozbe/with-observables'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import { Q } from '@nozbe/watermelondb'
 import { switchMap, of } from 'rxjs'
-import { DEFAULT_SETTINGS } from '../../consts/index.js'
+import { DEFAULT_SETTINGS } from '../../consts'
 
 export const extractSetting = (db, name, ...operators) => db
   .get('settings')

@@ -1,5 +1,5 @@
 import DocumentPicker from 'react-native-document-picker'
-import { useGeneralControl } from '../../context/general-context/index.js'
+import { useGeneralControl } from '../../context/general-context'
 
 export const useFilesPicker = (mimeTypes) => {
   const [actions, dispatch] = useGeneralControl()

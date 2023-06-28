@@ -11,7 +11,7 @@ export const phoneSanitazer = (phoneStr) => {
 
   const isRU = sanitazed.length === 11
 
-  if(isRU && !sanitazed.startsWith('7')) {
+  if (isRU && !sanitazed.startsWith('7')) {
     sanitazed = '7' + sanitazed.slice(1)
   }
 

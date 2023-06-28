@@ -1,5 +1,5 @@
 import { Model } from '@nozbe/watermelondb'
-import { immutableRelation, text, lazy, writer } from '@nozbe/watermelondb/decorators'
+import { immutableRelation, text } from '@nozbe/watermelondb/decorators'
 
 export default class AppointmentTooth extends Model {
   static table = 'appointments_teeth'

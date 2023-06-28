@@ -1,7 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import CustomNavigationBar from './components/AppHeader'
-import { Appointments, PatientDetail, AddAppointment, PatientsList,
-  AddPatient, ImportContacts, Settings, AddTemplate, TemplatesList, ConfirmAppointment } from './pages'
+import {
+  Appointments, PatientDetail, AddAppointment, PatientsList,
+  AddPatient, ImportContacts, Settings, AddTemplate, TemplatesList, ConfirmAppointment
+} from './pages'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import { useTheme, Text } from 'react-native-paper'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -29,12 +31,12 @@ const Icons = {
 const Stack = createNativeStackNavigator()
 const Tab = createMaterialBottomTabNavigator()
 
-function BottomTabs() {
+function BottomTabs () {
   const theme = useTheme()
   return (
       <Tab.Navigator
         sceneAnimationType="shifting"
-        barStyle={{ 
+        barStyle={{
           backgroundColor: theme.colors.primary,
           paddingTop: -2,
           paddingBottom: 4,
@@ -46,7 +48,7 @@ function BottomTabs() {
         renderLabel={({ focused, route }) => (
             <Text
               variant="labelSmall"
-              style={{ 
+              style={{
                 textAlign: 'center',
                 color: focused ? theme.colors.onPrimary : theme.colors.onSecondaryContainer,
                 marginTop: -7
@@ -54,22 +56,22 @@ function BottomTabs() {
             >
             {route.name}
             </Text>
-          )
+        )
         }
         shifting
       >
-        <Tab.Screen 
+        <Tab.Screen
           name={TabsName.records}
           component={Appointments}
           options={{ tabBarIcon: Icons.records }}
         />
-        <Tab.Screen 
+        <Tab.Screen
           name={TabsName.patients}
           component={PatientsList}
-          options={{ tabBarIcon: Icons.patients }} 
+          options={{ tabBarIcon: Icons.patients }}
         />
-        <Tab.Screen 
-          name={TabsName.settings} 
+        <Tab.Screen
+          name={TabsName.settings}
           component={Settings}
           options={{ tabBarIcon: Icons.settings }}
         />
@@ -88,17 +90,17 @@ const Router = () => {
           focus: () => dispatch({ type: actions.CLEAR })
         }}
       >
-        <Stack.Screen 
-          name="Home" 
-          component={BottomTabs} 
+        <Stack.Screen
+          name="Home"
+          component={BottomTabs}
           // options={{ headerShown: false }}
         />
-        <Stack.Screen 
-          name="Detail" 
+        <Stack.Screen
+          name="Detail"
           component={PatientDetail}
-          options={{ 
-            headerTitle: 'Карточка пациента',
-          }} 
+          options={{
+            headerTitle: 'Карточка пациента'
+          }}
         />
         <Stack.Screen options={getTitle} name="AddAppointment" component={AddAppointment} />
         <Stack.Screen options={{ headerTitle: 'Добавление пациента' }} name="AddPatient" component={AddPatient} />
@@ -112,4 +114,3 @@ const Router = () => {
 }
 
 export default Router
-

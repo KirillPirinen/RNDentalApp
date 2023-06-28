@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import { Divider, useTheme } from 'react-native-paper'
 import { FlatList, Keyboard, View } from 'react-native'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
@@ -10,25 +9,26 @@ import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef'
 import { Q } from '@nozbe/watermelondb'
 import { querySanitazer } from '../utils/sanitizers'
 import { PatientPhones } from '../components/PatientPhones'
-import { HighlightedText } from '../components/ HighlightedText'
+import { HighlightedText } from '../components/HighlightedText'
 
 const wrapper = { marginVertical: 12 }
 const renderDivider = () => <Divider bold />
-const renderList = ({ result, navigation, searchQuery, ...rest }) => {
+const renderList = ({ result, navigation, searchQuery: searchQueryRaw, ...rest }) => {
   const theme = useTheme()
+  const searchQuery = querySanitazer(searchQueryRaw)
   return (
       <FlatList
         data={result}
         renderItem={({ item }) => (
           <Patient
-            patient={item} 
-            navigation={navigation} 
+            patient={item}
+            navigation={navigation}
             theme={theme}
             renderName={(name) => <HighlightedText text={name} query={searchQuery} />}
           >
             <PatientPhones patient={item} query={searchQuery} />
           </Patient>
-          )}
+        )}
         ItemSeparatorComponent={renderDivider}
         style={wrapper}
         ListEmptyComponent={EmptyList}
@@ -39,7 +39,7 @@ const renderList = ({ result, navigation, searchQuery, ...rest }) => {
 }
 
 const dissmisHandle = () => {
-  if(Keyboard.isVisible()) {
+  if (Keyboard.isVisible()) {
     Keyboard.dismiss()
   }
   return true
@@ -50,7 +50,7 @@ export const PatientsList = ({ patients, navigation, database }) => {
   const isFocused = useIsFocused()
 
   const onChange = async (query) => {
-    if(/^\d/.test(query)) {
+    if (/^\d/.test(query)) {
       const res = await database.get('patients').query(
         Q.experimentalJoinTables(['phones']),
         Q.on('phones', 'number', Q.like(`%${querySanitazer(query)}%`))
@@ -59,14 +59,14 @@ export const PatientsList = ({ patients, navigation, database }) => {
     }
     return patients.filter(patient => patient.fullName.toLowerCase().includes(query))
   }
-    
+
   const [ref, onDrop, onDrag] = useFabControlsRef()
 
-  const onChoosePatientMethod = () => dispatch({ 
+  const onChoosePatientMethod = () => dispatch({
     type: actions.CHOOSE_ADD_PATIENT_METHOD,
-    payload: { 
-      onAlone: () => navigation.navigate('AddPatient'), 
-      onBulk: () => navigation.navigate('ImportContacts')  
+    payload: {
+      onAlone: () => navigation.navigate('AddPatient'),
+      onBulk: () => navigation.navigate('ImportContacts')
     }
   })
 
@@ -82,8 +82,8 @@ export const PatientsList = ({ patients, navigation, database }) => {
             navigation={navigation}
           />}
           <FAB
-            ref={ref} 
-            label="Добавить пациента" 
+            ref={ref}
+            label="Добавить пациента"
             onPress={onChoosePatientMethod}
           />
       </Container>
@@ -93,5 +93,5 @@ export const PatientsList = ({ patients, navigation, database }) => {
 export default withDatabase(
   withObservables([], ({ database }) => ({
     patients: database.get('patients').query()
-  }))(PatientsList), 
+  }))(PatientsList)
 )

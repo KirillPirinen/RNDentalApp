@@ -1,16 +1,19 @@
-import React from 'react'
+import { FC, ReactNode } from 'react'
 import { StyleSheet, TouchableOpacity, Text } from 'react-native'
 
-const Button = ({ children, color, onPress, textColor }) => (
-  <TouchableOpacity style={[styles.wrapper, { backgroundColor: color }]} onPress={onPress} color={color}>
+type ButtonProps = {
+  children: ReactNode
+  color: string
+  onPress: () => void
+  textColor: string
+}
+
+const Button: FC<ButtonProps> = ({ children, onPress, color = '#27A2DF', textColor = '#FFFFFF' }) => (
+  <TouchableOpacity style={[styles.wrapper, { backgroundColor: color }]} onPress={onPress}>
     <Text style={[styles.text, { color: textColor }]}>{children}</Text>
   </TouchableOpacity>
 )
 
-Button.defaultProps = {
-  color: '#27A2DF',
-  textColor: '#FFFFFF'
-}
 
 const styles = StyleSheet.create({
   wrapper: {

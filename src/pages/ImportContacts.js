@@ -77,7 +77,7 @@ const ImportContacts = ({ navigation }) => {
       menu: [
       { 
         type: 'TouchableCheckbox', 
-        title: 'Скрыть добавленные', 
+        label: 'Скрыть добавленные', 
         onPress: setUnique,
         value: isUnique
       }

@@ -23,7 +23,7 @@ export const CONTACT_SYNC_STRATEGY = {
   always: 'always'
 }
 
-export const TAG_REGEX = /\[\-(.*?)\-]/
+export const TAG_REGEX = /\[-(.*?)-]/
 
 export const DEFAULT_SETTINGS = {
   trackingInterval: { from: 0, to: 14, unconfirmed: true },
@@ -45,4 +45,4 @@ export const mimeTypes = {
   xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   doc: 'application/msword',
   docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-};
+}

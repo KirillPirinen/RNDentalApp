@@ -1,9 +1,15 @@
-import { forwardRef, useState, useImperativeHandle, useEffect } from 'react'
+import { forwardRef, useState, useImperativeHandle, useEffect, FC } from 'react'
 import { StyleSheet } from 'react-native'
 import { AnimatedFAB } from 'react-native-paper'
 import { useSettings } from '../context/general-context/index'
 
-export const FAB = forwardRef(({ onPress, label, style }, ref) => {
+export type FABProps = {
+  onPress: () => void;
+  label: string;
+  style: object;
+}
+
+export const FAB: FC<FABProps> = forwardRef<(visible: boolean) => void, FABProps>(({ onPress, label, style }, ref) => {
   const [visible, setVisible] = useState(true)
   const [expanded, setExpanded] = useState(false)
   const { activityButton } = useSettings()

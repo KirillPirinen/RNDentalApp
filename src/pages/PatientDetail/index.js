@@ -82,19 +82,19 @@ const PatientDetail = ({ navigation, patient, phones }) => {
     navigation.setOptions({
       menu: [{ 
         type: 'TouchableCheckbox', 
-        title: 'Telegram', 
+        label: 'Telegram', 
         onPress: onTelegramCheck,
         value: patient.hasTelegram
       },
       {
         type: 'TouchableCheckbox', 
-        title: 'Whatsapp', 
+        label: 'Whatsapp', 
         onPress: onWhatsappCheck,
         value: patient.hasWhatsapp
       },
       {
         type: 'TouchableCheckbox', 
-        title: collapsed ? 'Скрыть информацию    ' : 'Показать информацию', 
+        label: collapsed ? 'Скрыть информацию    ' : 'Показать информацию', 
         onPress: setCollapsed,
         value: collapsed
       }]

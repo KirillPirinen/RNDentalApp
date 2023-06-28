@@ -1,10 +1,24 @@
+import { default as PatientModel } from '../db/models/Patient'
 import { View, TouchableHighlight, StyleSheet } from 'react-native'
 import { Text } from 'react-native-paper'
 import { Surface } from 'react-native-paper'
 import { Avatar } from './Avatar'
-import { memo } from 'react'
+import { FC, ReactNode, memo } from 'react'
+import { AppTheme } from '../styles/themes'
+import { NavigationProp } from '@react-navigation/native'
 
-export const Patient = ({ 
+export type PatientProps = {
+  patient: PatientModel;
+  navigation: NavigationProp<any>;
+  renderName: (name: string) => string;
+  onLongPress?: () => void;
+  onPress?: () => void;
+  theme: AppTheme;
+  style?: object;
+  children?: ReactNode,
+}
+
+export const Patient: FC<PatientProps> = ({ 
   patient, 
   onLongPress, 
   onPress, 
@@ -27,8 +41,6 @@ export const Patient = ({
           elevation={2}
         >
           <Avatar 
-            style={{ marginRight: 16 }} 
-            size={40} 
             fullName={patient.fullName}
             src={patient.avatar}
           />

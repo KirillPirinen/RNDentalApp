@@ -3,7 +3,23 @@ import { Searchbar } from 'react-native-paper'
 import { View } from 'react-native'
 import { useEffect } from 'react'
 
-export default ({ placeholder, renderList, onChange, initState, ...rest }) => {
+type RenderListDefaultProps<I> = {
+  result: Array<I>
+  searchQuery: string;
+}
+
+const Autocomplete = <I extends object, T extends RenderListDefaultProps<I>>({
+  placeholder, 
+  renderList, 
+  onChange, 
+  initState, 
+  ...rest 
+}: {
+  placeholder: string
+  renderList: (props:T) => JSX.Element
+  onChange: (query: string) => Promise<Array<I>> | Array<I>
+  initState: Array<I>
+}) => {
 
   const [result, setResult] = useState(initState);
   const [searchQuery, setSearchQuery] = useState('');
@@ -12,7 +28,7 @@ export default ({ placeholder, renderList, onChange, initState, ...rest }) => {
     setResult(initState)
   }, [initState])
 
-  const onChangeSearch = query => {
+  const onChangeSearch = (query: string) => {
     if(query) {
       const prepQuery = query.toLowerCase()
       const recieved = onChange(prepQuery)
@@ -20,7 +36,7 @@ export default ({ placeholder, renderList, onChange, initState, ...rest }) => {
       if (recieved instanceof Promise) {
         recieved.then(setResult)
       } else {
-        setResult(onChange(prepQuery))
+        setResult(recieved)
       }
       
     } else {
@@ -29,8 +45,6 @@ export default ({ placeholder, renderList, onChange, initState, ...rest }) => {
     setSearchQuery(query)
   }
 
-  const Output = renderList
-
   return (
     <View>
       <Searchbar
@@ -38,7 +52,9 @@ export default ({ placeholder, renderList, onChange, initState, ...rest }) => {
         onChangeText={onChangeSearch}
         value={searchQuery}
       />
-      <Output {...rest} result={result} searchQuery={searchQuery} />
+      {renderList({ result, searchQuery, ...rest } as T)}
     </View>
   )
 }
+
+export default Autocomplete

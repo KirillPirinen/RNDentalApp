@@ -55,25 +55,25 @@ const TeethFormula = ({ formula, navigation, teeth }) => {
       menu: [
       { 
         type: 'TouchableCheckbox', 
-        title: 'Временные зубы', 
+        label: 'Временные зубы', 
         onPress: onBabyCheck,
         value: formula.hasBabyJaw
       },
       { 
         type: 'TouchableCheckbox', 
-        title: 'Постоянные зубы', 
+        label: 'Постоянные зубы', 
         onPress: onAdultCheck,
         value: formula.hasAdultJaw
       },
       { 
         type: 'TouchableCheckbox', 
-        title: 'Показывать с историей лечения', 
+        label: 'Показывать с историей лечения', 
         onPress: setHistory,
         value: history
       },
       { 
         type: 'TouchableCheckbox', 
-        title: 'Показывать status localis', 
+        label: 'Показывать status localis', 
         onPress: setStatusLocalis,
         value: statusLocalis
       }

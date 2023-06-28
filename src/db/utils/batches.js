@@ -2,7 +2,6 @@ import database from '..'
 import { phoneSanitazer } from '../../utils/sanitizers'
 
 export const getPatientBatches = ({ phones, fullName, id, image }) => {
-
   let patientId
 
   return [
@@ -12,7 +11,7 @@ export const getPatientBatches = ({ phones, fullName, id, image }) => {
       patient.hasTelegram = true
       patient.contactId = id
 
-      if(image?.uri) {
+      if (image?.uri) {
         patient.avatar = image.uri
       }
 
@@ -20,7 +19,6 @@ export const getPatientBatches = ({ phones, fullName, id, image }) => {
     }),
     ...getPatientRelationsBatches({ phones, patientId })
   ]
-
 }
 
 export const getPatientRelationsBatches = ({ patientId, phones }) => {
@@ -36,5 +34,4 @@ export const getPatientRelationsBatches = ({ patientId, phones }) => {
       instance.isPrimary = Boolean(phone.isPrimary)
     })) || [])
   ]
-
 }

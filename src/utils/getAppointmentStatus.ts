@@ -1,13 +1,14 @@
 import { APPOINTMENT_STATUS } from '../consts'
 import { addMinutes, isAfter, isBefore } from 'date-fns';
+import Appointment from '../db/models/Appointment';
 
-export const getAppointmentStatus = (appointment) => {
+export const getAppointmentStatus = (appointment: Appointment) => {
 
   switch (true) {
 
-    case appointment.is_confirmed: return APPOINTMENT_STATUS.confirmed
+    case appointment.isConfirmed: return APPOINTMENT_STATUS.confirmed
 
-    case appointment.is_skipped: return APPOINTMENT_STATUS.skipped
+    case appointment.isPostponed: return APPOINTMENT_STATUS.skipped
 
     default: {
 

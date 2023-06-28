@@ -1,22 +1,32 @@
-import { useEffect, useMemo, useState } from "react"
+import { FC, useMemo, useState } from "react"
 import { View, StyleSheet } from "react-native"
 import { IconButton, Text } from "react-native-paper"
 
+export type CounterData = { 
+  name: string;
+  value: number; 
+}
 
-export const Counter = ({ initial = 0, onChange, name = 'counter' }) => {
-  const [num, setNum] = useState(initial)
+export type CounterProps = {
+  initial?: number;
+  name?: string;
+  onChange: (dto: CounterData) => void;
+}
+
+export const Counter: FC<CounterProps> = ({ onChange, initial = 0, name = 'counter' }) => {
+  const [num, setNum] = useState<number>(initial)
 
   const cb = useMemo(() => {
-    let timer
+    let timer: NodeJS.Timer
 
     const onPressOut = () => clearInterval(timer)
 
-    const dec = (prev) => {
+    const dec = (prev: number) => {
       const value = prev - 1
       onChange?.({ name, value })
       return value
     }
-    const inc = (prev) => {
+    const inc = (prev: number) => {
       const value = prev + 1
       onChange?.({ name, value })
       return value

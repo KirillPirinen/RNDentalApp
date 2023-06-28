@@ -1,10 +1,17 @@
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Card, IconButton, Text } from 'react-native-paper'
 import { parseTemplate } from '../utils/parseTemplate'
 import { ButtonRowPanel } from './Buttons'
+import Template from '../db/models/Template'
 
-export default function TemplateCard({ template, onDelete, onEdit, hasTags }) {
+export type TemplateCardProps = {
+  template: Template;
+  onDelete?: (temp: Template) => void;
+  onEdit?: (temp: Template) => void;
+}
+
+const TemplateCard: FC<TemplateCardProps> = ({ template, onDelete, onEdit }) => {
   const [example, setExample] = useState()
 
   const onToggleExample = () => setExample(prev => !prev ? parseTemplate(template.text) : null)
@@ -35,6 +42,8 @@ export default function TemplateCard({ template, onDelete, onEdit, hasTags }) {
     </Card>
   )
 }
+
+export default TemplateCard;
 
 const styles = StyleSheet.create({
   headerWrapper: {

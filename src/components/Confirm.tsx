@@ -1,6 +1,15 @@
+import { FC, ReactNode } from 'react';
 import { Text, Dialog, Button as PaperButton, useTheme } from 'react-native-paper'
 
-export const Confirm = ({ title, question, onClose, visible, children }) => (
+type ConfirmProps = {
+  title: string;
+  question: string;
+  onClose: () => void;
+  visible: boolean;
+  children: ReactNode;
+}
+
+export const Confirm: FC<ConfirmProps> = ({ title, question, onClose, visible, children }) => (
     <Dialog 
       visible={visible}
       onDismiss={onClose}
@@ -18,7 +27,7 @@ export const Confirm = ({ title, question, onClose, visible, children }) => (
     </Dialog>
 )
 
-export const ConfirmDelete = ({  title, visible, question, onClose, onDelete }) => {
+export const ConfirmDelete: FC<ConfirmProps & { onDelete: () => void }> = ({ title, visible, question, onClose, onDelete }) => {
   const theme = useTheme()
   return (
     <Confirm 
@@ -31,7 +40,6 @@ export const ConfirmDelete = ({  title, visible, question, onClose, onDelete }) 
       <PaperButton
         icon="delete"
         textColor={theme.colors.error}
-        size={30}
         onPress={onDelete}
       > 
         Удалить 
@@ -39,7 +47,6 @@ export const ConfirmDelete = ({  title, visible, question, onClose, onDelete }) 
       <PaperButton
         icon="window-close"
         textColor={theme.colors.backdrop}
-        size={30}
         onPress={onClose}
       > 
         Отмена

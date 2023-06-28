@@ -1,3 +1,4 @@
+import { FC, ReactNode } from "react"
 import { Text } from "react-native-paper"
 
 const defaultStyle = {
@@ -6,8 +7,8 @@ const defaultStyle = {
   marginTop: 25,
   marginBottom: 10,
   paddingHorizontal: 20
-}
+} as const
 
-const SectionTitle = ({ children }) => <Text style={defaultStyle}>{children}</Text>
+const SectionTitle: FC<{ children: ReactNode }> = ({ children }) => <Text style={defaultStyle}>{children}</Text>
 
 export default SectionTitle

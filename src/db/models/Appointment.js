@@ -1,7 +1,6 @@
-import { Model } from '@nozbe/watermelondb'
+import { Model, Q } from '@nozbe/watermelondb'
 import { text, field, relation, date, writer, lazy, children, readonly } from '@nozbe/watermelondb/decorators'
 import { getAppointmentStatus } from '../../utils/getAppointmentStatus'
-import { Q } from '@nozbe/watermelondb'
 import { defaultUpdater } from '../../utils/defaultFn'
 import { APPOINTMENT_STATUS } from '../../consts'
 
@@ -29,66 +28,65 @@ export default class Appointment extends Model {
   @children('appointments_teeth') associatedRecords
 
   @lazy patientTeeth = this.collections.get('teeth').query(
-    Q.on('formulas', 'patient_id', this.patientId),
+    Q.on('formulas', 'patient_id', this.patientId)
   )
-  
+
   @lazy teethInstances = this.collections
     .get('teeth')
     .query(Q.on('appointments_teeth', 'appointment_id', this.id))
-  
+
   @lazy teethInstancesWithCount = this.collections
     .get('teeth')
     .query(
       Q.on('appointments_teeth', 'appointment_id', this.id),
-      Q.unsafeSqlExpr(`(SELECT count(*) FROM appointments_teeth WHERE teeth.id = appointments_teeth.tooth_id) = 1`)
+      Q.unsafeSqlExpr('(SELECT count(*) FROM appointments_teeth WHERE teeth.id = appointments_teeth.tooth_id) = 1')
     )
 
   @relation('patients', 'patient_id') patient
 
-  get status() {
-    return getAppointmentStatus(this) 
+  get status () {
+    return getAppointmentStatus(this)
   }
 
-  needsConfimation(statusStr) {
+  needsConfimation (statusStr) {
     const status = statusStr || this.status
     return !this.isConfirmed && (status === APPOINTMENT_STATUS.lasts || status === APPOINTMENT_STATUS.past)
   }
 
-  @writer async cleanUp() {
-    if(this.isConfirmed && this.teeth) {
+  @writer async cleanUp () {
+    if (this.isConfirmed && this.teeth) {
       const [teethToReset, recordsToDelete] = await Promise.all([
         this.teethInstancesWithCount.fetch(),
         this.associatedRecords.fetch()
       ])
       const batches = teethToReset.map((tooth) => {
-          return tooth.prepareUpdate(instance => {
-            instance.isTreated = false
-          })
+        return tooth.prepareUpdate(instance => {
+          instance.isTreated = false
+        })
       })
       const recordsBatch = recordsToDelete.map((record) => {
-          return record.prepareDestroyPermanently()
+        return record.prepareDestroyPermanently()
       })
 
       await this.batch(...batches, ...recordsBatch)
     }
   }
 
-  @writer async deleteInstance() {
-     this.callWriter(async () => await this.cleanUp())
-     await this.markAsDeleted()
+  @writer async deleteInstance () {
+    this.callWriter(async () => await this.cleanUp())
+    await this.markAsDeleted()
   }
 
-  @writer async updateInstance(fields, teeth) {
-
+  @writer async updateInstance (fields, teeth) {
     delete fields.teeth
 
-    if(!teeth) {
+    if (!teeth) {
       return await this.update(defaultUpdater(fields))
     }
-    
+
     this.callWriter(async () => await this.cleanUp())
 
-    const [existedTeeth, [formulaId] ] = await Promise.all([
+    const [existedTeeth, [formulaId]] = await Promise.all([
       await this.patientTeeth.fetch(),
       await this.collections.get('formulas').query(
         Q.where('patient_id', this.patientId)
@@ -101,12 +99,12 @@ export default class Appointment extends Model {
     }, {})
 
     const batches = teeth.filter(Boolean).reduce((acc, tooth) => {
-      if(dict[tooth]) {
+      if (dict[tooth]) {
         acc.push(this.collections.get('appointments_teeth').prepareCreate(instance => {
           instance.toothId = dict[tooth].id
           instance.appointmentId = this.id
         }))
-        if(!dict[tooth].isTreated) {
+        if (!dict[tooth].isTreated) {
           acc.push(dict[tooth].prepareUpdate((instance) => {
             instance.isTreated = true
           }))
@@ -135,6 +133,6 @@ export default class Appointment extends Model {
     await this.batch(
       this.prepareUpdate(defaultUpdater(fields)),
       ...batches
-    ) 
+    )
   }
 }

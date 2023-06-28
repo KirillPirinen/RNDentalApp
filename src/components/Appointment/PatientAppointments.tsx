@@ -1,19 +1,28 @@
 import { StyleSheet, View } from 'react-native'
 import { Foundation, FontAwesome5 } from '@expo/vector-icons'
-import { Text, Menu, IconButton, Divider, Surface } from 'react-native-paper'
+import { Text, Menu, IconButton, Divider, Surface, MenuProps } from 'react-native-paper'
 import Badge from '../Badge'
 import formatRu from '../../utils/formatRu'
-import { memo, useState } from 'react'
-import { APPOINTMENT_STATUS } from '../../consts'
+import { FC, ReactNode, memo, useState } from 'react'
+import Appointment from '../../db/models/Appointment'
+import { AppTheme } from '../../styles/themes'
 
-export const PatientAppointment = ({ 
+type AppointmentHandler = (app: Appointment, isConfirmation?: boolean) => void
+
+export type PatientAppointmentProps = {
+  appointment: Appointment;
+  theme: AppTheme;
+  onEditAppointment?: MenuApointmentProps['onEditAppointment'];
+  onDeleteAppointment?: MenuApointmentProps['onDeleteAppointment'],
+}
+
+export const PatientAppointment: FC<PatientAppointmentProps> = ({ 
   appointment, 
   onEditAppointment, 
   onDeleteAppointment,
   theme: { colors }
 }) => {
   const hasMenu = onEditAppointment && onDeleteAppointment
-  const needsConfirmation = appointment.needsConfimation()
   return (
     <Surface 
       style={[
@@ -57,8 +66,7 @@ export const PatientAppointment = ({
   )
 }
 
-
-const Teeth = ({ teeth }) => {
+const Teeth: FC<{ teeth: string }> = ({ teeth }) => {
   const count = teeth.split(',')
   return (
     <AppointmentCardRow>
@@ -73,7 +81,7 @@ const Teeth = ({ teeth }) => {
   )
 }
 
-const Diagnosis = ({ diagnosis }) => (
+const Diagnosis: FC<{ diagnosis: string }> = ({ diagnosis }) => (
   <AppointmentCardRow>
     <FontAwesome5
       name="notes-medical"
@@ -87,7 +95,7 @@ const Diagnosis = ({ diagnosis }) => (
   </AppointmentCardRow>
 )
 
-const Notes = ({ notes }) => (
+const Notes: FC<{ notes: string }> = ({ notes }) => (
   <AppointmentCardRow>
     <Foundation
       name="clipboard-notes"
@@ -101,9 +109,15 @@ const Notes = ({ notes }) => (
   </AppointmentCardRow>
 )
 
-const MenuApointment = ({ onEditAppointment, appointment, onDeleteAppointment, ...rest }) => {
+export type MenuApointmentProps = Partial<Omit<MenuProps, 'visible' | 'anchor' >> & {
+  appointment: Appointment;
+  onEditAppointment: AppointmentHandler;
+  onDeleteAppointment: AppointmentHandler;
+}
+
+const MenuApointment: FC<MenuApointmentProps> = ({ onEditAppointment, appointment, onDeleteAppointment, ...rest }) => {
   const [visible, setVisible] = useState(false)
-  const hof = (fn, isConfirmation) => () => (setVisible(false), fn(appointment, isConfirmation))
+  const hof = (fn: AppointmentHandler, isConfirmation?: boolean) => () => (setVisible(false), fn(appointment, isConfirmation))
   return (
     <Menu
       visible={visible}
@@ -126,9 +140,9 @@ const MenuApointment = ({ onEditAppointment, appointment, onDeleteAppointment, .
 
 export default memo(PatientAppointment)
 
-const AppointmentCardLabel = ({ children }) => <Text style={styles.appointmentCardLabel}>{children}</Text>
+const AppointmentCardLabel: FC<{ children: ReactNode }> = ({ children }) => <Text style={styles.appointmentCardLabel}>{children}</Text>
 
-const AppointmentCardRow = ({ style, children }) => <View style={[styles.appointmentCardRow, style]}>{children}</View>
+const AppointmentCardRow: FC<{ style?:object, children: ReactNode }> = ({ style, children }) => <View style={style ? [styles.appointmentCardRow, style]: styles.appointmentCardRow}>{children}</View>
 
 const styles = StyleSheet.create({
   card: {

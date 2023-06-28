@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { View, FlatList, Divider, ScrollView, StyleSheet } from 'react-native'
 import DatePicker from '@react-native-community/datetimepicker'
 import { Container, Autocomplete, Patient, EmptyList } from '../components'
@@ -13,7 +13,7 @@ import { querySanitazer } from '../utils/sanitizers'
 import { defaultExtractor } from '../utils/defaultFn'
 import { useGeneralControl } from '../context/general-context'
 import { getScheduledPatiens } from '../db/raw-queries'
-import { HighlightedText } from '../components/ HighlightedText'
+import { HighlightedText } from '../components/HighlightedText'
 import { PatientPhones } from '../components/PatientPhones'
 
 const onSearch = (db) => async (query) => {
@@ -30,12 +30,12 @@ const onSearch = (db) => async (query) => {
   return db.get('patients').query(Q.where('full_name', Q.like(`%${sanitized}%`)))
 }
 
-const renderList = ({ result, onChoose, db, searchQuery }) => {
+const renderList = ({ result, onChoose, db, searchQuery: searchQueryRaw }) => {
   const navigation = useNavigation()
   const theme = useTheme()
   const [actions, dispatch] = useGeneralControl()
-
-  const [suggestions, setSuggestions] = useState([])
+  const searchQuery = querySanitazer(searchQueryRaw)
+  const [suggestions, setSuggestions] = useState([])+
 
   useEffect(() => {
     db.get('patients').query(getScheduledPatiens()).then(data => {

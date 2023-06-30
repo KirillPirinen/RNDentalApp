@@ -3,23 +3,18 @@ import { Searchbar } from 'react-native-paper'
 import { View } from 'react-native'
 import { useEffect } from 'react'
 
-type RenderListDefaultProps<I> = {
-  result: Array<I>
-  searchQuery: string;
-}
-
-const Autocomplete = <I extends object, T extends RenderListDefaultProps<I>>({
+const Autocomplete = <T extends { result: T['result']; searchQuery?: string; }>({
   placeholder, 
-  renderList, 
+  renderList,
   onChange, 
   initState, 
   ...rest 
 }: {
-  placeholder: string
-  renderList: (props:T) => JSX.Element
-  onChange: (query: string) => Promise<Array<I>> | Array<I>
-  initState: Array<I>
-}) => {
+  placeholder?: string
+  renderList: ((props: T) => JSX.Element) | React.ComponentType<T>
+  onChange: (query: string) => Promise<T['result']> | T['result']
+  initState?: T['result']
+} & Omit<T, 'result' | 'searchQuery'>) => {
 
   const [result, setResult] = useState(initState);
   const [searchQuery, setSearchQuery] = useState('');
@@ -45,6 +40,8 @@ const Autocomplete = <I extends object, T extends RenderListDefaultProps<I>>({
     setSearchQuery(query)
   }
 
+  const Output = renderList
+
   return (
     <View>
       <Searchbar
@@ -52,7 +49,8 @@ const Autocomplete = <I extends object, T extends RenderListDefaultProps<I>>({
         onChangeText={onChangeSearch}
         value={searchQuery}
       />
-      {renderList({ result, searchQuery, ...rest } as T)}
+      {/* @ts-ignore */}
+      <Output result={result} searchQuery={searchQuery} { ...rest } />
     </View>
   )
 }

@@ -6,7 +6,7 @@ const defStyle = { marginRight: 16 }
 
 type AvatarProps = {
   fullName: string;
-  src?: string;
+  src?: string | null;
   style?: object;
   size?: number;
 }

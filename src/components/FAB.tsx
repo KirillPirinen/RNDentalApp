@@ -6,10 +6,10 @@ import { useSettings } from '../context/general-context/index'
 export type FABProps = {
   onPress: () => void;
   label: string;
-  style: object;
+  style?: object;
 }
 
-export const FAB: FC<FABProps> = forwardRef<(visible: boolean) => void, FABProps>(({ onPress, label, style }, ref) => {
+export const FAB = forwardRef<(visible: boolean) => void, FABProps>(({ onPress, label, style }, ref) => {
   const [visible, setVisible] = useState(true)
   const [expanded, setExpanded] = useState(false)
   const { activityButton } = useSettings()

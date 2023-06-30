@@ -3,8 +3,9 @@ import { View, StyleSheet } from "react-native"
 import { TextInput, Button } from "react-native-paper"
 import Phone from '../db/models/Phone';
 
-type InputChangeDTO = {
-  number?: string;
+export type InputChangeDTO = {
+  id?: string;
+  number: string;
   link?: Phone;
   delete?: boolean;
 }
@@ -24,7 +25,7 @@ const Input: FC<innerInputProps> = ({ label, onChange, onDeletePhone, id, value,
     onDeletePhone(id)
 
     if (link) {
-      return onChange(id, { link, delete: true })
+      return onChange(id, { number: value ?? '', link, delete: true })
     }
 
     onChange(id, null)
@@ -55,7 +56,7 @@ const Input: FC<innerInputProps> = ({ label, onChange, onDeletePhone, id, value,
 
 export type PhoneInputTypes = {
   onChange: innerInputProps['onChange'];
-  phones: Record<string, { id: string, number: string, link: Phone }>;
+  phones: Record<string, { id?: string, number: string, link: Phone }>;
 }
 
 export const PhoneInput: FC<PhoneInputTypes> = ({ onChange, phones }) => {

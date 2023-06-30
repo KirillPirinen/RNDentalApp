@@ -35,7 +35,7 @@ export const HeaderMenu: React.FC<HeaderMenuProps> = ({ menu, theme, contentColo
     >
       {menu.map(({ type, label, ...rest }) => {
         const Comp = contentTypes[type]
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+         
         // @ts-ignore
         return Comp && <Comp key={label} label={label} {...rest} />
       })}

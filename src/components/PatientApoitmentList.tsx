@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from 'react'
-import { FlatList, View } from 'react-native'
+import { FlatList, FlatListProps, View } from 'react-native'
 import { useTheme, Text } from 'react-native-paper'
 import { PatientAppointment } from './Appointment/PatientAppointments'
 import { useGeneralControl } from '../context/general-context'
@@ -9,12 +9,12 @@ import Appointment from '../db/models/Appointment'
 import Patient from '../db/models/Patient'
 import { NavigationProp } from '@react-navigation/native'
 
-export type PatientAppointmentListProps = {
+export type PatientAppointmentListProps = Omit<FlatListProps<Appointment>, 'data' | 'renderItem'> & {
   appointments: Array<Appointment>;
   patient: Patient;
   setOpenedMenu: () => void;
   openedMenu: string;
-  navigation: NavigationProp<any>
+  navigation: NavigationProp<ReactNavigation.RootParamList>
 }
 
 const ObservablePatientAppointment = withObservables(['appointment'], ({ appointment }) => ({

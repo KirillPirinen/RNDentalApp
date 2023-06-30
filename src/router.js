@@ -6,7 +6,7 @@ import {
 } from './pages'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import { useTheme, Text } from 'react-native-paper'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import TeethFormula from './pages/TeethFormula'
 import { useGeneralControl } from './context/general-context'
 

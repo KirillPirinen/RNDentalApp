@@ -1,19 +1,21 @@
-import { FC, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { View, StyleSheet } from "react-native"
 import { IconButton, Text } from "react-native-paper"
 
-export type CounterData = { 
-  name: string;
+export type CounterData<N extends string> = { 
+  name: N;
   value: number; 
 }
 
-export type CounterProps = {
+export type CounterProps<N extends string> = {
   initial?: number;
-  name?: string;
-  onChange: (dto: CounterData) => void;
+  name?: N;
+  onChange: (dto: CounterData<N>) => void;
 }
 
-export const Counter: FC<CounterProps> = ({ onChange, initial = 0, name = 'counter' }) => {
+ 
+// @ts-ignore
+export const Counter = <N extends string = 'counter'>({ onChange, initial = 0, name = 'counter' }: CounterProps<N>) => {
   const [num, setNum] = useState<number>(initial)
 
   const cb = useMemo(() => {

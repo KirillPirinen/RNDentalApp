@@ -9,8 +9,8 @@ import { NavigationProp } from '@react-navigation/native'
 
 export type PatientProps = {
   patient: PatientModel;
-  navigation: NavigationProp<any>;
-  renderName: (name: string) => string;
+  navigation: NavigationProp<ReactNavigation.RootParamList>;
+  renderName?: (name: string) => ReactNode;
   onLongPress?: () => void;
   onPress?: () => void;
   theme: AppTheme;

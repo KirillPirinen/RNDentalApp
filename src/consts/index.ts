@@ -46,3 +46,7 @@ export const mimeTypes = {
   doc: 'application/msword',
   docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 }
+
+export type AllowedSettings = typeof DEFAULT_SETTINGS
+
+export type AppotmentStatuses = keyof typeof APPOINTMENT_STATUS

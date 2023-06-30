@@ -28,17 +28,6 @@ export const appointmentsByDays = ({
   )
 }
 
-export const updateTeethState = (id) => Q.unsafeSqlQuery(`
-  UPDATE teeth SET tooth_state = 'cleaned' WHERE teeth.id IN (
-    SELECT teeth.id
-    FROM teeth 
-    LEFT JOIN appointments_teeth AS records ON teeth.id = records.tooth_id
-    WHERE records.appointment_id = '${id}' AND (
-      SELECT COUNT(appointments_teeth.id) FROM appointments_teeth WHERE teeth.id = appointments_teeth.tooth_id
-    ) = 1
-  )
-`)
-
 export const getScheduledPatiens = () => Q.unsafeSqlQuery(`
   SELECT patients.* FROM patients
   INNER JOIN appointments ON patients.id = appointments.patient_id

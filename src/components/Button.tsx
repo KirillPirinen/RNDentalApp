@@ -3,9 +3,9 @@ import { StyleSheet, TouchableOpacity, Text } from 'react-native'
 
 type ButtonProps = {
   children: ReactNode
-  color: string
+  color?: string
   onPress: () => void
-  textColor: string
+  textColor?: string
 }
 
 const Button: FC<ButtonProps> = ({ children, onPress, color = '#27A2DF', textColor = '#FFFFFF' }) => (

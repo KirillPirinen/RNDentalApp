@@ -34,6 +34,7 @@ const dark = {
 }
 
 export type AppTheme = typeof light
+export type AppThemeColors = keyof typeof light.colors
 
 export const useAppTheme = () => useTheme<AppTheme>()
 

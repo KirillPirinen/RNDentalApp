@@ -1,7 +1,6 @@
-import { StyleSheet } from 'react-native'
 import { toothStates } from '../consts'
 
-export const toothFillColors = StyleSheet.create({
+export const toothFillColors = {
   selected: {
     stroke: '#000000',
     fill: 'red',
@@ -35,4 +34,4 @@ export const toothFillColors = StyleSheet.create({
     stroke: '#06876a',
     strokeWidth: 1.1
   }
-})
+} as const

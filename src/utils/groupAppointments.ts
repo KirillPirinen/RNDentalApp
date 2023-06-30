@@ -1,12 +1,13 @@
 import { isSameDay } from 'date-fns'
 import formatRu from './formatRu'
+import Appointment from '../db/models/Appointment'
 
-const getDayContent = (appointment) => ({
+const getDayContent = (appointment: Appointment) => ({
   day: formatRu(appointment.date, 'do MMMM, EEEE'),
   data: [appointment]
 })
 
-export const groupAppointments = (appointments) => {
+export const groupAppointments = (appointments: Appointment[]) => {
   if (!appointments.length) return appointments
 
   const res = []

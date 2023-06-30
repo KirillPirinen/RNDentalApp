@@ -12,7 +12,7 @@ export default schemaMigrations({
             { name: 'avatar', type: 'string', isOptional: true },
           ],
         }),
-        addSetting('sync')
+        addSetting('sync')!
       ],
     },
   ]

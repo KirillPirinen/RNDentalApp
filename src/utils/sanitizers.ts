@@ -2,11 +2,11 @@
 const nonLikeSafeRegexp = /[^a-zA-Z0-9а-я]/g
 const nonNum = /[^0-9]/g
 
-export const querySanitazer = (str) => {
+export const querySanitazer = (str: string) => {
   return str.replace(nonLikeSafeRegexp, '')
 }
 
-export const phoneSanitazer = (phoneStr) => {
+export const phoneSanitazer = (phoneStr: string) => {
   let sanitazed = phoneStr.replace(nonNum, '')
 
   const isRU = sanitazed.length === 11

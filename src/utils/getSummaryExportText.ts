@@ -1,6 +1,6 @@
 import plural from 'plural-ru';
 
-export const getSummaryExportText = (fulfilledNum, rejectedNum) => {
+export const getSummaryExportText = (fulfilledNum: number, rejectedNum: number) => {
   let res = ''
 
   if (fulfilledNum) {

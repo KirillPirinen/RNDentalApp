@@ -1,20 +1,21 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import CustomNavigationBar from './components/AppHeader'
+import CustomNavigationBar, { AppHeaderProps } from './components/AppHeader'
 import {
   Appointments, PatientDetail, AddAppointment, PatientsList,
   AddPatient, ImportContacts, Settings, AddTemplate, TemplatesList, ConfirmAppointment
 } from './pages'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import { useTheme, Text } from 'react-native-paper'
+import { Text } from 'react-native-paper'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import TeethFormula from './pages/TeethFormula'
 import { useGeneralControl } from './context/general-context'
+import { useAppTheme } from './styles/themes'
 
-const renderIcon = (name) => ({ color }) => (
+const renderIcon = (name: React.ComponentProps<typeof MaterialCommunityIcons>['name']) => ({ color }: { color: string }) => (
   <MaterialCommunityIcons name={name} color={color} size={22} />
 )
 
-const renderHeader = (props) => <CustomNavigationBar {...props} />
+const renderHeader = (props: AppHeaderProps) => <CustomNavigationBar {...props} />
 
 export const TabsName = {
   records: 'Записи',
@@ -32,7 +33,7 @@ const Stack = createNativeStackNavigator()
 const Tab = createMaterialBottomTabNavigator()
 
 function BottomTabs () {
-  const theme = useTheme()
+  const theme = useAppTheme()
   return (
       <Tab.Navigator
         sceneAnimationType="shifting"
@@ -44,8 +45,8 @@ function BottomTabs () {
         }}
         activeColor="white"
         inactiveColor="white"
-        tabBarLabelStyle={{ color: 'red' }}
-        renderLabel={({ focused, route }) => (
+        /* @ts-ignore */
+        renderLabel={({ focused, route }: { focused: boolean; route: { name: string } }) => (
             <Text
               variant="labelSmall"
               style={{
@@ -56,8 +57,7 @@ function BottomTabs () {
             >
             {route.name}
             </Text>
-        )
-        }
+        )}
         shifting
       >
         <Tab.Screen
@@ -79,12 +79,13 @@ function BottomTabs () {
   )
 }
 
-const getTitle = ({ route }) => ({ headerTitle: route.params?.edit ? 'Редактирование записи' : 'Добавление записи' })
+const getTitle = ({ route }: { route: any }) => ({ headerTitle: route.params?.edit ? 'Редактирование записи' : 'Добавление записи' })
 
 const Router = () => {
   const [actions, dispatch] = useGeneralControl()
   return (
       <Stack.Navigator
+        // @ts-ignore
         screenOptions={{ header: renderHeader }}
         screenListeners={{
           focus: () => dispatch({ type: actions.CLEAR })
@@ -102,12 +103,16 @@ const Router = () => {
             headerTitle: 'Карточка пациента'
           }}
         />
+        {/* @ts-ignore */}
         <Stack.Screen options={getTitle} name="AddAppointment" component={AddAppointment} />
+        {/* @ts-ignore */}
         <Stack.Screen options={{ headerTitle: 'Добавление пациента' }} name="AddPatient" component={AddPatient} />
         <Stack.Screen options={{ headerTitle: 'Зубная формула' }} name="TeethFormula" component={TeethFormula} />
         <Stack.Screen options={{ headerTitle: 'Импорт контактов' }} name="ImportContacts" component={ImportContacts} />
+        {/* @ts-ignore */}
         <Stack.Screen options={{ headerTitle: 'Добавить новый шаблон' }} name="AddTemplate" component={AddTemplate} />
         <Stack.Screen options={{ headerTitle: 'Управление шаблонами' }} name="TemplatesList" component={TemplatesList} />
+        {/* @ts-ignore */}
         <Stack.Screen options={{ headerTitle: 'Подтверждение приема' }} name="ConfirmAppointment" component={ConfirmAppointment} />
       </Stack.Navigator>
   )

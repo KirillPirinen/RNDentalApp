@@ -11,6 +11,7 @@ export const TeethColorFill = withSetting('teethColorFill')(({ setting }: { sett
     <List.Accordion
         title="Отображение зубов в формуле"
         left={props => <List.Icon {...props} icon="tooth" />}
+        style={{ justifyContent: 'space-between' }}
     >
       <SettingsCheckbox 
         title="Выделять зубы с историей лечения"

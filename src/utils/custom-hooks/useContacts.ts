@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import * as Contacts from 'expo-contacts'
-import database from "../../db"
+import getDatabase from "../../db"
 import Patient from "../../db/models/Patient"
 
 let hashPatients: Record<NonNullable<Patient['contactId']>, boolean> = {}
@@ -24,7 +24,7 @@ export const useContacts = (isUnique?: boolean) => {
 
       if (status === 'granted') {
 
-        const patients = await database.get<Patient>('patients').query().fetch()
+        const patients = await getDatabase().get<Patient>('patients').query().fetch()
 
         hashPatients = patients.reduce<typeof hashPatients>((acc, patient) => {
 

@@ -28,7 +28,7 @@ export default class File extends Model {
   @writer async deleteInstance() {
     try {
       await this.destroyPermanently()
-      return await FileSystem.deleteAsync(this.uri)
+      return await FileSystem.deleteAsync(this.uri, { idempotent: true })
     } catch (e) {
       console.log(e)
     }

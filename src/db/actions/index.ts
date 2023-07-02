@@ -1,6 +1,14 @@
+import type { 
+  createPatientParams, 
+  createPatientOptions, 
+  createAppointmentParams,
+  createToothParams,
+  createTemplateParams,
+  createFileParams
+} from './types'
+
 import { Contact } from 'expo-contacts';
-import database from '..'
-import { PhoneDTO } from '../../pages/AddPatient';
+import getDatabase from '..'
 import { getPatientBatches, getPatientRelationsBatches } from '../utils/batches'
 import * as FileSystem from 'expo-file-system';
 import Patient from '../models/Patient';
@@ -10,20 +18,8 @@ import Template from '../models/Template';
 import File from '../models/File';
 import { ProgressResult } from '../../components/PortalContent/Progress';
 
-export type createPatientParams = {
-  phones?: PhoneDTO[]
-  phoneNumbers?: Contact['phoneNumbers']
-  image?: Contact['image']
-  id?: Contact['id']
-} & (
-  { fullName: string; name?: never; } | { name: string; fullName?: never }
-)
-
-export type createPatientOptions = {
-  withReturn?: boolean;
-}
-
 export const createPatient = async ({ fullName, phones, phoneNumbers, name, id, image }: createPatientParams, { withReturn }: createPatientOptions = {}) => {
+  const database = getDatabase()
   const recievedName = (fullName || name) as string
   const phonesToBatch = phones || phoneNumbers
 
@@ -56,22 +52,20 @@ export const createPatient = async ({ fullName, phones, phoneNumbers, name, id, 
 
 }
 
-export type createAppointmentParams = Pick<Appointment, 'patientId' | 'date' | 'duration'> & { diagnosis?: string; notes?: string; }
-
 export const createAppointment = async ({ patientId, date, diagnosis, notes, duration }: createAppointmentParams) => {
+  const database = getDatabase()
   return await database.write(async () => await database.get<Appointment>('appointments').create(appointment => {
       appointment.patientId = patientId
       appointment.date = date
       appointment.duration = duration
       appointment.diagnosis = diagnosis || ''
       appointment.notes = notes || ''
-    })  
+    })
   )
 }
 
-export type createToothParams = Pick<Tooth, 'formulaId' | 'toothNo' | 'toothState'> & { notes?: string; }
-
 export const createTooth = async ({ formulaId, toothNo, toothState, notes }: createToothParams) => {
+  const database = getDatabase()
   return await database.write(async () => await database.get<Tooth>('teeth').create(tooth => {
       tooth.formulaId = formulaId
       tooth.toothNo = toothNo
@@ -81,18 +75,17 @@ export const createTooth = async ({ formulaId, toothNo, toothState, notes }: cre
   )
 }
 
-export type createTemplateParams = Pick<Template, 'text' | 'name'>
-
 export const createTemplate = async ({ text, name }: createTemplateParams) => {
+  const database = getDatabase()
   return await database.write(async () => await database.get<Template>('templates').create(template => {
       template.name = name
       template.text = text
     })
   )
 }
-export type createFileParams = Pick<File, 'name' | 'type' | 'patientId'>
 
 export const createFile = async ({ name, type, patientId }: createFileParams) => {
+  const database = getDatabase()
   return await database.write(async () => await database.get<File>('files').create(template => {
       template.name = name
       template.type = type
@@ -102,6 +95,7 @@ export const createFile = async ({ name, type, patientId }: createFileParams) =>
 }
 
 export const exportPatiensFiles = async () => {
+  const database = getDatabase()
   const patients = await database.get<Patient>('patients').query().fetch()
   
   const req = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync()

@@ -86,7 +86,7 @@ const renderList = ({ result, onChoose, db, searchQuery: searchQueryRaw }: {
         >
           <PatientPhones patient={item} query={searchQuery} />
         </Patient>
-        )}
+      )}
       ItemSeparatorComponent={Divider}
       style={{ marginVertical: 12 }}
       ListHeaderComponent={(!isSearching && hasSuggestions) ? <Text variant="titleMedium">Последние запланированные пациенты: </Text> : undefined}

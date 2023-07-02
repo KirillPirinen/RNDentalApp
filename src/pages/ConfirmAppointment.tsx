@@ -7,12 +7,12 @@ import { useGeneralControl } from '../context/general-context'
 import { NavigationProp } from '@react-navigation/native'
 import { useAppTheme } from '../styles/themes'
 
-type ConfirmAppointment = {
+type ConfirmAppointmentProps = {
   navigation: NavigationProp<ReactNavigation.RootParamList>
   route: { params: ReactNavigation.RootParamList['ConfirmAppointment'] }
 }
 
-const ConfirmAppointment: FC<ConfirmAppointment> = ({ navigation, route: { params } }) => {
+const ConfirmAppointment: FC<ConfirmAppointmentProps> = ({ navigation, route: { params } }) => {
   const [actions, dispatch] = useGeneralControl()
 
   const appointment = params?.appointment

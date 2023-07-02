@@ -1,3 +1,5 @@
+import * as FileSystem from 'expo-file-system';
+
 export const toothStates = {
   pulpitis: 'pulpitis',
   caries: 'caries',
@@ -46,6 +48,10 @@ export const mimeTypes = {
   doc: 'application/msword',
   docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 }
+
+export const DEFAULT_DB_NAME = 'dental_app_v2' 
+export const APP_DATA_DIR = `${FileSystem.documentDirectory}__AppData`
+export const IMPORTED_DB_PATH = `${APP_DATA_DIR}/importedDB`
 
 export type AllowedSettings = typeof DEFAULT_SETTINGS
 

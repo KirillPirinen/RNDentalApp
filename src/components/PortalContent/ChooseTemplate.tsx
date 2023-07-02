@@ -2,7 +2,7 @@ import React, { useState, useLayoutEffect, FC } from 'react'
 import { View, StyleSheet, Linking } from 'react-native'
 import { Modal, Text, Button, RadioButton, Divider, 
   Surface } from 'react-native-paper'
-import database from '../../db'
+import getDatabase from '../../db'
 import { parseTemplateByPatient } from '../../utils/parseTemplate'
 import actions from '../../context/general-context/action-types'
 import { setStringAsync } from 'expo-clipboard'
@@ -64,7 +64,7 @@ export const ChooseTemplate: FC<ChooseTemplateProps> = ({
   }
 
   useLayoutEffect(() => {
-    database.get('templates').query().fetch()
+    getDatabase().get('templates').query().fetch()
       .then((dbTemplates) => {
         if(dbTemplates.length) {
           parseTemplateByPatient(dbTemplates, patient).then(setTemplates)

@@ -1,7 +1,7 @@
 import { Image, View, StyleSheet } from 'react-native'
 import { Text } from 'react-native-paper'
-import { FontAwesome5 } from '@expo/vector-icons';
-import { FC } from 'react';
+import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FC, ReactNode, useState } from 'react';
 
 const icons = {
   pdf: { name: 'file-pdf', color: '#FA0F00' },
@@ -17,11 +17,12 @@ export type IconNames = typeof icons[FileTypes]['name']
 export type IconProps = React.ComponentProps<typeof FontAwesome5> & {
   fileName: string;
   name: IconNames;
+  children?: ReactNode;
 }
 
-export const Icon: FC<IconProps> = ({ fileName, ...props }) => (
+export const Icon: FC<IconProps> = ({ fileName, children, ...props }) => (
   <View style={styles.iconWrapper}>
-    <FontAwesome5 {...props} />
+    {children ?? <FontAwesome5 {...props} />}
     <Text variant="bodyLarge" style={styles.fileName}>{fileName}</Text>
   </View>
 )
@@ -35,8 +36,18 @@ export type ImagePreviewCardProps = {
 }
 
 export const ImagePreviewCard: FC<ImagePreviewCardProps> = ({ name, type, uri, size = 24, style }) => {
+  const [error, setError] = useState<null | object>(null)
   const stub = type && icons[type] && <Icon fileName={name} {...icons[type]} style={style} size={size} />
-  return stub || uri && <Image source={{ uri }} style={style} />
+  
+  if (error) {
+    return (
+      <Icon fileName={name} name="image-off" style={style} size={size}>
+        <MaterialCommunityIcons name="image-off" color="#FA0F00" style={style} size={size} />
+      </Icon>
+    )
+  }
+
+  return stub || uri && <Image source={{ uri }} style={style} onError={setError} />
 }
 
 const styles = StyleSheet.create({

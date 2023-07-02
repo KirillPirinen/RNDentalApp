@@ -12,7 +12,7 @@ export const ActivityButton = withSetting('activityButton')(({ setting }: { sett
         description="Показывать подсказку при нажатии"
         name="helperText"
         onChange={onChange}
-        initial={values.helperText}
+        value={values.helperText}
       />
   )
 })

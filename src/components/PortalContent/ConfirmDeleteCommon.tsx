@@ -20,6 +20,10 @@ const defaultTextsResolvers = {
   template: ({ template }: { template: Template }) => ({
     title:`Удаление шаблона ${template.name}.`,
     question: `Вы действительно хотите удалить шаблон?`
+  }),
+  database: ({ dbName }: { dbName: string }) => ({
+    title:`Удаление БД ${dbName}.`,
+    question: `Вы действительно хотите удалить БД без возможности восстановления?`
   })
 }
 
@@ -38,6 +42,7 @@ export type ConfirmDeleteCommonProps<T extends ConfirmDeleteCommonModes> = Defau
   patient?: Patient;
   appointment?: Appointment;
   template?: Template;
+  dbName?: string;
 }> & SelectAdditional<T>
 
 export const ConfirmDeleteCommon = <T extends ConfirmDeleteCommonModes>({ 

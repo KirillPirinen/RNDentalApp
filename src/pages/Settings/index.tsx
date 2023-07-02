@@ -1,4 +1,4 @@
-import { Button, List } from 'react-native-paper'
+import { Button, List, Text } from 'react-native-paper'
 import { TrackingInterval } from './TrackingInterval'
 import styles from './styles'
 import { TeethColorFill } from './TeethColorFill'
@@ -17,6 +17,14 @@ const Settings: FC<SettingsProps> = ({ navigation }) => {
   const [actions, dispatch] = useGeneralControl()
   return (
     <List.Section title="Настройки">
+      <List.Item 
+        title={() => <Text style={{ marginLeft: -8 }} variant="bodyLarge">Базы данных</Text>} 
+        onPress={() => navigation.navigate('DatabasesList')}
+        left={props => <List.Icon {...props} icon="database"
+        style={styles.noAccordionItem}
+      />
+      }
+      />
       <List.Accordion
         title="Шаблоны сообщений"
         left={props => <List.Icon {...props} icon="format-text" />}

@@ -8,6 +8,7 @@ import Settings from './Settings'
 import AddTemplate from './AddTemplate'
 import TemplatesList from './TemplatesList'
 import ConfirmAppointment from './ConfirmAppointment'
+import DatabasesList from './DatabasesList'
 
 export {
   Appointments,
@@ -19,5 +20,6 @@ export {
   Settings,
   AddTemplate,
   TemplatesList,
-  ConfirmAppointment
+  ConfirmAppointment,
+  DatabasesList
 }

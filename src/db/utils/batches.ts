@@ -1,5 +1,5 @@
 import { Contact } from 'expo-contacts';
-import database from '..'
+import getDatabase from '..'
 import { phoneSanitazer } from '../../utils/sanitizers'
 import Patient from '../models/Patient';
 import Phone from '../models/Phone';
@@ -13,6 +13,8 @@ export type getPatientBatchesParams = {
 }
 
 export const getPatientBatches = ({ phones, fullName, id, image }: getPatientBatchesParams) => {
+  const database = getDatabase()
+
   let patientId: string
 
   const patientBatch = database.get<Patient>('patients').prepareCreate(patient => {
@@ -42,6 +44,8 @@ export type getPatientRelationsBatchesParams = {
 }
 
 export const getPatientRelationsBatches = ({ patientId, phones }: getPatientRelationsBatchesParams) => {
+  const database = getDatabase()
+  
   return [
     database.get<Formula>('formulas').prepareCreate(formula => {
       formula.patientId = patientId
@@ -50,7 +54,7 @@ export const getPatientRelationsBatches = ({ patientId, phones }: getPatientRela
     }),
     ...(phones?.filter(phone => Boolean(phone.number)).map(phone => database.get<Phone>('phones').prepareCreate(instance => {
       instance.patientId = patientId
-      instance.number = phoneSanitazer(phone.number)
+      instance.number = phoneSanitazer(phone.number!)
       instance.isPrimary = Boolean(phone.isPrimary)
     })) || [])
   ]

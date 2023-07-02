@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { List, ListItemProps } from 'react-native-paper'
 
@@ -18,7 +18,7 @@ type ComplexCB<T = boolean, N extends string = string> = {
 }
 
 export const SettingsCheckbox = <T extends SettingsCheckboxProps, N extends string>(
-  { onChange, name, initial, radio, value, ...rest }: SettingsCheckboxProps<N> & (T['name'] extends undefined ? SimpleCB : ComplexCB<boolean, N>)
+  { onChange, name, initial, radio, value, style, ...rest }: SettingsCheckboxProps<N> & (T['name'] extends undefined ? SimpleCB : ComplexCB<boolean, N>)
 ) => {
   const [_checked, setChecked] = useState(initial)
 
@@ -96,11 +96,17 @@ export const SettingsRadioGroup = <T extends SettingsRadioGroupProps, N extends 
 
 const styles = StyleSheet.create({
   button: {
-    paddingLeft: 24,
-    paddingRight: 16
+    paddingLeft: 22,
+    paddingRight: 16,
   },
   checkbox: {
     paddingRight: 16
+  },
+  noAccordionItem: {
+    paddingLeft: 8,
+  },
+  noAccordionItemTitle: {
+    paddingLeft: 0
   }
 })
 

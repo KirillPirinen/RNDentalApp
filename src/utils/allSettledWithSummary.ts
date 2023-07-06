@@ -1,7 +1,7 @@
 
 type PromiseStatuses = 'fulfilled' | 'rejected'
 
-type PromiseItem<T> = { status: PromiseStatuses; value: T; reason?: any; }
+export type PromiseItem<T> = { status: PromiseStatuses; value: T; reason?: any; }
 
 export type SettledSummary<T> = {
     fulfilled: number;
@@ -9,7 +9,11 @@ export type SettledSummary<T> = {
     result?: Array<PromiseItem<T>>
 }
 
-export const allSettledWithSummary = async <P extends Promise<any>, R = Awaited<P>>(promises: Array<P>) => {
+export const allSettledWithSummary = async <P extends Promise<any>, R = Awaited<P>>(
+    promises: Array<P>, 
+    onResolve?: (value: P) => void,
+    onReject?: () => void
+) => {
     const summary: SettledSummary<R> = {
         fulfilled: 0,
         rejected: 0,
@@ -19,6 +23,7 @@ export const allSettledWithSummary = async <P extends Promise<any>, R = Awaited<
         promises.map(p => p
             .then(value => {
                 summary.fulfilled++
+                onResolve?.(value)
                 return {
                     status: "fulfilled",
                     value
@@ -26,6 +31,7 @@ export const allSettledWithSummary = async <P extends Promise<any>, R = Awaited<
             })
             .catch(reason => {
                 summary.rejected++
+                onReject?.()
                 return {
                     status: "rejected",
                     reason

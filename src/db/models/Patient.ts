@@ -37,7 +37,7 @@ export default class Patient extends Model {
    
   // @ts-ignore
   @lazy sortedFiles = this.files.extend(
-    Q.sortBy('created_at', Q.desc)
+    Q.sortBy('created_at', Q.asc)
   )
 
   @lazy teeth = this.collections.get('teeth').query(
@@ -113,7 +113,7 @@ export default class Patient extends Model {
     }
 
     phoneNumbers?.forEach(contactPhone => {
-      const sanitazedPhone = phoneSanitazer(contactPhone.number)
+      const sanitazedPhone = phoneSanitazer(contactPhone.number!)
       if(!existedPhones[sanitazedPhone]) {
         batches.push(this.collections.get<Phone>('phones').prepareCreate(instance => {
           instance.patientId = this.id
@@ -135,7 +135,6 @@ export default class Patient extends Model {
 
     if (resFiles.length === 0) return 
 
-     
     // @ts-ignore
     const { granted, directoryUri } = dir ? { granted: true, directoryUri: dir } : await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
 

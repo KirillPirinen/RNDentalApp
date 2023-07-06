@@ -2,6 +2,7 @@ import React, { useState, useEffect, FC } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { Button, Modal, Text, ActivityIndicator } from 'react-native-paper'
 import { ContextedPortalDefaultProps } from '../__components__/__Portal'
+import actionTypes from '../../context/general-context/action-types'
 
 const defaultTextsResolvers = {
   contactsImport: { 
@@ -20,7 +21,10 @@ export type ProgressResult = {
   success: number;
   fail: number;
   total: number;
-  failedValues: Array<string>
+  failedValues: Array<{
+    reason?: string;
+    name: string;
+  }>
 }
 
 export type ProgressProps = ContextedPortalDefaultProps<{
@@ -53,7 +57,12 @@ export const Progress: FC<ProgressProps> = ({
         if(data) setDone(data)
         else __defaultProps.clear()
       })
-      .catch(__defaultProps.clear), 500)
+      .catch((e: any) => {
+        __defaultProps.dispatch({ type: actionTypes.INFO, payload: {
+          text: `Ошибка: ${e.message || 'unknown'}`,
+          color: 'errorContainer'
+        }})
+      }), 500)
     return () => clearTimeout(timer)
   }, [])
 
@@ -71,7 +80,14 @@ export const Progress: FC<ProgressProps> = ({
             <>
               <Text variant="bodyLarge">{`${error}:`}</Text>
               <ScrollView>
-                {done.failedValues.map((value, i) => <Text key={i}>{value}</Text>)}
+                {done.failedValues.map((value, i) => {
+                  return (
+                    <React.Fragment key={i}>
+                      <Text>{value.name}</Text>
+                      {value.reason && <Text style={{ color: 'red' }}>{` - ${value.reason}`}</Text>}
+                    </React.Fragment>
+                  )
+                })}
               </ScrollView>
             </>
           )}

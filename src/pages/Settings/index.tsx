@@ -5,7 +5,7 @@ import { TeethColorFill } from './TeethColorFill'
 import { ActivityButton } from './ActivityButton'
 import { useGeneralControl } from '../../context/general-context/index'
 import { Sync } from './Sync'
-import { exportPatiensFiles } from '../../db/actions/index'
+import { exportPatiensFiles, importPatiensFiles } from '../../db/actions/index'
 import { NavigationProp } from '@react-navigation/native'
 import { FC } from 'react'
 
@@ -36,12 +36,19 @@ const Settings: FC<SettingsProps> = ({ navigation }) => {
       <TeethColorFill />
       <Sync />
       <ActivityButton />
-      <List.Item 
+      <List.Item
         title="Экспортировать файлы пациентов" 
         onPress={() => {
           dispatch({ type: actions.PROGRESS, payload: { runJob: exportPatiensFiles, mode: 'filesExport' } })
         }}
         style={styles.button} 
+      />
+      <List.Item 
+        title="Импортировать файлы пациентов" 
+        onPress={() => {
+          dispatch({ type: actions.PROGRESS, payload: { runJob: importPatiensFiles, mode: 'filesExport' } })
+        }}
+        style={styles.button}
       />
       <Button onPress={() => dispatch({ type: actions.ABOUT_INFO })}>О приложении</Button>
     </List.Section>

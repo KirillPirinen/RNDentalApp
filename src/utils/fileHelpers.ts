@@ -21,7 +21,7 @@ export const getFileNameWithoutExt = (str: string, ext?: string) => {
 }
 
 export const getFileNameFromUri = (str: string) => {
-  const segments = decodeURI(str).split('/');
+  const segments = decodeURIComponent(str).split('/');
   return (segments.pop() || segments.pop() as string); 
 }
 

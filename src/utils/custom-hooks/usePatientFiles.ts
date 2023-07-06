@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import * as FileSystem from 'expo-file-system';
-import { getExtension } from '../fileHelpers';
+import { getExtension, makeDirIfNotExist } from '../fileHelpers';
 import { createFile } from '../../db/actions/index';
 import Patient from '../../db/models/Patient';
 import File from '../../db/models/File';
@@ -11,37 +11,34 @@ import { mimeTypes } from '../../consts';
 type CombinedAssets = ImagePickerAsset | DocumentPickerResponse
 
 export const resolveFileMeta = (file: CombinedAssets) => {
-  const cashUri = (file as DocumentPickerResponse).fileCopyUri || file.uri
+  const cashUri = (file as DocumentPickerResponse).fileCopyUri || (file as ImagePickerAsset).uri
   const name = (file as DocumentPickerResponse)?.name || (file as ImagePickerAsset)?.fileName
   const ext = getExtension(cashUri)
+
   
   return { uri: cashUri, name: name || `${Date.now()}.${ext}`, ext }
 }
 
+export const createAndMove = async (file: CombinedAssets, patient: Patient) => {
+  const { uri, name, ext } = resolveFileMeta(file)
+
+  const type = (ext as keyof typeof mimeTypes)
+
+  if(!mimeTypes[type]) return;
+
+  const instance = await createFile({ name, patientId: patient.id, type })
+  return await FileSystem.moveAsync({
+    from: uri,
+    to: instance.uri,
+  });
+}
+
 export const saveFiles = async (assets: CombinedAssets[], patient: Patient) => {
 
-  const meta = await FileSystem.getInfoAsync(patient.filesPath) 
-
-  if(!meta.exists) {
-    await FileSystem.makeDirectoryAsync(patient.filesPath)
-  }
-
-  const moveFile = async (file: CombinedAssets) => {
-    const { uri, name, ext } = resolveFileMeta(file)
-
-    const type = (ext as keyof typeof mimeTypes)
-
-    if(!mimeTypes[type]) return;
-
-    const instance = await createFile({ name, patientId: patient.id, type })
-    return await FileSystem.moveAsync({
-      from: uri,
-      to: instance.uri,
-    });
-  }
+  await makeDirIfNotExist(patient.filesPath)
 
   if(!Array.isArray(assets)) {
-    return moveFile(assets)
+    return createAndMove(assets, patient)
   }
 
   return assets.reduce(async (prevPromise, asset) => {
@@ -51,7 +48,7 @@ export const saveFiles = async (assets: CombinedAssets[], patient: Patient) => {
       console.log(err);
     } finally {
       // eslint-disable-next-line no-unsafe-finally
-      return moveFile(asset);
+      return createAndMove(asset, patient);
     }
   }, Promise.resolve())
 

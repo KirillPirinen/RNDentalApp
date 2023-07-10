@@ -34,7 +34,7 @@ const TemplatesList: FC<TemplatesListProps> = ({ templates, navigation }) => {
 
   }, [])
 
-  const onEdit = useCallback((template: Template) => () => navigation.navigate('AddTemplate', {
+  const onEdit = useCallback((template: Template) => navigation.navigate('AddTemplate', {
     edit: true,
     template
   }), [])

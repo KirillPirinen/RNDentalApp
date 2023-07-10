@@ -2,12 +2,13 @@ import React, { useState, useLayoutEffect, FC } from 'react'
 import { View, StyleSheet, Linking } from 'react-native'
 import { Modal, Text, Button, RadioButton, Divider, 
   Surface } from 'react-native-paper'
-import getDatabase from '../../db'
-import { parseTemplateByPatient } from '../../utils/parseTemplate'
-import actions from '../../context/general-context/action-types'
+import getDatabase from '../../../db'
+import { parseTemplateByPatient } from '../../../utils/parseTemplate'
+import actions from '../../../context/general-context/action-types'
 import { setStringAsync } from 'expo-clipboard'
-import { ContextedPortalDefaultProps } from '../__components__/__Portal'
-import Patient from '../../db/models/Patient'
+import { ContextedPortalDefaultProps } from '..'
+import Patient from '../../../db/models/Patient'
+import Template from '../../../db/models/Template'
 
 export type ChooseTemplateModes = keyof typeof Links
 
@@ -37,7 +38,7 @@ export const ChooseTemplate: FC<ChooseTemplateProps> = ({
     mode,
     phone
 }) => {
-  const [templates, setTemplates] = useState([])
+  const [templates, setTemplates] = useState<Array<{ id: string, name: string, text: string }>>([])
   const [choosed, setChoosed] = useState<string>('')
   
   const isTelegram = mode === "telegram"
@@ -64,9 +65,10 @@ export const ChooseTemplate: FC<ChooseTemplateProps> = ({
   }
 
   useLayoutEffect(() => {
-    getDatabase().get('templates').query().fetch()
+    getDatabase().get<Template>('templates').query().fetch()
       .then((dbTemplates) => {
         if(dbTemplates.length) {
+          // @ts-ignore
           parseTemplateByPatient(dbTemplates, patient).then(setTemplates)
         } else {
           onSendTemplateBare()

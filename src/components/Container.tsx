@@ -9,11 +9,12 @@ const defaultStyle = {
 type ContainerProps = ScrollViewProps & {
   children: ReactNode
   scroll?: boolean;
+  style?: object;
 }
 
-const Container: FC<ContainerProps> = ({ children, scroll, ...rest }) => {
+const Container: FC<ContainerProps> = ({ children, scroll, style, ...rest }) => {
   const Component = scroll ? ScrollView : View
-  return <Component style={defaultStyle} {...rest}>{children}</Component>
+  return <Component style={style ? [style, defaultStyle] : defaultStyle} {...rest}>{children}</Component>
 }
 
 

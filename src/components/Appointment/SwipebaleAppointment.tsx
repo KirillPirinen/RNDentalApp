@@ -59,8 +59,7 @@ export const SwipeableAppointment: FC<SwipeableAppointmentProps> = enhancer(({
           onPress={() => onDelete(appointment, patient)} 
           style={{ backgroundColor: theme.colors.error }}
         >
-          <Ionicons name="ios-close" size={48} color="white"
-          />
+          <Ionicons name="ios-close" size={48} color="white" />
         </SwipeViewButton>
         <SwipeViewButton 
           onPress={() => {

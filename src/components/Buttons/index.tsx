@@ -10,8 +10,8 @@ export type SwipeViewButtonProps = TouchableOpacityProps & {
 export const SwipeViewButton: FC<SwipeViewButtonProps> = ({ style, ...rest }) => <TouchableOpacity {...rest} style={style ? [styles.swipe, style]: styles.swipe}/>
 
 export type ButtonRowPanelProps = {
-  onDelete: () => void;
-  onEdit: () => void;
+  onDelete?: () => void;
+  onEdit?: () => void;
   children?: ReactNode;
   style?: ViewStyle;
   buttonsStyle?: ViewStyle;
@@ -52,7 +52,7 @@ export const ButtonRowPanel: FC<ButtonRowPanelProps> = ({ onDelete, onEdit, chil
 )}
 
 const styles = StyleSheet.create({
-  actionsWrapper: { flexDirection:'row', alignItems: 'center' },
+  actionsWrapper: { flexDirection:'row', alignItems: 'center', margin: 0 },
   noPadding: { padding: 0 },
   swipe: {
     width: 75,

@@ -1,26 +1,44 @@
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { Searchbar } from 'react-native-paper'
 import { View } from 'react-native'
 import { useEffect } from 'react'
 
-const Autocomplete = <T extends { result: T['result']; searchQuery?: string; }>({
+const Autocomplete = <T extends { result: T['result']; searchQuery?: string; }, F>({
   placeholder, 
   renderList,
   onChange, 
-  initState, 
+  initState,
+  barStyle,
+  children,
+  onFocus,
   ...rest 
 }: {
   placeholder?: string
   renderList: ((props: T) => JSX.Element) | React.ComponentType<T>
   onChange: (query: string) => Promise<T['result']> | T['result']
-  initState?: T['result']
+  initState?: Promise<T['result']> | T['result']
+  barStyle?: object
+  children?: ReactNode
+  onFocus?: () => void
 } & Omit<T, 'result' | 'searchQuery'>) => {
 
-  const [result, setResult] = useState(initState);
+  const [result, setResult] = useState<T['result']>([]);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const init = () => {
+    if (initState instanceof Promise) {
+      initState.then(setResult)
+    } else {
+      setResult(initState)
+    }
+  }
+
   useEffect(() => {
-    setResult(initState)
+    if(!searchQuery) {
+      init()
+    } else {
+      onChangeSearch(searchQuery)
+    }
   }, [initState])
 
   const onChangeSearch = (query: string) => {
@@ -35,7 +53,7 @@ const Autocomplete = <T extends { result: T['result']; searchQuery?: string; }>(
       }
       
     } else {
-      setResult(initState)
+      init()
     }
     setSearchQuery(query)
   }
@@ -47,8 +65,11 @@ const Autocomplete = <T extends { result: T['result']; searchQuery?: string; }>(
       <Searchbar
         placeholder={placeholder}
         onChangeText={onChangeSearch}
+        style={barStyle}
         value={searchQuery}
+        onFocus={onFocus}
       />
+      {children}
       {/* @ts-ignore */}
       <Output result={result} searchQuery={searchQuery} { ...rest } />
     </View>

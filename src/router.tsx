@@ -2,7 +2,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import CustomNavigationBar, { AppHeaderProps } from './components/AppHeader'
 import {
   Appointments, PatientDetail, AddAppointment, PatientsList,
-  AddPatient, ImportContacts, Settings, AddTemplate, TemplatesList, ConfirmAppointment, DatabasesList
+  AddPatient, ImportContacts, Settings, AddTemplate, TemplatesList, ConfirmAppointment, 
+  DatabasesList, GroupList, AddGroup
 } from './pages'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import { Text } from 'react-native-paper'
@@ -20,13 +21,13 @@ const renderHeader = (props: AppHeaderProps) => <CustomNavigationBar {...props} 
 export const TabsName = {
   records: 'Записи',
   patients: 'Все пациенты',
-  settings: 'Настройки'
+  settings: 'Настройки',
 }
 
 const Icons = {
   records: renderIcon('calendar-check'),
   patients: renderIcon('account-injury'),
-  settings: renderIcon('cog-outline')
+  settings: renderIcon('cog-outline'),
 }
 
 const Stack = createNativeStackNavigator()
@@ -79,7 +80,7 @@ function BottomTabs () {
   )
 }
 
-const getTitle = ({ route }: { route: any }) => ({ headerTitle: route.params?.edit ? 'Редактирование записи' : 'Добавление записи' })
+const getEditTitle = (editTitle: string, defaultTitle: string) => ({ route }: { route: any }) => ({ headerTitle: route.params?.edit ? editTitle : defaultTitle })
 
 const Router = () => {
   const [actions, dispatch] = useGeneralControl()
@@ -87,9 +88,7 @@ const Router = () => {
       <Stack.Navigator
         // @ts-ignore
         screenOptions={{ header: renderHeader }}
-        screenListeners={{
-          focus: () => dispatch({ type: actions.CLEAR })
-        }}
+        screenListeners={{ focus: () => dispatch({ type: actions.CLEAR }) }}
       >
         <Stack.Screen
           name="Home"
@@ -99,20 +98,21 @@ const Router = () => {
         <Stack.Screen
           name="Detail"
           component={PatientDetail}
-          options={{
-            headerTitle: 'Карточка пациента'
-          }}
+          options={{ headerTitle: 'Карточка пациента' }}
         />
         {/* @ts-ignore */}
-        <Stack.Screen options={getTitle} name="AddAppointment" component={AddAppointment} />
+        <Stack.Screen options={getEditTitle('Редактирование записи', 'Добавление записи')} name="AddAppointment" component={AddAppointment} />
         {/* @ts-ignore */}
         <Stack.Screen options={{ headerTitle: 'Добавление пациента' }} name="AddPatient" component={AddPatient} />
         <Stack.Screen options={{ headerTitle: 'Зубная формула' }} name="TeethFormula" component={TeethFormula} />
         <Stack.Screen options={{ headerTitle: 'Импорт контактов' }} name="ImportContacts" component={ImportContacts} />
         {/* @ts-ignore */}
-        <Stack.Screen options={{ headerTitle: 'Добавить новый шаблон' }} name="AddTemplate" component={AddTemplate} />
+        <Stack.Screen options={getEditTitle('Редактирование шаблона', 'Добавить новый шаблон')} name="AddTemplate" component={AddTemplate} />
+        {/* @ts-ignore */}
+        <Stack.Screen options={getEditTitle('Редактирование группы', 'Добавить новую группу')} name="AddGroup" component={AddGroup} />
         <Stack.Screen options={{ headerTitle: 'Управление шаблонами' }} name="TemplatesList" component={TemplatesList} />
         <Stack.Screen options={{ headerTitle: 'Управление БД' }} name="DatabasesList" component={DatabasesList} />
+        <Stack.Screen options={{ headerTitle: 'Управление группами' }} name="GroupList" component={GroupList} />
         {/* @ts-ignore */}
         <Stack.Screen options={{ headerTitle: 'Подтверждение приема' }} name="ConfirmAppointment" component={ConfirmAppointment} />
       </Stack.Navigator>

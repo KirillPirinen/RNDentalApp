@@ -1,8 +1,8 @@
 import React, { useState, useEffect, FC } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { Button, Modal, Text, ActivityIndicator } from 'react-native-paper'
-import { ContextedPortalDefaultProps } from '../__components__/__Portal'
-import actionTypes from '../../context/general-context/action-types'
+import { ContextedPortalDefaultProps } from '..'
+import actionTypes from '../../../context/general-context/action-types'
 
 const defaultTextsResolvers = {
   contactsImport: { 

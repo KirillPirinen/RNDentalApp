@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 import { StyleSheet, ViewStyle } from 'react-native'
 import { Snackbar, SnackbarProps } from 'react-native-paper'
-import { TabsName } from '../../router'
-import { ContextedPortalDefaultProps } from '../__components__/__Portal'
-import { AppThemeColors, useAppTheme } from '../../styles/themes'
+import { TabsName } from '../../../router'
+import { ContextedPortalDefaultProps } from '..'
+import { AppThemeColors, useAppTheme } from '../../../styles/themes'
 
 const homeTabs = Object.values(TabsName)
 

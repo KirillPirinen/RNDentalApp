@@ -2,13 +2,15 @@ import type {
   createAppointmentParams,
   createToothParams,
   createTemplateParams,
-  createFileParams
+  createFileParams,
+  createGroupParams
 } from './types'
 import getDatabase from '..'
 import Appointment from '../models/Appointment';
 import Tooth from '../models/Tooth';
 import Template from '../models/Template';
 import File from '../models/File';
+import Group from '../models/Group';
 
 export { importPatiensFiles } from './importPatiensFiles'
 export { createPatient, importContacts } from './importContacts'
@@ -53,5 +55,23 @@ export const createFile = async ({ name, type, patientId }: createFileParams) =>
       template.type = type
       template.patientId = patientId
     })
+  )
+}
+
+export const createGroup = async ({ name, description = null }: createGroupParams, asBatch?: boolean, id?: string) => {
+  const database = getDatabase()
+
+  const fn = (group: Group) => {
+    group.name = name
+    group.description = description
+  }
+
+  if (asBatch) {
+    const batchInstance = database.get<Group>('groups').prepareCreate(fn)
+    id && (batchInstance._raw.id = id)
+    return batchInstance
+  }
+
+  return await database.write(async () => await database.get<Group>('groups').create(fn)
   )
 }

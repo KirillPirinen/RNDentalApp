@@ -1,8 +1,7 @@
-import { Divider } from 'react-native-paper'
-import { FlatList, Keyboard, View, FlatListProps } from 'react-native'
+import { FlatList, View, FlatListProps } from 'react-native'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import withObservables from '@nozbe/with-observables'
-import { Container, Autocomplete, FAB, EmptyList, Patient } from '../components'
+import { Autocomplete, FAB, EmptyList, Patient } from '../components'
 import { NavigationProp, useIsFocused } from '@react-navigation/native'
 import { useGeneralControl } from '../context/general-context'
 import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef'
@@ -11,11 +10,36 @@ import { querySanitazer } from '../utils/sanitizers'
 import { PatientPhones } from '../components/PatientPhones'
 import { HighlightedText } from '../components/HighlightedText'
 import PatientModel from '../db/models/Patient'
-import { FC } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { useAppTheme } from '../styles/themes'
+import { defaultDissmisHandle, renderDefaultDivider } from '../utils/defaultFn'
+import Group from '../db/models/Group'
+import DropDownPicker from 'react-native-dropdown-picker';
+
+DropDownPicker.modifyTranslation('RU', {
+  PLACEHOLDER: 'Выберите группу',
+  SEARCH_PLACEHOLDER: 'Ищем группы',
+  SELECTED_ITEMS_COUNT_TEXT: {
+    1: 'Выбрана одна группа',
+    2: 'Две группы выбраны',
+    n: '{count} групп выбрано'
+  },
+  NOTHING_TO_SHOW: ''
+})
+
+const schema = {
+  label: 'name',
+  value: 'id'
+}
 
 const wrapper = { marginVertical: 12 } as const
-const renderDivider = () => <Divider bold />
+const picker = {
+  backgroundColor: 'rgb(247,243,249)',
+  borderWidth: 1,
+  borderColor: "rgba(0,0,0,0.3)"
+} as const
+
+const footer = <View style={{ height: 100 }} />
 
 type renderListProps = Omit<FlatListProps<PatientModel>, 'renderItem' | 'data'> & { 
   result: PatientModel[];
@@ -39,39 +63,63 @@ const renderList = ({ result, navigation, searchQuery: searchQueryRaw, ...rest }
             <PatientPhones patient={item} query={searchQuery} />
           </Patient>
         )}
-        ItemSeparatorComponent={renderDivider}
+        ItemSeparatorComponent={renderDefaultDivider}
         style={wrapper}
         ListEmptyComponent={EmptyList}
-        ListFooterComponent={<View style={{ height: 100 }} />}
+        ListFooterComponent={footer}
         {...rest}
       />
   )
 }
 
-const dissmisHandle = () => {
-  if (Keyboard.isVisible()) {
-    Keyboard.dismiss()
-  }
-  return true
-}
-
 export type PatientsListProps = {
   navigation: NavigationProp<ReactNavigation.RootParamList>
   patients: PatientModel[]
+  groups: Group[]
   database: Database
 }
 
-export const PatientsList: FC<PatientsListProps> = ({ patients, navigation, database }) => {
+export const PatientsList: FC<PatientsListProps> = ({ patients, groups, navigation, database }) => {
+  const [open, setOpen] = useState(false);
+  const [groupIds, setGroupIds] = useState<Array<string>>([]);
   const [actions, dispatch] = useGeneralControl()
   const isFocused = useIsFocused()
 
+  useEffect(() => {
+    return () => {
+      setGroupIds([])
+      setOpen(false)
+    }
+  }, [isFocused])
+
+  const filtered = useMemo(async () => {
+    if(!groupIds.length) return patients
+    return await database.get<PatientModel>('patients').query(
+      Q.experimentalJoinTables(['patients_groups']),
+      Q.on('patients_groups', 'group_id', Q.oneOf(groupIds))
+    )
+  }, [patients, groupIds])
+
   const onChange = async (query: string) => {
+    const collection = database.get<PatientModel>('patients')
+    const sanitized = querySanitazer(query)
+
     if (/^\d/.test(query)) {
-      const res = await database.get<PatientModel>('patients').query(
-        Q.experimentalJoinTables(['phones']),
-        Q.on('phones', 'number', Q.like(`%${querySanitazer(query)}%`))
+      return await collection.query(
+        Q.experimentalJoinTables(['phones', 'patients_groups']),
+        Q.and(
+          Q.on('phones', 'number', Q.like(`%${sanitized}%`)),
+          ...(groupIds.length ? [Q.on('patients_groups', 'group_id', Q.oneOf(groupIds))] : [])
+        )
       ).fetch()
-      return res
+    } else if (groupIds.length) {
+      return await collection.query(
+        Q.experimentalJoinTables(['patients_groups']),
+        Q.and(
+          Q.where('full_name', Q.like(`%${sanitized}%`)),
+          Q.on('patients_groups', 'group_id', Q.oneOf(groupIds))
+        )
+      )
     }
     return patients.filter(patient => patient.fullName.toLowerCase().includes(query))
   }
@@ -87,27 +135,54 @@ export const PatientsList: FC<PatientsListProps> = ({ patients, navigation, data
   })
 
   return (
-      <Container onStartShouldSetResponder={dissmisHandle}>
+      <View 
+        onStartShouldSetResponder={() => {
+          setOpen(false)
+          return defaultDissmisHandle()
+        }} 
+        style={{ height: '100%' }}
+      >
           {isFocused && <Autocomplete
             onChange={onChange}
             renderList={renderList}
-            initState={patients}
+            initState={filtered}
             onScrollBeginDrag={onDrag}
             onScrollEndDrag={onDrop}
             removeClippedSubviews={true}
             navigation={navigation}
-          />}
+            barStyle={{ margin: 25, marginBottom: 10 }}
+            onFocus={() => setOpen(false)}
+          >
+            {groups.length > 0 && (
+              <View style={{ marginHorizontal: 25 }}>
+                <DropDownPicker
+                  schema={schema}
+                  multiple={true}
+                  min={0}
+                  open={open}
+                  value={groupIds}
+                  items={groups as any}
+                  setOpen={setOpen}
+                  setValue={setGroupIds}
+                  language="RU"
+                  style={picker}
+                />
+              </View>
+            )}
+            </Autocomplete>
+          }
           <FAB
             ref={ref}
             label="Добавить пациента"
             onPress={onChoosePatientMethod}
           />
-      </Container>
+      </View>
   )
 }
 
 export default withDatabase(
   withObservables([], ({ database }: { database: Database }) => ({
-    patients: database.get<PatientModel>('patients').query()
+    patients: database.get<PatientModel>('patients').query(),
+    groups: database.get<Group>('groups').query()
   }))(PatientsList)
 )

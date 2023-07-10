@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { Portal } from 'react-native-paper'
 import { useModalContent, useGeneralControl } from '../../context/general-context'
-import RegisterContent from '../PortalContent'
+import RegisterContent from './PortalContent'
 import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { AppTheme, useAppTheme } from '../../styles/themes'
 import { AppDispatch } from '../../types/AppDispatch'

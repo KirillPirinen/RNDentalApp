@@ -20,10 +20,12 @@ const Settings: FC<SettingsProps> = ({ navigation }) => {
       <List.Item 
         title={() => <Text style={{ marginLeft: -8 }} variant="bodyLarge">Базы данных</Text>} 
         onPress={() => navigation.navigate('DatabasesList')}
-        left={props => <List.Icon {...props} icon="database"
-        style={styles.noAccordionItem}
+        left={props => <List.Icon {...props} icon="database" style={styles.noAccordionItem} />}
       />
-      }
+      <List.Item 
+        title={() => <Text style={{ marginLeft: -8 }} variant="bodyLarge">Группы</Text>} 
+        onPress={() => navigation.navigate('GroupList')}
+        left={props => <List.Icon {...props} icon="crowd" style={styles.noAccordionItem} />}
       />
       <List.Accordion
         title="Шаблоны сообщений"

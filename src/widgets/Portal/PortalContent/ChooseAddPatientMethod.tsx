@@ -1,7 +1,7 @@
 import { FC } from 'react'
-import { Confirm } from '../Confirm'
+import { Confirm } from '../../../components/Confirm'
 import { Button } from 'react-native-paper'
-import { ContextedPortalDefaultProps } from '../__components__/__Portal'
+import { ContextedPortalDefaultProps } from '..'
 
 export type ChooseAddPatientMethodProps = ContextedPortalDefaultProps<{
   onAlone: () => void

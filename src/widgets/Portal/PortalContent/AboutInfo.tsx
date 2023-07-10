@@ -1,9 +1,9 @@
 
 import { Text } from 'react-native-paper'
 import { View, StyleSheet, Linking } from 'react-native'
-import { TelegramButton } from '../Buttons/DeepLinks'
+import { TelegramButton } from '../../../components/Buttons/DeepLinks'
 import { Modal } from 'react-native-paper'
-import { ContextedPortalDefaultProps } from '../__components__/__Portal'
+import { ContextedPortalDefaultProps } from '..'
 import { FC } from 'react'
 
 const text = `Приложение - инструмент для стоматологов, поможет Вам хранить и отслеживать данные пациентов, фото, cнимки, зубную формулу и тд.

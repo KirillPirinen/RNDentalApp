@@ -11,6 +11,8 @@ import Appointment from './Appointment'
 import Formula from './Formula'
 import File from './File'
 import { PhoneDTO } from '../../pages/AddPatient'
+import PatientsGroup from './PatientsGroups'
+import Group from './Group'
 
 export default class Patient extends Model {
 
@@ -21,6 +23,7 @@ export default class Patient extends Model {
     formulas: { type: 'has_many', foreignKey: 'patient_id' },
     phones: { type: 'has_many', foreignKey: 'patient_id' },
     files: { type: 'has_many', foreignKey: 'patient_id' },
+    patients_groups: { type: 'has_many', foreignKey: 'patient_id' },
   } as const
   
   @text('full_name') fullName: string
@@ -33,8 +36,11 @@ export default class Patient extends Model {
   @children('appointments') appointments: Query<Appointment>
   @children('formulas') formulas: Query<Formula>
   @children('files') files: Query<File>
+  @children('patients_groups') associatedRecords: Query<PatientsGroup>
 
-   
+  @lazy allAppointments = this.collections.get<Group>('groups')
+    .query(Q.on('patients_groups', 'patient_id', this.id))
+
   // @ts-ignore
   @lazy sortedFiles = this.files.extend(
     Q.sortBy('created_at', Q.asc)

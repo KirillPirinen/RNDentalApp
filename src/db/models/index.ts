@@ -7,6 +7,8 @@ import Template from './Template'
 import AppointmentTooth from './AppointmentTooth'
 import Settings from './Settings'
 import File from './File'
+import Group from './Group'
+import PatientsGroups from './PatientsGroups'
 
 export default [
   Patient,
@@ -17,5 +19,7 @@ export default [
   Template,
   AppointmentTooth,
   Settings,
-  File
+  File,
+  Group,
+  PatientsGroups
 ]

@@ -12,9 +12,9 @@ export type TemplateCardProps = {
 }
 
 const TemplateCard: FC<TemplateCardProps> = ({ template, onDelete, onEdit }) => {
-  const [example, setExample] = useState()
+  const [example, setExample] = useState<string | undefined>()
 
-  const onToggleExample = () => setExample(prev => !prev ? parseTemplate(template.text) : null)
+  const onToggleExample = () => setExample(prev => !prev ? parseTemplate(template.text) : undefined)
 
   return (
     <Card style={styles.card}>
@@ -25,9 +25,9 @@ const TemplateCard: FC<TemplateCardProps> = ({ template, onDelete, onEdit }) => 
             <Text variant="titleSmall">Пример:</Text>
             <Text variant="bodyMedium" selectable>{example || template.text}</Text>
           </View>
-          <ButtonRowPanel 
-            onDelete={onDelete?.(template)} 
-            onEdit={onEdit?.(template)}
+          <ButtonRowPanel
+            onDelete={onDelete && (() => onDelete(template))} 
+            onEdit={onEdit && (() => onEdit(template))}
             style={styles.panel}
             buttonsStyle={styles.buttons}
           >

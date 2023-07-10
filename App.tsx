@@ -4,7 +4,7 @@ import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
 import { dbAsync } from './src/db'
 import { LogBox } from 'react-native'
 import { GeneralContextProvider } from './src/context/general-context'
-import { ContextedPortal } from './src/components/__components__/__Portal'
+import { ContextedPortal } from './src/widgets/Portal'
 import { useLayoutEffect, useState } from 'react'
 import { Database } from '@nozbe/watermelondb'
 

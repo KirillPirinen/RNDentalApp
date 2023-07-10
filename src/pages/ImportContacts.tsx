@@ -12,6 +12,7 @@ import { importContacts } from '../db/actions'
 import { NavigationProp } from '@react-navigation/native'
 import * as Contacts from 'expo-contacts'
 
+const footer = <View style={{ height: 120 }}></View>
 const eqCompare = (prev: ItemProps, next: ItemProps) => prev.checked === next.checked
 
 const wrapper = { marginBottom: 30 } as const
@@ -66,7 +67,7 @@ const RenderedList: FC<RenderedListProps> = memo(({ result, onDrop, onDrag, ...r
         ListEmptyComponent={EmptyList}
         onScrollBeginDrag={onDrag}
         onScrollEndDrag={onDrop}
-        ListFooterComponent={<View style={{ height: 120 }}></View>}
+        ListFooterComponent={footer}
         // @ts-ignore
         // FlatList is a pure so we need to pass any prop to pass difference comparasion
         forceRerenderer={all}

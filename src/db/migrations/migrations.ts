@@ -1,4 +1,4 @@
-import { addColumns, schemaMigrations } from '@nozbe/watermelondb/Schema/migrations'
+import { addColumns, createTable, schemaMigrations } from '@nozbe/watermelondb/Schema/migrations'
 import { addSetting } from '../utils/addSetting'
 
 export default schemaMigrations({
@@ -13,6 +13,25 @@ export default schemaMigrations({
           ],
         }),
         addSetting('sync')!
+      ],
+    },
+    {
+      toVersion: 3,
+      steps: [
+        createTable({
+          name: 'groups',
+          columns: [
+            { name: 'name', type: 'string' },
+            { name: 'description', type: 'string', isOptional: true },
+          ],
+        }),
+        createTable({
+          name: 'patients_groups',
+          columns: [
+            { name: 'group_id', type: 'string', isIndexed: true },
+            { name: 'patient_id', type: 'string', isIndexed: true }
+          ]
+        }),
       ],
     },
   ]

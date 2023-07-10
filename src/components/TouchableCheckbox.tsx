@@ -33,7 +33,6 @@ export const TouchableCheckbox = ({
   style,
   name,
 }: TouchableCheckboxProps) => {
-
   const [_checked, setChecked] = useState<boolean>(Boolean(value));
   
   const handlePress = () => {
@@ -46,8 +45,10 @@ export const TouchableCheckbox = ({
 
   return (
     <TouchableRipple onPress={handlePress} style={[styles.wrapper, style]}>
-      <Text style={styles.label}>{label}</Text>
-      <Checkbox status={_checked ? 'checked' : 'unchecked'} />
+      <>
+        <Text style={styles.label}>{label}</Text>
+        <Checkbox status={_checked ? 'checked' : 'unchecked'} />
+      </>
     </TouchableRipple>
   );
 };

@@ -1,8 +1,8 @@
 import { FC, useCallback, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { IconButton, Modal, Surface, Text, Button } from 'react-native-paper'
-import { Teeth } from '../Teeth/Teeth'
-import { ContextedPortalDefaultProps } from '../__components__/__Portal'
+import { Teeth } from '../../../components/Teeth/Teeth'
+import { ContextedPortalDefaultProps } from '..'
 
 export type ChooseTeethProps = ContextedPortalDefaultProps<{
   onSubmit: (selectedArr: string[]) => void

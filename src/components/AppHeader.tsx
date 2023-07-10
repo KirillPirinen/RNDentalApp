@@ -23,7 +23,7 @@ const AppHeader: FC<AppHeaderProps> = ({ options: { menu, headerTitle }, route }
   const contentColor = theme.colors.onPrimary
   const isHome = route.name === 'Home'
 
-  const { statusBarColor, statusBarStyle } = getStatusBarStyle({ isHome, isModalOpen: state?.__visible, theme })
+  const { statusBarColor, statusBarStyle } = getStatusBarStyle({ isHome, isModalOpen: Boolean(state?.__visible), theme })
 
   return (
     <>

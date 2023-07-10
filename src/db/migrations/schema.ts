@@ -3,7 +3,7 @@ import { DEFAULT_SETTINGS } from '../../consts/index'
 import { insertSettings } from '../raw-queries'
 
 export default appSchema({
-  version: 2,
+  version: 3,
   tables: [
     tableSchema({
       name: 'patients',
@@ -89,6 +89,20 @@ export default appSchema({
         { name: 'created_at', type: 'number' },
         { name: 'updated_at', type: 'number' }
       ],
+    }),
+    tableSchema({
+      name: 'groups',
+      columns: [
+        { name: 'name', type: 'string' },
+        { name: 'description', type: 'string', isOptional: true },
+      ],
+    }),
+    tableSchema({
+      name: 'patients_groups',
+      columns: [
+        { name: 'group_id', type: 'string', isIndexed: true },
+        { name: 'patient_id', type: 'string', isIndexed: true }
+      ]
     }),
   ],
   unsafeSql: (sql, kind) => {

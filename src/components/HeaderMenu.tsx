@@ -33,12 +33,14 @@ export const HeaderMenu: React.FC<HeaderMenuProps> = ({ menu, theme, contentColo
       anchor={<Appbar.Action color={contentColor} icon="dots-vertical" onPress={openMenu} />}
       contentStyle={{ backgroundColor: theme.colors.background }}
     >
-      {menu.map(({ type, label, ...rest }) => {
+      <>
+        {menu.map(({ type, label, ...rest }) => {
         const Comp = contentTypes[type]
          
-        // @ts-ignore
-        return Comp && <Comp key={label} label={label} {...rest} />
-      })}
+          // @ts-ignore
+          return Comp && <Comp key={label} label={label} {...rest} />
+        })}
+      </>
     </Menu>
   )
 }

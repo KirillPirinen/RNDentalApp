@@ -1,5 +1,5 @@
 import { RegistredModalContent } from '../components/PortalContent'
-import { ContextedPortalOmitDefaultProps } from '../components/__components__/__Portal';
+import { ContextedPortalOmitDefaultProps } from '../widgets/Portal';
 import { AllowedSettings } from '../consts';
 import { modalControlAction, settingsAction, modalContentsAction } from '../context/general-context/action-types';
 import Settings from '../db/models/Settings';

@@ -15,6 +15,8 @@ declare global {
       'TemplatesList': any;
       'TeethFormula': { patient: Patient };
       'DatabasesList': any;
+      'GroupList': any;
+      'AddGroup': { group: Template, edit?: boolean } | undefined;
     }
   }
 }

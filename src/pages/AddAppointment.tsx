@@ -1,112 +1,16 @@
 import { FC, useEffect, useState } from 'react'
-import { View, FlatList, ScrollView, StyleSheet } from 'react-native'
+import { View, ScrollView, StyleSheet } from 'react-native'
 import DatePicker from '@react-native-community/datetimepicker'
-import { Container, Autocomplete, Patient, EmptyList } from '../components'
-import { Button, Divider, TextInput as Input, Text, useTheme } from 'react-native-paper'
-import { useDatabase } from '@nozbe/watermelondb/hooks'
-import { Database, Q } from '@nozbe/watermelondb'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
+import { Container, Patient } from '../components'
+import { Button, TextInput as Input, Text } from 'react-native-paper'
+import { NavigationProp } from '@react-navigation/native'
 import formatRu from '../utils/formatRu'
 import { createAppointment } from '../db/actions'
 import Slider from '@react-native-community/slider'
-import { querySanitazer } from '../utils/sanitizers'
-import { defaultExtractor } from '../utils/defaultFn'
-import { useGeneralControl } from '../context/general-context'
-import { getScheduledPatiens } from '../db/raw-queries'
-import { HighlightedText } from '../components/HighlightedText'
-import { PatientPhones } from '../components/PatientPhones'
 import PatientModel from '../db/models/Patient'
 import { useAppTheme } from '../styles/themes'
 import Appointment from '../db/models/Appointment'
-
-const onSearch = (db: Database) => async (query: string) => {
-  const sanitized = querySanitazer(query)
-
-  if(/^\d/.test(query)) {
-    const res = await db.get<PatientModel>('patients').query(
-      Q.experimentalJoinTables(['phones']),
-      Q.on('phones', 'number', Q.like(`%${sanitized}%`))
-    ).fetch()
-    return res
-  }
-
-  return db.get<PatientModel>('patients').query(Q.where('full_name', Q.like(`%${sanitized}%`)))
-}
-
-const renderList = ({ result, onChoose, db, searchQuery: searchQueryRaw }: {
-  result: Array<PatientModel>;
-  onChoose: (p: PatientModel) => void;
-  db: Database;
-  searchQuery: string;
-}) => {
-  const navigation = useNavigation()
-  const theme = useAppTheme()
-  const [actions, dispatch] = useGeneralControl()
-  const searchQuery = querySanitazer(searchQueryRaw)
-  const [suggestions, setSuggestions] = useState<Array<PatientModel>>([])
-
-  useEffect(() => {
-    db.get<PatientModel>('patients').query(getScheduledPatiens()).then(data => {
-      const dict: Record<string, boolean> = {}
-      const res = []
-      for(const patient of data) {
-        if(!dict[patient.id]) {
-          res.push(patient)
-          dict[patient.id] = true
-          if(res.length >= 3) break
-        }
-      }
-      setSuggestions(res)
-    })
-  }, [])
-
-  const onChoosePatientMethod = () => dispatch({ 
-    type: actions.CHOOSE_ADD_PATIENT_METHOD,
-    payload: { 
-      onAlone: () => navigation.navigate('AddPatient'), 
-      onBulk: () => navigation.navigate('ImportContacts')  
-    }
-  })
-
-  const isSearching = Boolean(result)
-  const hasSuggestions = Boolean(suggestions.length)
-
-  return (
-    <FlatList
-      data={isSearching ? result : suggestions}
-      keyExtractor={defaultExtractor}
-      renderItem={({ item }) => (
-        <Patient 
-          patient={item} 
-          navigation={navigation} 
-          theme={theme}
-          renderName={(name) => <HighlightedText text={name} query={searchQuery} />}
-          onPress={() => onChoose(item)}
-          onLongPress={() => navigation.navigate('Detail', { patient: item })}
-        >
-          <PatientPhones patient={item} query={searchQuery} />
-        </Patient>
-      )}
-      ItemSeparatorComponent={Divider}
-      style={{ marginVertical: 12 }}
-      ListHeaderComponent={(!isSearching && hasSuggestions) ? <Text variant="titleMedium">Последние запланированные пациенты: </Text> : undefined}
-      ListFooterComponent={(isSearching && !result?.length) ? (
-        <EmptyList text="Пациент не найден. Хотите добавить нового?">
-          <Button 
-            icon="plus" 
-            mode="outlined"
-            buttonColor={theme.colors.primaryContainer}
-            textColor="white"
-            onPress={onChoosePatientMethod}
-            style={{ marginVertical: 10 }}
-          >
-            Добавить
-          </Button>
-        </EmptyList>
-      ) : undefined}
-    />
-  )
-}
+import PatientSearch from '../widgets/PatientSearch'
 
 const initState = { mode: null, сurrent: new Date() }
 
@@ -125,7 +29,6 @@ const AddAppointment: FC<AddAppointmentProps> = ({ navigation, route: { params }
   const isEdit = params?.edit
 
   const theme = useAppTheme()
-  const db = useDatabase()
 
   const [dateMeta, setDateMeta] = useState<DateMeta>(appointment.date ? 
     {...initState, date: appointment.date } : initState
@@ -177,19 +80,13 @@ const AddAppointment: FC<AddAppointmentProps> = ({ navigation, route: { params }
 
   return (
     <Container>
-      {!choosed ? <Autocomplete 
-        onChange={onSearch(db)} 
-        renderList={renderList} 
-        onChoose={setChoosed}
-        placeholder="Поиск пациента"
-        db={db}
-      /> : (
+      {!choosed ? <PatientSearch setChoosed={setChoosed} /> : (
         <ScrollView keyboardShouldPersistTaps='handled'>
           <Patient 
             patient={choosed}
             navigation={navigation}
             theme={theme}
-            onPress={choosed && function(){ navigation.navigate('Detail', { patient: choosed })}}
+            onPress={choosed && (() => { navigation.navigate('Detail', { patient: choosed })})}
           />
           <Button 
             icon="reload" 

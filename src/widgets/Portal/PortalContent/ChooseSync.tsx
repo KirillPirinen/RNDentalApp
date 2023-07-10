@@ -1,7 +1,7 @@
 import { View } from 'react-native'
-import { Confirm } from '../Confirm'
+import { Confirm } from '../../../components/Confirm'
 import { Button as PaperButton, Checkbox, Dialog } from 'react-native-paper'
-import { ContextedPortalDefaultProps } from '../__components__/__Portal'
+import { ContextedPortalDefaultProps } from '..'
 import { FC } from 'react'
 
 export type ChooseSyncProps = ContextedPortalDefaultProps<{

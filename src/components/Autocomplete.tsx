@@ -2,6 +2,7 @@ import { ReactNode, useState } from 'react'
 import { Searchbar } from 'react-native-paper'
 import { View } from 'react-native'
 import { useEffect } from 'react'
+import { querySanitazer } from '../utils/sanitizers'
 
 const Autocomplete = <T extends { result: T['result']; searchQuery?: string; }, F>({
   placeholder, 
@@ -43,7 +44,7 @@ const Autocomplete = <T extends { result: T['result']; searchQuery?: string; }, 
 
   const onChangeSearch = (query: string) => {
     if(query) {
-      const prepQuery = query.toLowerCase()
+      const prepQuery = querySanitazer(query)
       const recieved = onChange(prepQuery)
 
       if (recieved instanceof Promise) {

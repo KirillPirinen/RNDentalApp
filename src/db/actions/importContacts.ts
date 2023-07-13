@@ -6,7 +6,7 @@ import { Contact } from 'expo-contacts';
 import getDatabase from '..'
 import { getPatientBatches, getPatientRelationsBatches } from '../utils/batches'
 import Patient from '../models/Patient';
-import { ProgressResult } from '../../components/PortalContent/Progress';
+import { ProgressResult } from '../../widgets/Portal/PortalContent/Progress';
 
 export { importPatiensFiles } from './importPatiensFiles'
 

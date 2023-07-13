@@ -1,5 +1,5 @@
 
-const nonLikeSafeRegexp = /[^a-zA-Z0-9а-я]/g
+const nonLikeSafeRegexp = /[^a-zA-Z0-9а-яА-Я]/g
 const nonNum = /[^0-9]/g
 
 export const querySanitazer = (str: string) => {

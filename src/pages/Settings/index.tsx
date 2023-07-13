@@ -8,6 +8,7 @@ import { Sync } from './Sync'
 import { exportPatiensFiles, importPatiensFiles } from '../../db/actions/index'
 import { NavigationProp } from '@react-navigation/native'
 import { FC } from 'react'
+import { widthUnmounOnBlur } from '../../utils/hoc/widthUnmounOnBlur'
 
 export type SettingsProps = {
   navigation: NavigationProp<ReactNavigation.RootParamList>
@@ -57,4 +58,4 @@ const Settings: FC<SettingsProps> = ({ navigation }) => {
   )
 }
 
-export default Settings
+export default widthUnmounOnBlur(Settings)

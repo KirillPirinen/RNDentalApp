@@ -39,7 +39,7 @@ function BottomTabs () {
   const theme = useAppTheme()
   return (
       <Tab.Navigator
-        sceneAnimationType="shifting"
+        sceneAnimationEnabled={true}
         barStyle={{
           backgroundColor: theme.colors.primary,
           paddingTop: -2,

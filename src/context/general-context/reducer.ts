@@ -35,7 +35,7 @@ export default <T extends AppActionTypes>(state: AppState, action: SelectAction<
     }
 
     case actions.CHOOSE_SYNC:
-    case actions.ABOUT_INFO:
+    case actions.USER_INFO:
     case actions.INFO:
     case actions.CHOOSE_TEETH:
     case actions.PROGRESS:

@@ -33,7 +33,8 @@ const defaultState = {
 
 const styles = StyleSheet.create({
   tabWrapper: {
-    marginBottom: 50
+    marginBottom: 50,
+    height: '100%'
   },
   imagesWrapper: {
     flexDirection: 'row',
@@ -175,7 +176,7 @@ const FilesTab: FC<FilesTabProps> = ({ patient, setCollapsed }) => {
   }
 
   const onOpen = (uri: string, type: string) => FileViewer.open(uri, { showOpenWithDialog: true }).catch(error => {
-    dispatch({ 
+    dispatch({
       type: actions.INFO,
       payload: { 
         text: `На устройстве не найдено приложение для открытия типа ${type}`,

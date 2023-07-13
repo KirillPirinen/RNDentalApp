@@ -43,7 +43,7 @@ export default class Patient extends Model {
 
   // @ts-ignore
   @lazy sortedFiles = this.files.extend(
-    Q.sortBy('created_at', Q.asc)
+    Q.sortBy('created_at', Q.desc)
   )
 
   @lazy teeth = this.collections.get('teeth').query(

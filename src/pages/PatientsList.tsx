@@ -16,7 +16,6 @@ import { defaultDissmisHandle, renderDefaultDivider } from '../utils/defaultFn'
 import Group from '../db/models/Group'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { FontAwesome } from '@expo/vector-icons';
-import { getAlphaFromColor } from '../utils/getAlphaFromColor'
 
 DropDownPicker.modifyTranslation('RU', {
   PLACEHOLDER: 'Выберите группу',
@@ -86,7 +85,6 @@ export const PatientsList: FC<PatientsListProps> = ({ patients, groups, navigati
     ({
       label: group.name,
       value: group.id,
-      containerStyle: { backgroundColor: group.color ? getAlphaFromColor(group.color) : 'white' },
       icon: () => <FontAwesome name="group" size={16} color={group.color ?? 'black'} />
     })
   ), [groups])

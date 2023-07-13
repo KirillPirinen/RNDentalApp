@@ -229,5 +229,5 @@ const styles = StyleSheet.create({
 export default withObservables(['route'], ({ route }) => ({
     patient: route.params.patient,
     phones: route.params.patient.phones,
-    groups: route.params.patient.groups.observeWithColumns(['name'])
+    groups: route.params.patient.groups.observeWithColumns(['name', 'color'])
 }))(PatientDetail)

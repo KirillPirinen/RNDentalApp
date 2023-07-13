@@ -15,7 +15,7 @@ export type AppointmentsListTabProps = Partial<PatientAppointmentListProps> & {
   navigation: NavigationProp<ReactNavigation.RootParamList>
 }
 
-const margin = { marginBottom: -60 }
+const margin = { marginBottom: -60, paddingHorizontal: 15 }
 
 export const AppointmentsListTab: FC<AppointmentsListTabProps> = ({ patient, navigation, ...rest }) => {
   return (

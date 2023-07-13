@@ -47,7 +47,12 @@ const Settings: FC<SettingsProps> = ({ navigation }) => {
         }}
         style={styles.button}
       />
-      <Button onPress={() => dispatch({ type: actions.ABOUT_INFO, payload: {} })}>О приложении</Button>
+      <Button onPress={() => dispatch({ 
+        type: actions.USER_INFO, 
+        payload: {
+          mode: 'about'
+        }
+      })}>О приложении</Button>
     </List.Section>
   )
 }

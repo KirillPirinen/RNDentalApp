@@ -97,7 +97,15 @@ const DatabasesList: FC<DatabasesListProps> = ({ navigation }) => {
   return (
     <>
     <List.Item 
-      title="Импортировать новую БД" 
+      title="Прочитать инструкцию" 
+      titleStyle={{ color: 'green' }}
+      onPress={() => dispatch({ type: actions.USER_INFO, payload: {
+        mode: "migrate"
+      }})} 
+      left={props => <List.Icon {...props} color={'green'} icon="information-outline" />}
+    />
+    <List.Item 
+      title="Импортировать новую БД"
       onPress={onImport} 
       left={props => <List.Icon {...props} icon="database-import" />}
     />

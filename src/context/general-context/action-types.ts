@@ -5,7 +5,7 @@ export const modalContentsAction = {
   PROGRESS: 'Progress',
   CHOOSE_TEMPLATE: 'ChooseTemplate',
   CHOOSE_TEETH: 'ChooseTeeth',
-  ABOUT_INFO: 'AboutInfo',
+  USER_INFO: 'UserInfo',
   INFO: 'Info',
   CHOOSE_SYNC: 'ChooseSync'
 } as const

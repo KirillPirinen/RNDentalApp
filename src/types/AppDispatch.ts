@@ -1,4 +1,4 @@
-import { RegistredModalContent } from '../components/PortalContent'
+import { RegistredModalContent } from '../widgets/Portal/PortalContent'
 import { ContextedPortalOmitDefaultProps } from '../widgets/Portal';
 import { AllowedSettings } from '../consts';
 import { modalControlAction, settingsAction, modalContentsAction } from '../context/general-context/action-types';

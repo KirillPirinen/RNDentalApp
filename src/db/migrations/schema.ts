@@ -95,6 +95,7 @@ export default appSchema({
       columns: [
         { name: 'name', type: 'string' },
         { name: 'description', type: 'string', isOptional: true },
+        { name: 'color', type: 'string', isOptional: true },
       ],
     }),
     tableSchema({

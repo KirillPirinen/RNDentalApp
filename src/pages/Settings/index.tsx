@@ -22,11 +22,6 @@ const Settings: FC<SettingsProps> = ({ navigation }) => {
         onPress={() => navigation.navigate('DatabasesList')}
         left={props => <List.Icon {...props} icon="database" style={styles.noAccordionItem} />}
       />
-      <List.Item 
-        title={() => <Text style={{ marginLeft: -8 }} variant="bodyLarge">Группы</Text>} 
-        onPress={() => navigation.navigate('GroupList')}
-        left={props => <List.Icon {...props} icon="crowd" style={styles.noAccordionItem} />}
-      />
       <List.Accordion
         title="Шаблоны сообщений"
         left={props => <List.Icon {...props} icon="format-text" />}
@@ -52,7 +47,7 @@ const Settings: FC<SettingsProps> = ({ navigation }) => {
         }}
         style={styles.button}
       />
-      <Button onPress={() => dispatch({ type: actions.ABOUT_INFO })}>О приложении</Button>
+      <Button onPress={() => dispatch({ type: actions.ABOUT_INFO, payload: {} })}>О приложении</Button>
     </List.Section>
   )
 }

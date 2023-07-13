@@ -15,7 +15,9 @@ import { CONTACT_SYNC_STRATEGY } from '../../consts'
 import { NavigationProp } from '@react-navigation/native'
 import Patient from '../../db/models/Patient'
 import Phone from '../../db/models/Phone'
-import { ChooseTemplateProps } from '../../components/PortalContent/ChooseTemplate'
+import { ChooseTemplateProps } from '../../widgets/Portal/PortalContent/ChooseTemplate'
+import Group from '../../db/models/Group'
+import { PatientGroupList } from '../../components/PatientGroupList'
 
 const tabs: Array<Route> = [
   { key: '0', title: 'Записи' },
@@ -26,9 +28,10 @@ export type PatientDetailProps = {
   navigation: NavigationProp<ReactNavigation.RootParamList>
   patient: Patient;
   phones: Phone[];
+  groups: Group[];
 }
 
-const PatientDetail: FC<PatientDetailProps> = ({ navigation, patient, phones }) => {
+const PatientDetail: FC<PatientDetailProps> = ({ navigation, patient, phones, groups }) => {
   const [actions, dispatch] = useGeneralControl()
   const { sync } = useSettings()
   const layout = useWindowDimensions();
@@ -152,7 +155,8 @@ const PatientDetail: FC<PatientDetailProps> = ({ navigation, patient, phones }) 
 
   return (
       <View style={styles.pageWrapper}>
-        <View style={[styles.patientDetails]}>
+        {groups.length > 0 && <PatientGroupList groups={groups} style={{ marginBottom: -10 }} />}
+        <View style={styles.patientDetails}>
           <View style={styles.metaWrapper}>
             <View style={styles.nameWrapper}>
               {patient.avatar && collapsed && (
@@ -224,5 +228,6 @@ const styles = StyleSheet.create({
 
 export default withObservables(['route'], ({ route }) => ({
     patient: route.params.patient,
-    phones: route.params.patient.phones
+    phones: route.params.patient.phones,
+    groups: route.params.patient.groups.observeWithColumns(['name'])
 }))(PatientDetail)

@@ -1,10 +1,9 @@
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC, useCallback } from 'react'
 import { StyleSheet } from 'react-native'
 import { useGeneralControl } from '../context/general-context'
 import { ScrollView } from 'react-native-gesture-handler'
 import { NavigationProp } from '@react-navigation/native'
 import { List } from 'react-native-paper'
-import { DEFAULT_DB_NAME } from '../consts'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import withObservables from '@nozbe/with-observables'
 import Group from '../db/models/Group'
@@ -22,7 +21,6 @@ export type GroupListProps = {
 
 const GroupList: FC<GroupListProps> = ({ navigation, groups }) => {
   const [actions, dispatch] = useGeneralControl()
-  const [databases, setDatabases] = useState<Array<string>>([DEFAULT_DB_NAME])
 
   const onAddPatients = useCallback((group: Group) => dispatch({ 
     type: actions.CONFIRM_DELETE,
@@ -51,6 +49,7 @@ const GroupList: FC<GroupListProps> = ({ navigation, groups }) => {
         title="Создать группу" 
         onPress={() => navigation.navigate('AddGroup')} 
         left={props => <List.Icon {...props} icon="account-multiple-plus" />}
+        style={styles.addBtn}
       />
       <ScrollView style={styles.wrapper}>
           {groups?.map(group => <ObservableGroup
@@ -66,6 +65,7 @@ const GroupList: FC<GroupListProps> = ({ navigation, groups }) => {
 }
 
 const styles = StyleSheet.create({
+  addBtn: { marginTop: 15 },
   wrapper: { margin: 25 },
   button: {
     paddingLeft: 24,

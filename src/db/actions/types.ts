@@ -20,4 +20,4 @@ export type createAppointmentParams = Pick<Appointment, 'patientId' | 'date' | '
 export type createToothParams = Pick<Tooth, 'formulaId' | 'toothNo' | 'toothState'> & { notes?: string; }
 export type createTemplateParams = Pick<Template, 'text' | 'name'>
 export type createFileParams = Pick<File, 'name' | 'type' | 'patientId'>
-export type createGroupParams = Pick<Group, 'name' | 'description'>
+export type createGroupParams = Pick<Group, 'name' | 'description' | 'color'>

@@ -15,6 +15,8 @@ import { useAppTheme } from '../styles/themes'
 import { defaultDissmisHandle, renderDefaultDivider } from '../utils/defaultFn'
 import Group from '../db/models/Group'
 import DropDownPicker from 'react-native-dropdown-picker';
+import { FontAwesome } from '@expo/vector-icons';
+import { getAlphaFromColor } from '../utils/getAlphaFromColor'
 
 DropDownPicker.modifyTranslation('RU', {
   PLACEHOLDER: 'Выберите группу',
@@ -26,11 +28,6 @@ DropDownPicker.modifyTranslation('RU', {
   },
   NOTHING_TO_SHOW: ''
 })
-
-const schema = {
-  label: 'name',
-  value: 'id'
-}
 
 const wrapper = { marginVertical: 12 } as const
 const picker = {
@@ -84,6 +81,15 @@ export const PatientsList: FC<PatientsListProps> = ({ patients, groups, navigati
   const [groupIds, setGroupIds] = useState<Array<string>>([]);
   const [actions, dispatch] = useGeneralControl()
   const isFocused = useIsFocused()
+
+  const groupItems = useMemo(() => groups.map(group => 
+    ({
+      label: group.name,
+      value: group.id,
+      containerStyle: { backgroundColor: group.color ? getAlphaFromColor(group.color) : 'white' },
+      icon: () => <FontAwesome name="group" size={16} color={group.color ?? 'black'} />
+    })
+  ), [groups])
 
   useEffect(() => {
     return () => {
@@ -156,12 +162,11 @@ export const PatientsList: FC<PatientsListProps> = ({ patients, groups, navigati
             {groups.length > 0 && (
               <View style={{ marginHorizontal: 25 }}>
                 <DropDownPicker
-                  schema={schema}
                   multiple={true}
                   min={0}
                   open={open}
                   value={groupIds}
-                  items={groups as any}
+                  items={groupItems}
                   setOpen={setOpen}
                   setValue={setGroupIds}
                   language="RU"

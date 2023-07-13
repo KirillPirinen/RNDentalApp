@@ -21,12 +21,14 @@ const renderHeader = (props: AppHeaderProps) => <CustomNavigationBar {...props} 
 export const TabsName = {
   records: 'Записи',
   patients: 'Все пациенты',
+  groups: 'Группы',
   settings: 'Настройки',
 }
 
 const Icons = {
   records: renderIcon('calendar-check'),
   patients: renderIcon('account-injury'),
+  groups: renderIcon('crowd'),
   settings: renderIcon('cog-outline'),
 }
 
@@ -72,6 +74,11 @@ function BottomTabs () {
           options={{ tabBarIcon: Icons.patients }}
         />
         <Tab.Screen
+          name={TabsName.groups}
+          component={GroupList}
+          options={{ tabBarIcon: Icons.groups }}
+        />
+        <Tab.Screen
           name={TabsName.settings}
           component={Settings}
           options={{ tabBarIcon: Icons.settings }}
@@ -112,7 +119,6 @@ const Router = () => {
         <Stack.Screen options={getEditTitle('Редактирование группы', 'Добавить новую группу')} name="AddGroup" component={AddGroup} />
         <Stack.Screen options={{ headerTitle: 'Управление шаблонами' }} name="TemplatesList" component={TemplatesList} />
         <Stack.Screen options={{ headerTitle: 'Управление БД' }} name="DatabasesList" component={DatabasesList} />
-        <Stack.Screen options={{ headerTitle: 'Управление группами' }} name="GroupList" component={GroupList} />
         {/* @ts-ignore */}
         <Stack.Screen options={{ headerTitle: 'Подтверждение приема' }} name="ConfirmAppointment" component={ConfirmAppointment} />
       </Stack.Navigator>

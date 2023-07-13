@@ -58,12 +58,13 @@ export const createFile = async ({ name, type, patientId }: createFileParams) =>
   )
 }
 
-export const createGroup = async ({ name, description = null }: createGroupParams, asBatch?: boolean, id?: string) => {
+export const createGroup = async ({ name, description = null, color = null }: createGroupParams, asBatch?: boolean, id?: string) => {
   const database = getDatabase()
 
   const fn = (group: Group) => {
     group.name = name
     group.description = description
+    group.color = color
   }
 
   if (asBatch) {

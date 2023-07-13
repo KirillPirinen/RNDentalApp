@@ -15,6 +15,8 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 import PatientsGroups from '../db/models/PatientsGroups'
 import randomId from '@nozbe/watermelondb/utils/common/randomId'
+import { AppColorPicker } from '../components/AppColorPicker'
+import tinycolor2 from 'tinycolor2'
 
 const footer = <View style={{ height: 100 }} />
 
@@ -79,10 +81,11 @@ const AddGroup: FC<AddGroupProps> = ({ navigation, route: { params } }) => {
 
   const preparedGroupId = useRef<string>(group?.id || randomId()).current
   const [patients, setPatients] = useState<PatientModel[]>([])
-  const [addMode, setAddMode] = useState(false)
+  const [mode, setMode] = useState<'add' | 'color'>()
   const [actions, dispatch] = useGeneralControl()
   const [name, setName] = useState<string>(group?.name || '')
   const [description, setDescription] = useState<string>(group?.description || '')
+  const [color, setColor] = useState(group?.color || '');
   const [error, setError] = useState<{ name?: boolean }>({})
 
   useEffect(() => {
@@ -108,12 +111,12 @@ const AddGroup: FC<AddGroupProps> = ({ navigation, route: { params } }) => {
     })
 
     if(params?.edit) {
-      return params.group.updateInstance({ description, name }, batchesArr.length && batchesArr).then(navigation.goBack)
+      return params.group.updateInstance({ description, name, color }, batchesArr.length && batchesArr).then(navigation.goBack)
     } 
 
     database.write(async () => {
-      const instanceBatch = await createGroup({ name, description }, true, preparedGroupId)
-      batchesArr.length && await database.batch(instanceBatch, ...batchesArr)
+      const instanceBatch = await createGroup({ name, description, color }, true, preparedGroupId)
+      await database.batch(instanceBatch, ...batchesArr)
     }).then(() => {
       setTimeout(() => {
         dispatch({ 
@@ -143,7 +146,7 @@ const AddGroup: FC<AddGroupProps> = ({ navigation, route: { params } }) => {
     setPatients(prev => prev.filter(p => p.id !== patient.id))
   }, [setPatients])
 
-  if (addMode) {
+  if (mode === 'add') {
     return (
       <PatientSearch 
         barStyle={styles.searchBar} 
@@ -157,8 +160,21 @@ const AddGroup: FC<AddGroupProps> = ({ navigation, route: { params } }) => {
             mutabaleState.current.tasks[patient.id] = { type: 'create', patient }
             setPatients(prev => [...prev, patient])
           }
-          setAddMode(false)
+          setMode(undefined)
         }}
+      />
+    )
+  }
+
+  if(mode === 'color') {
+    return (
+      <AppColorPicker 
+        onSelect={(hex: string) => {
+          setColor(hex)
+          setMode(undefined)
+        }}
+        defaultColor={color}
+        onCancel={() => setMode(undefined)}
       />
     )
   }
@@ -166,6 +182,14 @@ const AddGroup: FC<AddGroupProps> = ({ navigation, route: { params } }) => {
   return (
     <>
       <View onStartShouldSetResponder={defaultDissmisHandle} style={{ paddingHorizontal: 25, paddingBottom: 10, paddingTop: 25 }}>
+        <Button 
+          mode={tinycolor2(color).isDark() ? "contained" : 'contained-tonal'}
+          buttonColor={color}
+          onPress={() => setMode('color')}
+          style={styles.colorBtn}
+        >
+          {'Изменить цвет'}
+        </Button>
         <TextInput
           label="Название группы"
           mode="outlined"
@@ -198,7 +222,7 @@ const AddGroup: FC<AddGroupProps> = ({ navigation, route: { params } }) => {
           icon="plus-thick" 
           mode="contained"
           buttonColor={theme.colors.primary}
-          onPress={() => setAddMode(true)}
+          onPress={() => setMode('add')}
         >
           {'Добавить участника'}
         </Button>
@@ -222,7 +246,8 @@ const styles = StyleSheet.create({
   deleteBtn: { width: '10%' },
   saveBtn: { marginTop: 20 },
   addBtn: { marginTop: 10 },
-  searchBar: { margin: 25, marginBottom: 10 }
+  searchBar: { margin: 25, marginBottom: 10 },
+  colorBtn: { marginBottom: 15 }
 })
 
 export default AddGroup

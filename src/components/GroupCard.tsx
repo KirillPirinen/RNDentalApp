@@ -1,19 +1,33 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { Card, IconButton, Text } from 'react-native-paper'
+import { Card, Text } from 'react-native-paper'
 import { ButtonRowPanel } from './Buttons'
 import Group from '../db/models/Group'
+import { getAlphaFromColor } from '../utils/getAlphaFromColor'
 
 export type GroupCardProps = {
   group: Group;
   onDelete?: (temp: Group) => void;
   onEdit?: (temp: Group) => void;
-  onAddPatient?: (temp: Group) => void;
 }
 
-const GroupCard: FC<GroupCardProps> = ({ group, onDelete, onEdit, onAddPatient }) => {
+const GroupCard: FC<GroupCardProps> = ({ group, onDelete, onEdit }) => {
+  const cardContentStyle = useMemo(() => {
+    if (group.color) {
+      return { 
+        backgroundColor: getAlphaFromColor(group.color), 
+        borderColor: group.color, 
+        borderLeftWidth: 5,
+        color: 'white'
+      }
+    }
+  }, [group.color])
+
   return (
-    <Card style={styles.card}>
+    <Card 
+      style={styles.card}
+      contentStyle={cardContentStyle}
+    >
       <Card.Content>
         <View style={styles.headerWrapper}>
           <View style={styles.content}>
@@ -46,7 +60,7 @@ const styles = StyleSheet.create({
   content: {
     flexShrink: 1
   },
-  card: { margin: 5 },
+  card: { margin: 5, position: 'relative' },
   panel: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',

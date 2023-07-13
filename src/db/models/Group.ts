@@ -14,6 +14,7 @@ export default class Group extends Model {
   
   @text('name') name: string
   @text('description') description: string | null
+  @text('color') color: string | null
   @children('patients_groups') associatedRecords: Query<PatientsGroup>
 
   @lazy allPatients = this.collections.get<Patient>('patients')

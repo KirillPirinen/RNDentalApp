@@ -38,7 +38,7 @@ export default class Patient extends Model {
   @children('files') files: Query<File>
   @children('patients_groups') associatedRecords: Query<PatientsGroup>
 
-  @lazy allAppointments = this.collections.get<Group>('groups')
+  @lazy groups = this.collections.get<Group>('groups')
     .query(Q.on('patients_groups', 'patient_id', this.id))
 
   // @ts-ignore

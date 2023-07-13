@@ -106,26 +106,22 @@ export const PatientsList: FC<PatientsListProps> = ({ patients, groups, navigati
 
   const onChange = async (query: string) => {
     const collection = database.get<PatientModel>('patients')
-    const sanitized = querySanitazer(query)
-
+    let filteredPatients = patients
     if (/^\d/.test(query)) {
-      return await collection.query(
+       return await collection.query(
         Q.experimentalJoinTables(['phones', 'patients_groups']),
         Q.and(
-          Q.on('phones', 'number', Q.like(`%${sanitized}%`)),
+          Q.on('phones', 'number', Q.like(`%${query}%`)),
           ...(groupIds.length ? [Q.on('patients_groups', 'group_id', Q.oneOf(groupIds))] : [])
         )
       ).fetch()
     } else if (groupIds.length) {
-      return await collection.query(
+      filteredPatients = await collection.query(
         Q.experimentalJoinTables(['patients_groups']),
-        Q.and(
-          Q.where('full_name', Q.like(`%${sanitized}%`)),
-          Q.on('patients_groups', 'group_id', Q.oneOf(groupIds))
-        )
+        Q.on('patients_groups', 'group_id', Q.oneOf(groupIds))
       )
     }
-    return patients.filter(patient => patient.fullName.toLowerCase().includes(query))
+    return filteredPatients.filter(patient => patient.fullName.toLowerCase().includes(query.toLowerCase()))
   }
 
   const [ref, onDrop, onDrag] = useFabControlsRef()

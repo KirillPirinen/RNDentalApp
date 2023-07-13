@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 import { FlatList } from 'react-native'
 import { Autocomplete, Patient, EmptyList } from '../../components'
 import { Button, Divider, Text } from 'react-native-paper'
@@ -13,22 +13,7 @@ import { HighlightedText } from '../../components/HighlightedText'
 import { PatientPhones } from '../../components/PatientPhones'
 import PatientModel from '../../db/models/Patient'
 import { useAppTheme } from '../../styles/themes'
-import getDatabase from '../../db'
-
-const onSearch = async (query: string) => {
-  const db = getDatabase()
-  const sanitized = querySanitazer(query)
-
-  if(/^\d/.test(query)) {
-    const res = await db.get<PatientModel>('patients').query(
-      Q.experimentalJoinTables(['phones']),
-      Q.on('phones', 'number', Q.like(`%${sanitized}%`))
-    ).fetch()
-    return res
-  }
-
-  return db.get<PatientModel>('patients').query(Q.where('full_name', Q.like(`%${sanitized}%`)))
-}
+import { usePatients } from '../../utils/custom-hooks/usePatients'
 
 const renderList = ({ result, onChoose, searchQuery: searchQueryRaw }: {
   result: Array<PatientModel>;
@@ -111,6 +96,20 @@ export type PatientSearchProps = {
 }
 
 const PatientSearch: FC<PatientSearchProps> = ({ setChoosed, barStyle }) => {
+  const patients = usePatients()
+  const db = useDatabase()
+
+  const onSearch = useCallback(async (query: string) => {
+    if(/^\d/.test(query)) {
+      return await db.get<PatientModel>('patients').query(
+        Q.experimentalJoinTables(['phones']),
+        Q.on('phones', 'number', Q.like(`%${query}%`))
+      ).fetch()
+    }
+    
+    return patients.filter(patient => patient.fullName.toLowerCase().includes(query.toLowerCase()))
+  }, [patients, db])
+
   return (
     <Autocomplete 
       onChange={onSearch} 

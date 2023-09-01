@@ -1,6 +1,6 @@
-import { RegistredModalContent } from '../../components/PortalContent'
 import { AllowedSettings } from '../../consts'
 import { AppActionTypes, SelectAction } from '../../types/AppDispatch'
+import { RegistredModalContent } from '../../widgets/Portal/PortalContent'
 import actions from './action-types'
 
 export type AppState = {
@@ -39,6 +39,7 @@ export default <T extends AppActionTypes>(state: AppState, action: SelectAction<
     case actions.INFO:
     case actions.CHOOSE_TEETH:
     case actions.PROGRESS:
+    case actions.CONFIRM_COMMON:
     case actions.CHOOSE_ADD_PATIENT_METHOD: return {
       ...state,
       modal: {

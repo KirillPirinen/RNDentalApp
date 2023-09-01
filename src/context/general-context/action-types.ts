@@ -7,7 +7,8 @@ export const modalContentsAction = {
   CHOOSE_TEETH: 'ChooseTeeth',
   USER_INFO: 'UserInfo',
   INFO: 'Info',
-  CHOOSE_SYNC: 'ChooseSync'
+  CHOOSE_SYNC: 'ChooseSync',
+  CONFIRM_COMMON: 'ConfirmCommon'
 } as const
 
 export const modalControlAction = {

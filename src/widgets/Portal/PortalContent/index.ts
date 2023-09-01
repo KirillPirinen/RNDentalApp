@@ -6,6 +6,7 @@ import { ChooseTemplate } from './ChooseTemplate'
 import { ChooseTeeth } from './ChooseTeeth'
 import { UserInfo } from './UserInfo'
 import { ChooseSync } from './ChooseSync'
+import { ConfirmCommon } from './ConfirmCommon'
 
 export type RegistredModalContent = typeof RegisterContent
 
@@ -17,7 +18,8 @@ const RegisterContent = {
   ChooseTemplate,
   ChooseTeeth,
   UserInfo,
-  ChooseSync
+  ChooseSync,
+  ConfirmCommon
 } as const
 
 export default RegisterContent

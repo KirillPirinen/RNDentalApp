@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { Text, Dialog, Button as PaperButton, useTheme } from 'react-native-paper'
 
-type ConfirmProps = {
+export type ConfirmProps = {
   title: string;
   question: string;
   onClose: () => void;

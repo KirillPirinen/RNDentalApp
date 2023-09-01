@@ -54,3 +54,20 @@ export const insertSettings = (object) => {
 export const findById = (id, table) => Q.unsafeSqlQuery(`
   SELECT * FROM "${table}" WHERE id = "${id}";
 `)
+
+//duration in minutes
+export const getAppointmentsWithCollision = (startDate, duration, currentId?: string) => {
+  const inputStartTimestamp = startDate.getTime() //Math.floor(startDate.getTime() / 1000);
+  const inputEndTimestamp = inputStartTimestamp + (duration * 60) * 1000;
+
+  const query = Q.unsafeSqlQuery(`
+    SELECT appointments.*
+    FROM appointments 
+    WHERE (_status != 'deleted')
+    AND (appointments.date < ${inputEndTimestamp} AND ${inputStartTimestamp} < (appointments.date + (appointments.duration * 60) * 1000))
+    ${currentId ? `AND appointments.id != '${currentId}'` : ''}
+    ORDER BY appointments.date ASC;
+  `);
+
+  return query;
+};

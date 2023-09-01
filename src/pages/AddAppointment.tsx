@@ -11,6 +11,9 @@ import PatientModel from '../db/models/Patient'
 import { useAppTheme } from '../styles/themes'
 import Appointment from '../db/models/Appointment'
 import PatientSearch from '../widgets/PatientSearch'
+import { useDatabase } from '@nozbe/watermelondb/hooks'
+import { getAppointmentsWithCollision } from '../db/raw-queries'
+import { useGeneralControl } from '../context/general-context'
 
 const initState = { mode: null, сurrent: new Date() }
 
@@ -29,6 +32,7 @@ const AddAppointment: FC<AddAppointmentProps> = ({ navigation, route: { params }
   const isEdit = params?.edit
 
   const theme = useAppTheme()
+  const db = useDatabase()
 
   const [dateMeta, setDateMeta] = useState<DateMeta>(appointment.date ? 
     {...initState, date: appointment.date } : initState
@@ -38,6 +42,7 @@ const AddAppointment: FC<AddAppointmentProps> = ({ navigation, route: { params }
   const [notes, setNotes] = useState(appointment.notes || '')
   const [duration, setDuration] = useState(appointment.duration || 5)
   const [buttonColor, setButtonColor] = useState(theme.colors.primary)
+  const [actions, dispatch] = useGeneralControl()
 
   const onReset = () => setChoosed(null)
   
@@ -61,17 +66,52 @@ const AddAppointment: FC<AddAppointmentProps> = ({ navigation, route: { params }
     }
   }, [patient])
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
 
     if (dateMeta.date && choosed) {
-
       const content = { patientId: choosed.id, date: dateMeta.date, notes, duration }
 
-      if(params?.edit) {
-        return appointment.updateInstance(content).then(navigation.goBack)
+      const onSuccess = () => {
+        if(params?.edit) {
+          return appointment.updateInstance(content).then(navigation.goBack)
+        }
+  
+        return createAppointment(content).then(navigation.goBack)
       }
 
-      return createAppointment(content).then(navigation.goBack)
+      const overlappedCount = await db.get<Appointment>('appointments').query(getAppointmentsWithCollision(
+        dateMeta.date,
+        duration,
+        appointment.id
+      )).fetchIds()
+
+      
+      if (overlappedCount.length) {
+        dispatch({ 
+          type: actions.CONFIRM_COMMON, 
+          payload: {
+            title: `Обнаружено ${overlappedCount.length} записей на это время.`,
+            question: 'Вы уверены что хотите записать пациента с пересечением?',
+            buttons: [
+            { 
+              children: 'Выбрать другое время', 
+              onPress: () => {
+                dispatch({ type: actions.CLEAR })
+                setDateMeta(appointment.date ? 
+                  {...initState, date: appointment.date } : initState
+                )
+              }
+            },
+            { 
+              children: 'Подтвердить', 
+              onPress: onSuccess
+            }
+          ]
+          }
+        })
+      } else {
+        onSuccess()
+      }
     } 
 
     setButtonColor('red')

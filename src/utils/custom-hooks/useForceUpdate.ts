@@ -11,12 +11,17 @@ export const useForceUpdateByInterval = (delay: number, stop = false) => {
   useFocusEffect(
     useCallback(() => {
       render()
-      
+      let rqid: number;
+
       const timer = !stop && setInterval(() => {
-        render()
+        rqid && cancelIdleCallback(rqid)
+        rqid = requestIdleCallback(render)
       }, delay)
   
-      return () => timer && clearInterval(timer)
+      return () => {
+        timer && clearInterval(timer)
+        rqid && cancelIdleCallback(rqid)
+      }
     }, [stop])
   )
 

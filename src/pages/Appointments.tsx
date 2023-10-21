@@ -1,6 +1,6 @@
 import withObservables from '@nozbe/with-observables'
-import { View, SectionList } from 'react-native'
-import { FAB, SwipeableAppointment, SectionTitle } from '../components'
+import { View, SectionList, StyleSheet } from 'react-native'
+import { FAB, SwipeableAppointment, SectionTitle, EmptyList } from '../components'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import { groupAppointments } from '../utils/groupAppointments'
 import { useMemo, useCallback, FC } from 'react'
@@ -18,9 +18,10 @@ import Patient from '../db/models/Patient'
 import { useAppTheme } from '../styles/themes'
 import { Database } from '@nozbe/watermelondb'
 import { NamedSetting } from '../db/models/Settings'
+import { AppCalendar } from '../widgets/AppointmentsCalendar'
+import { Button, IconButton } from 'react-native-paper'
 
-const wrapperStyle = { height: '100%'} as const
-
+const spacer = <View style={{ height: 80 }} />
 const renderSectionHeader = ({ section: { day }}: { section: { day: string }}) => <SectionTitle>{day}</SectionTitle>
 
 type AppointmentsProps = {
@@ -37,7 +38,7 @@ const Appointments: FC<AppointmentsProps> = ({ appointments, navigation }) => {
   useForceUpdateByInterval(10000, !appointments.length)
 
   const onEditAppointment = useCallback((appointment: Appointment, patient: Patient, confirm?: boolean) => {
-    if(confirm) {
+    if (confirm) {
       return navigation.navigate('ConfirmAppointment', { patient, appointment })
     }
     return navigation.navigate('AddAppointment', { patient, appointment, edit: true })
@@ -64,7 +65,14 @@ const Appointments: FC<AppointmentsProps> = ({ appointments, navigation }) => {
   const [ref, onDrop, onDrag] = useFabControlsRef()
 
   return (
-    <GestureHandlerRootView style={wrapperStyle}>
+    <GestureHandlerRootView style={styles.wrapper}>
+      <Button
+        icon="calendar"
+        labelStyle={{ fontSize: 18 }}
+        style={{ padding: 0, marginTop: 5, marginBottom: 0 }}
+        onPress={() => navigation.navigate('AppointmentsCalendar')}
+      >Открыть календарь</Button>
+      {grouped.length ? (
         <SectionList
           sections={grouped}
           keyExtractor={defaultExtractor}
@@ -72,16 +80,28 @@ const Appointments: FC<AppointmentsProps> = ({ appointments, navigation }) => {
           renderSectionHeader={renderSectionHeader}
           onScrollBeginDrag={onDrag}
           onScrollEndDrag={onDrop}
-          ListFooterComponent={<View style={{ height: 80 }}></View>}
+          ListFooterComponent={spacer}
         />
-        <FAB 
-          ref={ref} 
-          label="Добавить запись" 
-          onPress={() => navigation.navigate('AddAppointment')}
-        />
+      ) : (
+        <View style={styles.emptyContainer}>
+          <EmptyList text='Записей нет' style={styles.emptyList} iconName='dots-horizontal' iconStyle={styles.emptyIcon} />
+        </View>
+      )}
+      <FAB 
+        ref={ref} 
+        label="Добавить запись" 
+        onPress={() => navigation.navigate('AddAppointment')}
+      />
     </GestureHandlerRootView>
   )
 }
+
+const styles = StyleSheet.create({
+  emptyList: { marginTop: 30, width: '100%' },
+  emptyContainer: { width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' },
+  emptyIcon: { backgroundColor: 'lightblue', marginBottom: 10 },
+  wrapper: { height: '100%' }
+})
 
 export default withDatabase(
   withObservables([], ({ database }: { database: Database }) => ({

@@ -11,6 +11,7 @@ import ConfirmAppointment from './ConfirmAppointment'
 import DatabasesList from './DatabasesList'
 import GroupList from './GroupList'
 import AddGroup from './AddGroup'
+import AppointmentsCalendar from './AppointmentsCalendar'
 
 export {
   Appointments,
@@ -25,5 +26,6 @@ export {
   ConfirmAppointment,
   DatabasesList,
   GroupList,
-  AddGroup
+  AddGroup,
+  AppointmentsCalendar
 }

@@ -40,6 +40,7 @@ export default <T extends AppActionTypes>(state: AppState, action: SelectAction<
     case actions.CHOOSE_TEETH:
     case actions.PROGRESS:
     case actions.CONFIRM_COMMON:
+    case actions.PATIENT_APPOINTMENT_DETAILS:
     case actions.CHOOSE_ADD_PATIENT_METHOD: return {
       ...state,
       modal: {

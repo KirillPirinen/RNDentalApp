@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
-import { View, Linking, StyleSheet, useWindowDimensions, Image } from 'react-native'
+import { View, Linking, StyleSheet, useWindowDimensions } from 'react-native'
 import withObservables from '@nozbe/with-observables'
 import { Text, useTheme } from 'react-native-paper'
 import { Button, FAB, PhonesList, CallButton, WhatsappButton, TelegramButton, ButtonRowPanel } from '../../components'
@@ -18,6 +18,7 @@ import Phone from '../../db/models/Phone'
 import { ChooseTemplateProps } from '../../widgets/Portal/PortalContent/ChooseTemplate'
 import Group from '../../db/models/Group'
 import { PatientGroupList } from '../../components/PatientGroupList'
+import { PatientLabel } from '../../components/PatientLabel'
 
 const tabs: Array<Route> = [
   { key: '0', title: 'Записи' },
@@ -158,17 +159,7 @@ const PatientDetail: FC<PatientDetailProps> = ({ navigation, patient, phones, gr
         {groups.length > 0 && <PatientGroupList groups={groups} style={{ marginBottom: -10 }} />}
         <View style={styles.patientDetails}>
           <View style={styles.metaWrapper}>
-            <View style={styles.nameWrapper}>
-              {patient.avatar && collapsed && (
-                <Image 
-                  source={{ uri: patient.avatar }} 
-                  style={styles.avatar}
-                />
-              )}
-              <Text style={styles.patientFullname}>
-                {patient.fullName}
-              </Text>
-            </View>
+            <PatientLabel patient={patient} showAvatar={collapsed} />
             <ButtonRowPanel 
               onEdit={() => navigation.navigate('AddPatient', { patient, phones })}
               onDelete={onConfirmDeletePatient}
@@ -209,16 +200,6 @@ const styles = StyleSheet.create({
   patientDetails: { maxHeight: 300, padding: 25 },
   formulaButtonView: { flex: 1 },
   patientButtons: { flexDirection: 'row', marginTop: 20 },
-  nameWrapper: { flexShrink: 3, flexDirection: 'row', marginRight: 4, alignItems: 'center' },
-  avatar: { width: 60, height: 50, marginRight: 6, borderRadius: 6 },
-  patientFullname: {
-    fontWeight:'800',
-    fontSize: 18,
-    lineHeight: 22,    
-    marginBottom: 3,
-    flexWrap: 'wrap',
-    paddingRight: 56
-  },
   phoneListWrapper: { flexDirection: 'row', flexWrap:'wrap', justifyContent:'space-between' },
   metaWrapper: {
     flexDirection: 'row', 

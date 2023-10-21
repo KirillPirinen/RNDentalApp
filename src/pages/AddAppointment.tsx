@@ -21,7 +21,7 @@ type DateMeta = { сurrent: Date; mode: null | 'date' | 'time'; date?: Appointme
 
 export type AddAppointmentProps = {
   navigation: NavigationProp<ReactNavigation.RootParamList>
-  route: { params?: { patient: PatientModel, appointment?: Appointment, edit?: boolean } }
+  route: { params?: { patient?: PatientModel, appointment?: Appointment, edit?: boolean, startDate?: Appointment['date']  } }
 }
 
 const AddAppointment: FC<AddAppointmentProps> = ({ navigation, route: { params } }) => {
@@ -30,12 +30,12 @@ const AddAppointment: FC<AddAppointmentProps> = ({ navigation, route: { params }
   const patient = params?.patient
   const confirmMode = params?.appointment?.isConfirmed
   const isEdit = params?.edit
-
+  const comingDate = params?.startDate || appointment.date
   const theme = useAppTheme()
   const db = useDatabase()
 
-  const [dateMeta, setDateMeta] = useState<DateMeta>(appointment.date ? 
-    {...initState, date: appointment.date } : initState
+  const [dateMeta, setDateMeta] = useState<DateMeta>(comingDate ? 
+    {...initState, date: comingDate } : initState
   )
 
   const [choosed, setChoosed] = useState<PatientModel | null>(patient || null)
@@ -191,7 +191,6 @@ const AddAppointment: FC<AddAppointmentProps> = ({ navigation, route: { params }
             <Button 
               icon="plus-thick" 
               mode="contained" 
-              color={theme.colors.primary} 
               onPress={onSubmit}
             >
               {isEdit ? 'Сохранить изменения' : 'Добавить прием'}

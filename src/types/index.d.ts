@@ -9,7 +9,7 @@ declare global {
       'Detail': { patient: Patient };
       'AddPatient': { patient: Patient; phones: Phone[] } | undefined;
       'ImportContacts': any;
-      'AddAppointment': { patient: Patient, appointment?: Appointment, edit?: boolean } | undefined;
+      'AddAppointment': { patient?: Patient, appointment?: Appointment, edit?: boolean, startDate?: Appointment['date'] } | undefined;
       'ConfirmAppointment': { patient: Patient, appointment: Appointment, edit?: boolean };
       'AddTemplate': { template: Template, edit?: boolean } | undefined;
       'TemplatesList': any;
@@ -17,6 +17,7 @@ declare global {
       'DatabasesList': any;
       'GroupList': any;
       'AddGroup': { group: Template, edit?: boolean } | undefined;
+      'AppointmentsCalendar': any
     }
   }
 }

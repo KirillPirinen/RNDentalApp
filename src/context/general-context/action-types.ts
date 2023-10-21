@@ -8,7 +8,8 @@ export const modalContentsAction = {
   USER_INFO: 'UserInfo',
   INFO: 'Info',
   CHOOSE_SYNC: 'ChooseSync',
-  CONFIRM_COMMON: 'ConfirmCommon'
+  CONFIRM_COMMON: 'ConfirmCommon',
+  PATIENT_APPOINTMENT_DETAILS: 'PatientAppointmentDetails'
 } as const
 
 export const modalControlAction = {

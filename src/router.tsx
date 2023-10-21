@@ -3,7 +3,7 @@ import CustomNavigationBar, { AppHeaderProps } from './components/AppHeader'
 import {
   Appointments, PatientDetail, AddAppointment, PatientsList,
   AddPatient, ImportContacts, Settings, AddTemplate, TemplatesList, ConfirmAppointment, 
-  DatabasesList, GroupList, AddGroup
+  DatabasesList, GroupList, AddGroup, AppointmentsCalendar
 } from './pages'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import { Text } from 'react-native-paper'
@@ -121,6 +121,7 @@ const Router = () => {
         <Stack.Screen options={{ headerTitle: 'Управление БД' }} name="DatabasesList" component={DatabasesList} />
         {/* @ts-ignore */}
         <Stack.Screen options={{ headerTitle: 'Подтверждение приема' }} name="ConfirmAppointment" component={ConfirmAppointment} />
+        <Stack.Screen options={{ headerTitle: 'Календарь приема' }} name="AppointmentsCalendar" component={AppointmentsCalendar} />
       </Stack.Navigator>
   )
 }

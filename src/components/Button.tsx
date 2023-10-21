@@ -6,10 +6,11 @@ type ButtonProps = {
   color?: string
   onPress: () => void
   textColor?: string
+  style?: object
 }
 
-const Button: FC<ButtonProps> = ({ children, onPress, color = '#27A2DF', textColor = '#FFFFFF' }) => (
-  <TouchableOpacity style={[styles.wrapper, { backgroundColor: color }]} onPress={onPress}>
+const Button: FC<ButtonProps> = ({ children, onPress, style, color = '#27A2DF', textColor = '#FFFFFF' }) => (
+  <TouchableOpacity style={[styles.wrapper, { backgroundColor: color }, style]} onPress={onPress}>
     <Text style={[styles.text, { color: textColor }]}>{children}</Text>
   </TouchableOpacity>
 )

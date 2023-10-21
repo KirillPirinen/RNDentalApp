@@ -7,6 +7,7 @@ import { ChooseTeeth } from './ChooseTeeth'
 import { UserInfo } from './UserInfo'
 import { ChooseSync } from './ChooseSync'
 import { ConfirmCommon } from './ConfirmCommon'
+import { PatientAppointmentDetails } from './PatientAppointmentDetails'
 
 export type RegistredModalContent = typeof RegisterContent
 
@@ -19,7 +20,8 @@ const RegisterContent = {
   ChooseTeeth,
   UserInfo,
   ChooseSync,
-  ConfirmCommon
+  ConfirmCommon,
+  PatientAppointmentDetails
 } as const
 
 export default RegisterContent

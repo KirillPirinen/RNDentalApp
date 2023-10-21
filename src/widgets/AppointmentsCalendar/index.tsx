@@ -43,7 +43,7 @@ export const AppointmentsCalendar: React.FC<AppCalendarProps> = ({ appointments 
       overlapEventsSpacing: 8,
       rightEdgeSpacing: 24,
     }
-  }, [navigation, dispatch])
+  }, [navigation, dispatch, eventsByDate])
 
     return (
       <CalendarProvider

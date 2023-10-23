@@ -1,11 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   ExpandableCalendar,
   TimelineList,
   CalendarProvider,
   TimelineProps,
   LocaleConfig,
-  CalendarUtils,
+  DateData,
 } from 'react-native-calendars';
 import { ExtendedTimelineEventProps, useAppCalendarDates } from '../../utils/custom-hooks/useAppCalendarDates';
 import Appointment from '../../db/models/Appointment';
@@ -18,13 +18,15 @@ LocaleConfig.defaultLocale = 'ru';
 
 export type AppCalendarProps = {
   appointments: Array<Appointment>
+  currentDate: string;
+  onMonthChange?: (date: DateData) => void
+  onDateChanged?: (date: string) => void
 }
 
-export const AppointmentsCalendar: React.FC<AppCalendarProps> = ({ appointments }) => {
+export const AppointmentsCalendar: React.FC<AppCalendarProps> = ({ appointments, onMonthChange, onDateChanged, currentDate }) => {
   const navigation = useNavigation()
   const [actions, dispatch] = useGeneralControl()
   const { markedDates, eventsByDate, isReady } = useAppCalendarDates(appointments)
-  const [currentDate, setCurrentDate] = useState(() => CalendarUtils.getCalendarDateString(Date.now()))
 
   // @ts-ignore
   const timelineProps: Partial<TimelineProps> = useMemo(() => {
@@ -48,7 +50,7 @@ export const AppointmentsCalendar: React.FC<AppCalendarProps> = ({ appointments 
     return (
       <CalendarProvider
         date={currentDate}
-        onDateChanged={setCurrentDate}
+        onDateChanged={onDateChanged}
         showTodayButton
         disabledOpacity={0.6}
       >
@@ -57,6 +59,7 @@ export const AppointmentsCalendar: React.FC<AppCalendarProps> = ({ appointments 
           leftArrowImageSource={require('../../assets/previous.png')}
           rightArrowImageSource={require('../../assets/next.png')}
           markedDates={markedDates}
+          onMonthChange={onMonthChange}
           closeOnDayPress
         />
         <TimelineList

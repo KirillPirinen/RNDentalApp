@@ -71,3 +71,15 @@ export const getAppointmentsWithCollision = (startDate, duration, currentId) => 
 
   return query;
 };
+
+export const getAppointmentsByMonth = (month, year) => {
+  const m = month < 10 ? `0${month}` : month
+  const query = Q.unsafeSqlQuery(`
+    SELECT appointments.*
+    FROM appointments 
+    WHERE (_status != 'deleted')
+    AND strftime('%m-%Y', appointments.date / 1000, 'unixepoch') = '${m}-${year}'
+    ORDER BY appointments.date ASC;
+  `)
+  return query
+}

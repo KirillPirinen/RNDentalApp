@@ -1,22 +1,27 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import Appointment from '../db/models/Appointment'
 import { AppointmentsCalendar } from '../widgets/AppointmentsCalendar'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { getAppointmentsByMonth } from '../db/raw-queries'
-import { CalendarUtils } from 'react-native-calendars'
+import debounce from 'lodash.debounce'
 
 type AppointmentsCalendarProps = {
   appointments: Array<Appointment>
 }
 
+type StateDate = { year: number, month: number }
+
 const AppointmentsCalendarPage: FC<AppointmentsCalendarProps> = () => {
   const database = useDatabase()
-  const now = new Date()
-  const [currentDate, setCurrentDate] = useState(() => CalendarUtils.getCalendarDateString(now))
-  const [date, setDate] = useState<{ year: number, month: number }>({ year: now.getFullYear(), month: now.getMonth() + 1 })
+  const [date, setDate] = useState<StateDate>(() => {
+    const now = new Date()
+    return { year: now.getFullYear(), month: now.getMonth() + 1 }
+  })
   const [appointments, setAppointments] = useState<Appointment[]>([])
-  
+
+  const onMonthChange = useCallback(debounce(setDate, 500), [])
+
   useEffect(() => {
     const observable = database.get<Appointment>('appointments')
       .query(getAppointmentsByMonth(date.month, date.year))
@@ -31,11 +36,9 @@ const AppointmentsCalendarPage: FC<AppointmentsCalendarProps> = () => {
 
   return (
     <View style={styles.wrapper}>
-      <AppointmentsCalendar 
+      <AppointmentsCalendar
         appointments={appointments}
-        onMonthChange={setDate}
-        onDateChanged={setCurrentDate}
-        currentDate={currentDate}
+        onMonthChange={onMonthChange}
       />
     </View>
   )

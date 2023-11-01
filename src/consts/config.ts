@@ -2,24 +2,24 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { APP_DATA_DIR, DEFAULT_DB_NAME, IMPORTED_DB_PATH } from "."
 import { makeDirIfNotExist } from "../utils/fileHelpers"
 import { locale as deviceLocaleName } from 'expo-localization'
-import enMesages from '../locales/en/messages.json'
-import ruMesages from '../locales/ru/messages.json'
-import esMesages from '../locales/es/messages.json'
-import zhMesages from '../locales/zh/messages.json'
-import deMesages from '../locales/de/messages.json'
-import frMesages from '../locales/fr/messages.json'
-import hiMesages from '../locales/hi/messages.json'
+import enMesages from '../locales/en/messages.js'
+import ruMesages from '../locales/ru/messages.js'
+import esMesages from '../locales/es/messages.js'
+import zhMesages from '../locales/zh/messages.js'
+import deMesages from '../locales/de/messages.js'
+import frMesages from '../locales/fr/messages.js'
+import hiMesages from '../locales/hi/messages.js'
 
 export type AppLocales = keyof typeof appMessages
 
 export const appMessages = {
-  en: enMesages,
-  ru: ruMesages,
-  es: esMesages,
-  zh: zhMesages,
-  de: deMesages,
-  fr: frMesages,
-  hi: hiMesages
+  en: enMesages.messages,
+  ru: ruMesages.messages,
+  es: esMesages.messages,
+  zh: zhMesages.messages,
+  de: deMesages.messages,
+  fr: frMesages.messages,
+  hi: hiMesages.messages
 } as const
 
 export const fallback_locale = 'en'

@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import {
   ExpandableCalendar,
   TimelineList,
   CalendarProvider,
   TimelineProps,
   DateData,
+  CalendarUtils,
 } from 'react-native-calendars';
 import { ExtendedTimelineEventProps, useAppCalendarDates } from '../../utils/custom-hooks/useAppCalendarDates';
 import Appointment from '../../db/models/Appointment';
@@ -15,13 +16,12 @@ import { appConfigSync } from '../../consts/config';
 
 export type AppCalendarProps = {
   appointments: Array<Appointment>
-  currentDate: string;
   onMonthChange?: (date: DateData) => void
-  onDateChanged?: (date: string) => void
 }
 
-export const AppointmentsCalendar: React.FC<AppCalendarProps> = ({ appointments, onMonthChange, onDateChanged, currentDate }) => {
+export const AppointmentsCalendar: React.FC<AppCalendarProps> = memo(({ appointments, onMonthChange }) => {
   setCalendarLocale(appConfigSync.lang)
+  const [currentDate, setCurrentDate] = useState(() => CalendarUtils.getCalendarDateString(Date.now()))
   const navigation = useNavigation()
   const [actions, dispatch] = useGeneralControl()
   const { markedDates, eventsByDate } = useAppCalendarDates(appointments)
@@ -48,7 +48,7 @@ export const AppointmentsCalendar: React.FC<AppCalendarProps> = ({ appointments,
     return (
       <CalendarProvider
         date={currentDate}
-        onDateChanged={onDateChanged}
+        onDateChanged={setCurrentDate}
         showTodayButton
         disabledOpacity={0.6}
       >
@@ -69,4 +69,4 @@ export const AppointmentsCalendar: React.FC<AppCalendarProps> = ({ appointments,
         />
       </CalendarProvider>
     );
-}
+})

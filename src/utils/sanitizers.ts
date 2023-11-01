@@ -1,5 +1,5 @@
 
-import parsePhoneNumber, { PhoneNumber } from 'libphonenumber-js'
+import parsePhoneNumber, { isValidPhoneNumber } from 'libphonenumber-js'
 
 const nonLikeSafeRegexp = /[^a-zA-Z0-9а-яА-Я]/g
 const nonNum = /[^0-9]/g
@@ -14,9 +14,11 @@ export const phoneSanitazer = (phoneStr: string) => {
   const sanitazed = phoneStr.replace(nonNum, '')
 
   for (const countryCode of tryCountry) {
-    const parsed = parsePhoneNumber(sanitazed, countryCode)
+    const parsed = isValidPhoneNumber(sanitazed, countryCode) && parsePhoneNumber(sanitazed, countryCode)
     
-    if(parsed) return parsed.number
+    if (parsed) {
+      return parsed.number
+    }
   }
 
   return sanitazed

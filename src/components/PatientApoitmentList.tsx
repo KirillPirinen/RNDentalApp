@@ -8,6 +8,7 @@ import withObservables from '@nozbe/with-observables'
 import Appointment from '../db/models/Appointment'
 import Patient from '../db/models/Patient'
 import { NavigationProp } from '@react-navigation/native'
+import { Trans } from '@lingui/macro'
 
 export type PatientAppointmentListProps = Omit<FlatListProps<Appointment>, 'data' | 'renderItem'> & {
   appointments: Array<Appointment>;
@@ -62,7 +63,7 @@ export const PatientAppointmentList: FC<PatientAppointmentListProps> = ({
 
   return (
     <View style={{ height: '90%' }}>
-      {!appointments?.length && <Text style={{ marginTop: 12, textAlign: 'center', width: '100%' }}>Записей нет</Text>}
+      {!appointments?.length && <Text style={{ marginTop: 12, textAlign: 'center', width: '100%' }}><Trans>Записей нет</Trans></Text>}
       <FlatList
         data={appointments}
         renderItem={renderAppointments}

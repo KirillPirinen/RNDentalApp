@@ -2,7 +2,7 @@ import { View, StyleSheet, Dimensions, ScrollView, Pressable } from 'react-nativ
 import * as ImagePicker from 'expo-image-picker';
 import { usePatientFiles } from '../../../utils/custom-hooks/usePatientFiles';
 import { useFilesPicker } from '../../../utils/custom-hooks/useFilesPicker';
-import { useCallback, useEffect, useState, memo, FC } from 'react';
+import { useCallback, useEffect, useState, memo, FC, useMemo } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { SegmentedButtons, SegmentedButtonsProps, Text } from 'react-native-paper';
 import { types } from 'react-native-document-picker'
@@ -13,6 +13,7 @@ import * as FileSystem from 'expo-file-system';
 import { getSummaryExportText } from '../../../utils/getSummaryExportText';
 import Patient from '../../../db/models/Patient';
 import { t, plural, Trans } from '@lingui/macro';
+import { i18n } from "@lingui/core"
 
 const width = Dimensions.get('window').width
 
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
   selectedText: { paddingVertical: 5 }
 })
 
-const addButtons = [
+const getAddButtons = () => [
   {
     value: 'camera',
     label: t`Камера`,
@@ -91,7 +92,7 @@ const addButtons = [
   }
 ]
 
-const selectButtons = [
+const getSelectButtons = () => [
   {
     value: 'selectAll',
     label: t`Выделить все`,
@@ -106,7 +107,7 @@ const selectButtons = [
   },
 ]
 
-const actionsButtons = [
+const getActionsButtons = () => [
   {
     value: 'delete',
     icon: () => <MaterialCommunityIcons name='delete-alert' size={20} />,
@@ -131,6 +132,14 @@ const FilesTab: FC<FilesTabProps> = ({ patient, setCollapsed }) => {
   const { files, addFiles, dirPath, removeFiles } = usePatientFiles(patient);
   const [{ isEdit, selectedImages, count }, setSelected] = useState(defaultState)
   const pickFiles = useFilesPicker([types.xls, types.xlsx, types.doc, types.docx, types.images, types.pdf])
+
+  const { addButtons, selectButtons, actionsButtons } = useMemo(() => {
+    return {
+      addButtons: getAddButtons(),
+      selectButtons: getSelectButtons(),
+      actionsButtons: getActionsButtons()
+    }
+  }, [i18n.locale])
 
   const pickFromLibrary = async () => {
     const res = await pickFiles()

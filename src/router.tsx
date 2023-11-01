@@ -14,7 +14,6 @@ import { useAppTheme } from './styles/themes'
 import { t, msg } from '@lingui/macro'
 import { useMemo } from 'react'
 import { i18n } from "@lingui/core"
-import { children } from '@nozbe/watermelondb/decorators'
 
 const renderIcon = (name: React.ComponentProps<typeof MaterialCommunityIcons>['name']) => ({ color }: { color: string }) => (
   <MaterialCommunityIcons name={name} color={color} size={22} />

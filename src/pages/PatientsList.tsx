@@ -17,6 +17,7 @@ import Group from '../db/models/Group'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { FontAwesome } from '@expo/vector-icons';
 import { t } from '@lingui/macro'
+import { appConfigSync } from '../consts/config'
 
 DropDownPicker.modifyTranslation('RU', {
   PLACEHOLDER: 'Выберите группу',
@@ -164,7 +165,8 @@ export const PatientsList: FC<PatientsListProps> = ({ patients, groups, navigati
                   items={groupItems}
                   setOpen={setOpen}
                   setValue={setGroupIds}
-                  language="RU"
+                  //@ts-ignore
+                  language={appConfigSync.lang.toLocaleUpperCase()}
                   style={picker}
                 />
               </View>

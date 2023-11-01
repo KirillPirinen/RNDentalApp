@@ -62,7 +62,7 @@ export const PatientAppointment: FC<PatientAppointmentProps> = ({
           {formatRu(appointment.date, 'PPpp')}
         </Badge>
       </AppointmentCardRow>
-      {Boolean(appointment.price) && <Badge style={styles.badgePrice} status="green">{appointment.price} &#8381;</Badge>}
+      {Boolean(appointment.price) && <Badge style={styles.badgePrice} status="green">{appointment.price}</Badge>}
     </Surface>
   )
 }

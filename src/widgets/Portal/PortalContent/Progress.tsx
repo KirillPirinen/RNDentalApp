@@ -5,18 +5,20 @@ import { ContextedPortalDefaultProps } from '..'
 import actionTypes from '../../../context/general-context/action-types'
 import { Trans, t } from '@lingui/macro'
 
-const defaultTextsResolvers = {
-  contactsImport: { 
-    title: t`Успешно добавлено`,
-    error: t`Данные контакты импортированы с ошибками`
-  },
-  filesExport: {
-    title: t`Успешно экспортировано`,
-    error: t`Файлы данных пациентов экспортированы с ошибками`
-  },
-}
+const getDefaultTextsResolvers = () => (
+  {
+    contactsImport: { 
+      title: t`Успешно добавлено`,
+      error: t`Данные контакты импортированы с ошибками`
+    },
+    filesExport: {
+      title: t`Успешно экспортировано`,
+      error: t`Файлы данных пациентов экспортированы с ошибками`
+    },
+  }
+)
 
-export type ProgressModes = keyof typeof defaultTextsResolvers
+export type ProgressModes = keyof ReturnType<typeof getDefaultTextsResolvers>
 
 export type ProgressResult = {
   success: number;
@@ -44,7 +46,8 @@ export const Progress: FC<ProgressProps> = ({
 
   const [done, setDone] = useState<ProgressResult | null>(null)
   const hasErrors = Boolean(done?.failedValues.length)
-  const { title, error } = defaultTextsResolvers[mode]
+  const resolvers = getDefaultTextsResolvers()
+  const { title, error } = resolvers[mode]
   
   const onExit = done ? function () {
     __defaultProps.clear()
@@ -76,7 +79,7 @@ export const Progress: FC<ProgressProps> = ({
     > 
       {done ? (
         <>
-          <Text variant="bodyLarge">{`${title}:`} {`${done.success} из ${done.total}`} </Text>
+          <Text variant="bodyLarge">{`${title}:`} {`${done.success} ${t`из`} ${done.total}`} </Text>
           {hasErrors && (
             <>
               <Text variant="bodyLarge">{`${error}:`}</Text>

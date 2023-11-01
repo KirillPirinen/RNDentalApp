@@ -17,6 +17,7 @@ import PatientsGroups from '../db/models/PatientsGroups'
 import randomId from '@nozbe/watermelondb/utils/common/randomId'
 import { AppColorPicker } from '../components/AppColorPicker'
 import tinycolor2 from 'tinycolor2'
+import { Trans, t } from '@lingui/macro'
 
 const footer = <View style={{ height: 100 }} />
 
@@ -122,7 +123,7 @@ const AddGroup: FC<AddGroupProps> = ({ navigation, route: { params } }) => {
         dispatch({ 
           type: actions.INFO,
           payload: { 
-            text: 'Вы успешно добавили новую группу'
+            text: t`Вы успешно добавили новую группу`
           }
         })
       }, 500)
@@ -153,7 +154,7 @@ const AddGroup: FC<AddGroupProps> = ({ navigation, route: { params } }) => {
         setChoosed={(patient) => {
           if (patients.includes(patient)) {
             dispatch({ type: actions.INFO, payload: {
-              text: `Пациент ${patient.fullName} уже добавлен в эту группу.`,
+              text: t`Пациент ${patient.fullName} уже добавлен в эту группу.`,
               color: 'errorContainer'
             }})
           } else {
@@ -188,10 +189,10 @@ const AddGroup: FC<AddGroupProps> = ({ navigation, route: { params } }) => {
           onPress={() => setMode('color')}
           style={styles.colorBtn}
         >
-          {'Изменить цвет'}
+          <Trans>Изменить цвет</Trans>
         </Button>
         <TextInput
-          label="Название группы"
+          label={t`Название группы`}
           mode="outlined"
           value={name}
           onChangeText={onChangeTextName}
@@ -199,7 +200,7 @@ const AddGroup: FC<AddGroupProps> = ({ navigation, route: { params } }) => {
         />
         <View>
           <TextInput
-            label="Описание"
+            label={t`Описание`}
             mode="outlined"
             value={description}
             onChangeText={setDescription}
@@ -215,7 +216,7 @@ const AddGroup: FC<AddGroupProps> = ({ navigation, route: { params } }) => {
           buttonColor={'green'}
           onPress={onSubmit}
         >
-          {params?.edit ? 'Сохранить изменения' : 'Добавить группу'}
+          {params?.edit ? t`Сохранить изменения` : t`Добавить группу`}
         </Button>
         <Button 
           style={styles.addBtn} 
@@ -224,12 +225,12 @@ const AddGroup: FC<AddGroupProps> = ({ navigation, route: { params } }) => {
           buttonColor={theme.colors.primary}
           onPress={() => setMode('add')}
         >
-          {'Добавить участника'}
+          <Trans>Добавить участника</Trans>
         </Button>
       </View>
       {patients.length > 0 && (
         <>
-          <Text variant="bodyLarge" style={{ paddingLeft: 25, paddingBottom: 10 }}>Участники:</Text>
+          <Text variant="bodyLarge" style={{ paddingLeft: 25, paddingBottom: 10 }}><Trans>Участники</Trans>:</Text>
           <PatientList patients={patients} navigation={navigation} onRemove={onRemove} />
         </>
       )}

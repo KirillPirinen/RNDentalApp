@@ -9,6 +9,9 @@ import { exportPatiensFiles, importPatiensFiles } from '../../db/actions/index'
 import { NavigationProp } from '@react-navigation/native'
 import { FC } from 'react'
 import { widthUnmounOnBlur } from '../../utils/hoc/widthUnmounOnBlur'
+import { Trans, t } from '@lingui/macro'
+import { Lang } from './Lang'
+import { ScrollView } from 'react-native'
 
 export type SettingsProps = {
   navigation: NavigationProp<ReactNavigation.RootParamList>
@@ -17,44 +20,49 @@ export type SettingsProps = {
 const Settings: FC<SettingsProps> = ({ navigation }) => {
   const [actions, dispatch] = useGeneralControl()
   return (
-    <List.Section title="Настройки">
-      <List.Item 
-        title={() => <Text style={{ marginLeft: -8 }} variant="bodyLarge">Базы данных</Text>} 
-        onPress={() => navigation.navigate('DatabasesList')}
-        left={props => <List.Icon {...props} icon="database" style={styles.noAccordionItem} />}
-      />
-      <List.Accordion
-        title="Шаблоны сообщений"
-        left={props => <List.Icon {...props} icon="format-text" />}
-      >
-        <List.Item title="Добавить шаблон" onPress={() => navigation.navigate('AddTemplate')} style={styles.button} />
-        <List.Item title="Управление шаблонами" onPress={() => navigation.navigate('TemplatesList')} style={styles.button} />
-      </List.Accordion>
-      <TrackingInterval />
-      <TeethColorFill />
-      <Sync />
-      <ActivityButton />
-      <List.Item
-        title="Экспортировать файлы пациентов" 
-        onPress={() => {
-          dispatch({ type: actions.PROGRESS, payload: { runJob: exportPatiensFiles, mode: 'filesExport' } })
-        }}
-        style={styles.button} 
-      />
-      <List.Item 
-        title="Импортировать файлы пациентов" 
-        onPress={() => {
-          dispatch({ type: actions.PROGRESS, payload: { runJob: importPatiensFiles, mode: 'filesExport' } })
-        }}
-        style={styles.button}
-      />
-      <Button onPress={() => dispatch({ 
-        type: actions.USER_INFO, 
-        payload: {
-          mode: 'about'
-        }
-      })}>О приложении</Button>
-    </List.Section>
+    <ScrollView>
+      <List.Section title={t`Настройки`}>
+        <List.Item 
+          title={() => <Text style={{ marginLeft: -8 }} variant="bodyLarge"><Trans>Базы данных</Trans></Text>} 
+          onPress={() => navigation.navigate('DatabasesList')}
+          left={props => <List.Icon {...props} icon="database" style={styles.noAccordionItem} />}
+        />
+        <Lang />
+        <List.Accordion
+          title={t`Шаблоны сообщений`}
+          left={props => <List.Icon {...props} icon="format-text" />}
+        >
+          <List.Item title={t`Добавить шаблон`} onPress={() => navigation.navigate('AddTemplate')} style={styles.button} />
+          <List.Item title={t`Управление шаблонами`} onPress={() => navigation.navigate('TemplatesList')} style={styles.button} />
+        </List.Accordion>
+        <TrackingInterval />
+        <TeethColorFill />
+        <Sync />
+        <ActivityButton />
+        <List.Item
+          title={t`Экспортировать файлы пациентов`}
+          onPress={() => {
+            dispatch({ type: actions.PROGRESS, payload: { runJob: exportPatiensFiles, mode: 'filesExport' } })
+          }}
+          style={styles.button} 
+        />
+        <List.Item 
+          title={t`Импортировать файлы пациентов`}
+          onPress={() => {
+            dispatch({ type: actions.PROGRESS, payload: { runJob: importPatiensFiles, mode: 'filesExport' } })
+          }}
+          style={styles.button}
+        />
+        <Button onPress={() => dispatch({ 
+          type: actions.USER_INFO, 
+          payload: {
+            mode: 'about'
+          }
+        })}>
+          <Trans>О приложении</Trans>
+        </Button>
+      </List.Section>
+    </ScrollView>
   )
 }
 

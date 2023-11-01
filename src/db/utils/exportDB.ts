@@ -1,6 +1,7 @@
 import * as FileSystem from 'expo-file-system';
 import { getFileNameWithoutExt, getRootAppDirectory, isFilesExist } from '../../utils/fileHelpers';
 import { DEFAULT_DB_NAME, IMPORTED_DB_PATH } from '../../consts';
+import { t } from '@lingui/macro';
 
 export const dbExportFilesExt = ['.db', '.db-wal'] as const
 
@@ -11,7 +12,7 @@ export const exportDB = async (dbName: string) => {
   const dbFilesNames = dbExportFilesExt.map(ext => `${sanitazedUri}${ext}`)
 
   if (!(await isFilesExist(rootUri, dbFilesNames))) {
-    throw new Error(`Не найдены файлы БД ${dbName}.`)
+    throw new Error(t`Не найдены файлы БД ${dbName}.`)
   }
   
   const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();

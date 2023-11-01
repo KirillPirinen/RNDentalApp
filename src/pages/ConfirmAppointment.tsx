@@ -6,6 +6,7 @@ import Slider from '@react-native-community/slider'
 import { useGeneralControl } from '../context/general-context'
 import { NavigationProp } from '@react-navigation/native'
 import { useAppTheme } from '../styles/themes'
+import { Trans, t } from '@lingui/macro'
 
 type ConfirmAppointmentProps = {
   navigation: NavigationProp<ReactNavigation.RootParamList>
@@ -52,10 +53,10 @@ const ConfirmAppointment: FC<ConfirmAppointmentProps> = ({ navigation, route: { 
             mode="outlined" 
             onPress={onOpenSelection}
           >
-            {teeth.toString() || 'Выбрать зубы'}
+            {teeth.toString() || t`Выбрать зубы`}
           </Button>
           <View style={styles.middleWrapper}>
-            <Text variant="titleLarge">{`Длительность приема: ${duration} минут`}</Text>
+            <Text variant="titleLarge">{t`Длительность приема: ${duration} минут`}</Text>
             <Slider
               style={styles.slider}
               onValueChange={setDuration}
@@ -72,7 +73,7 @@ const ConfirmAppointment: FC<ConfirmAppointmentProps> = ({ navigation, route: { 
           <View style={styles.middleWrapper}>
             <Input
               mode="outlined"
-              label="Диагноз"
+              label={t`Диагноз`}
               style={styles.input}
               onChangeText={setDiagnosis}
               value={diagnosis}
@@ -82,7 +83,7 @@ const ConfirmAppointment: FC<ConfirmAppointmentProps> = ({ navigation, route: { 
           <View style={styles.middleWrapper}>
             <Input
               mode="outlined"
-              label="Заметки"
+              label={t`Заметки`}
               style={styles.input}
               onChangeText={setNotes}
               value={notes}
@@ -92,7 +93,7 @@ const ConfirmAppointment: FC<ConfirmAppointmentProps> = ({ navigation, route: { 
           <View style={styles.middleWrapper}>
             <Input
               mode="outlined"
-              label="Цена"
+              label={t`Цена`}
               style={styles.input}
               onChangeText={setPrice}
               value={price}
@@ -106,7 +107,7 @@ const ConfirmAppointment: FC<ConfirmAppointmentProps> = ({ navigation, route: { 
               buttonColor="green"
               onPress={onSubmit}
             >
-              Подтвердить прием
+              <Trans>Подтвердить прием</Trans>
             </Button>
           </View>
         </ScrollView>

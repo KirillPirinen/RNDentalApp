@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native'
 import { IconButton, Modal, Surface, Text, Button } from 'react-native-paper'
 import { Teeth } from '../../../components/Teeth/Teeth'
 import { ContextedPortalDefaultProps } from '..'
+import { Trans } from '@lingui/macro'
 
 export type ChooseTeethProps = ContextedPortalDefaultProps<{
   onSubmit: (selectedArr: string[]) => void
@@ -65,7 +66,7 @@ export const ChooseTeeth: FC<ChooseTeethProps> = ({
         withAdultTeeth
       />
       <Surface style={styles.tooltip}>
-        {Boolean(selectedArr.length) &&<Text>Вы выбрали: <Text style={styles.bold}>{selectedArr.join(', ')}</Text></Text>}
+        {Boolean(selectedArr.length) && <Text><Trans>Вы выбрали</Trans>: <Text style={styles.bold}>{selectedArr.join(', ')}</Text></Text>}
       </Surface>
       <Button 
         style={styles.submit} 
@@ -74,7 +75,7 @@ export const ChooseTeeth: FC<ChooseTeethProps> = ({
         buttonColor='green'
         onPress={submitHandler}
       >
-        Выбрать
+        <Trans>Выбрать</Trans>
       </Button>
     </Modal>
   )

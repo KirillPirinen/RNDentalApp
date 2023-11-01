@@ -4,6 +4,7 @@ import { Card, Text } from 'react-native-paper'
 import { ButtonRowPanel } from './Buttons'
 import Group from '../db/models/Group'
 import { getAlphaFromColor } from '../utils/getAlphaFromColor'
+import { Trans } from '@lingui/macro'
 
 export type GroupCardProps = {
   group: Group;
@@ -32,8 +33,8 @@ const GroupCard: FC<GroupCardProps> = ({ group, onDelete, onEdit }) => {
         <View style={styles.headerWrapper}>
           <View style={styles.content}>
             <Text variant="titleLarge" style={{ flexWrap: 'wrap' }}>{group.name}</Text>
-            {group.description && <Text variant="titleSmall">Описание:</Text>}
-            <Text variant="bodyMedium" selectable>{group.description || 'Описание отсутствует'}</Text>
+            {group.description && <Text variant="titleSmall"><Trans>Описание</Trans>:</Text>}
+            <Text variant="bodyMedium" selectable>{group.description || <Trans>Описание отсутствует</Trans>}</Text>
           </View>
           <View style={styles.panel}>
           <ButtonRowPanel

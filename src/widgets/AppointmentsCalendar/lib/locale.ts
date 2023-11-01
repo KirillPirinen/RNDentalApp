@@ -1,4 +1,5 @@
 import { LocaleConfig } from 'react-native-calendars';
+import { AppLocales } from '../../../consts/config';
 
 export const ru = {
   monthNames: [
@@ -41,3 +42,226 @@ export const ru = {
   dayNamesShort: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
   today: 'Сегодня',
 };
+
+export const es = {
+  monthNames: [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre',
+  ],
+  monthNamesShort: [
+    'Ene',
+    'Feb',
+    'Mar',
+    'Abr',
+    'May',
+    'Jun',
+    'Jul',
+    'Ago',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dic',
+  ],
+  dayNames: [
+    'Domingo',
+    'Lunes',
+    'Martes',
+    'Miércoles',
+    'Jueves',
+    'Viernes',
+    'Sábado',
+  ],
+  dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+  today: 'Hoy',
+};
+
+export const zh = {
+  monthNames: [
+    '一月',
+    '二月',
+    '三月',
+    '四月',
+    '五月',
+    '六月',
+    '七月',
+    '八月',
+    '九月',
+    '十月',
+    '十一月',
+    '十二月',
+  ],
+  monthNamesShort: [
+    '一月',
+    '二月',
+    '三月',
+    '四月',
+    '五月',
+    '六月',
+    '七月',
+    '八月',
+    '九月',
+    '十月',
+    '十一月',
+    '十二月',
+  ],
+  dayNames: [
+    '星期日',
+    '星期一',
+    '星期二',
+    '星期三',
+    '星期四',
+    '星期五',
+    '星期六',
+  ],
+  dayNamesShort: ['日', '一', '二', '三', '四', '五', '六'],
+  today: '今天',
+};
+
+export const de = {
+  monthNames: [
+    'Januar',
+    'Februar',
+    'März',
+    'April',
+    'Mai',
+    'Juni',
+    'Juli',
+    'August',
+    'September',
+    'Oktober',
+    'November',
+    'Dezember',
+  ],
+  monthNamesShort: [
+    'Jan',
+    'Feb',
+    'Mär',
+    'Apr',
+    'Mai',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Okt',
+    'Nov',
+    'Dez',
+  ],
+  dayNames: [
+    'Sonntag',
+    'Montag',
+    'Dienstag',
+    'Mittwoch',
+    'Donnerstag',
+    'Freitag',
+    'Samstag',
+  ],
+  dayNamesShort: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+  today: 'Heute',
+};
+
+export const fr = {
+  monthNames: [
+    'janvier',
+    'février',
+    'mars',
+    'avril',
+    'mai',
+    'juin',
+    'juillet',
+    'août',
+    'septembre',
+    'octobre',
+    'novembre',
+    'décembre',
+  ],
+  monthNamesShort: [
+    'janv',
+    'févr',
+    'mars',
+    'avril',
+    'mai',
+    'juin',
+    'juil',
+    'août',
+    'sept',
+    'oct',
+    'nov',
+    'déc',
+  ],
+  dayNames: [
+    'dimanche',
+    'lundi',
+    'mardi',
+    'mercredi',
+    'jeudi',
+    'vendredi',
+    'samedi',
+  ],
+  dayNamesShort: ['dim', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam'],
+  today: 'Aujourd\'hui',
+};
+
+export const hi = {
+  monthNames: [
+    'जनवरी',
+    'फरवरी',
+    'मार्च',
+    'अप्रैल',
+    'मई',
+    'जून',
+    'जुलाई',
+    'अगस्त',
+    'सितंबर',
+    'अक्टूबर',
+    'नवम्बर',
+    'दिसंबर',
+  ],
+  monthNamesShort: [
+    'जन',
+    'फर',
+    'मार्च',
+    'अप्रैल',
+    'मई',
+    'जून',
+    'जुल',
+    'अग',
+    'सित',
+    'अक्ट',
+    'नव',
+    'दिस',
+  ],
+  dayNames: [
+    'रविवार',
+    'सोमवार',
+    'मंगलवार',
+    'बुधवार',
+    'गुरुवार',
+    'शुक्रवार',
+    'शनिवार',
+  ],
+  dayNamesShort: ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'],
+  today: 'आज',
+};
+
+
+LocaleConfig.locales['ru'] = ru
+LocaleConfig.locales['zh'] = zh
+LocaleConfig.locales['es'] = es
+LocaleConfig.locales['de'] = de
+LocaleConfig.locales['fr'] = fr
+LocaleConfig.locales['hi'] = hi
+LocaleConfig.locales['en'] = LocaleConfig.locales['']
+
+export const setCalendarLocale = (locale: AppLocales) => {
+  LocaleConfig.defaultLocale = locale 
+}

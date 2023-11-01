@@ -1,5 +1,6 @@
 import DocumentPicker from 'react-native-document-picker'
 import { useGeneralControl } from '../../context/general-context'
+import { t } from '@lingui/macro'
 
 export const useFilesPicker = (mimeTypes?: string[]) => {
   const [actions, dispatch] = useGeneralControl()
@@ -19,7 +20,7 @@ export const useFilesPicker = (mimeTypes?: string[]) => {
         dispatch({ 
           type: actions.INFO,
           payload: { 
-            text: `Произошла ошибка. Возможно не все файлы импортированы.`,
+            text: t`Произошла ошибка. Возможно не все файлы импортированы.`,
             color: 'errorContainer'
           }
         })

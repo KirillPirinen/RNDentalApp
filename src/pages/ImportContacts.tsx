@@ -11,6 +11,7 @@ import { useToggle } from '../utils/custom-hooks/useToggle'
 import { importContacts } from '../db/actions'
 import { NavigationProp } from '@react-navigation/native'
 import * as Contacts from 'expo-contacts'
+import { t } from '@lingui/macro'
 
 const footer = <View style={{ height: 120 }}></View>
 const eqCompare = (prev: ItemProps, next: ItemProps) => prev.checked === next.checked
@@ -54,7 +55,7 @@ const RenderedList: FC<RenderedListProps> = memo(({ result, onDrop, onDrag, ...r
   return (
     <>
       {Boolean(result?.length) && <List.Item
-        title={all ? 'Снять выделение' : 'Выбрать всех'}
+        title={all ? t`Снять выделение` : t`Выбрать всех`}
         right={() => <List.Icon icon={all ? 'checkbox-marked' : 'checkbox-blank-outline'} />}
         onPress={onSelectAll}
       />}
@@ -96,7 +97,7 @@ const ImportContacts: FC<ImportContactsProps> = ({ navigation }) => {
       menu: [
       { 
         type: 'TouchableCheckbox', 
-        label: 'Скрыть добавленные', 
+        label: t`Скрыть добавленные`, 
         onPress: setUnique,
         value: isUnique
       }
@@ -129,7 +130,7 @@ const ImportContacts: FC<ImportContactsProps> = ({ navigation }) => {
       />
       <FAB
         ref={ref} 
-        label="Добавить"
+        label={t`Добавить`}
         onPress={onSubmit}
       />
     </Container>

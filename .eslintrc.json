@@ -16,7 +16,8 @@
     "plugins": [
         "react",
         "react-native",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "lingui"
     ],
     "rules": {
         "react/react-in-jsx-scope": 0,

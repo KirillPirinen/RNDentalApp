@@ -9,6 +9,7 @@ import { setStringAsync } from 'expo-clipboard'
 import { ContextedPortalDefaultProps } from '..'
 import Patient from '../../../db/models/Patient'
 import Template from '../../../db/models/Template'
+import { Trans, t } from '@lingui/macro'
 
 export type ChooseTemplateModes = keyof typeof Links
 
@@ -20,7 +21,7 @@ const Links = {
 const createDefaultAction = (mode: ChooseTemplateModes) => ({ 
     type: actions.INFO,
     payload: { 
-      text: `К сожалению мы не смогли открыть ${mode}, возможно он не установлен`,
+      text: t`К сожалению мы не смогли открыть ${mode}, возможно он не установлен`,
       color: 'errorContainer'
     }
 } as const)
@@ -83,7 +84,7 @@ export const ChooseTemplate: FC<ChooseTemplateProps> = ({
       visible={__visible && Boolean(templates.length)} 
       contentContainerStyle={styles.modal}
     > 
-    <Text variant="headlineSmall">Ваши шаблоны:</Text>
+    <Text variant="headlineSmall"><Trans>Ваши шаблоны</Trans>:</Text>
     <RadioButton.Group onValueChange={setChoosed} value={choosed}>
       <View style={styles.radioWrapper}>
         {templates.map(({ name, text, id }) => (
@@ -105,7 +106,7 @@ export const ChooseTemplate: FC<ChooseTemplateProps> = ({
       {isTelegram && choosed && (
         <>
           <Text style={{ textAlign:'center'}}>
-            Telegram не поддерживает предзагруженные сообщения, по-этому после открытия чата нужно вставить скопированный из шаблона текст
+            <Trans>Telegram не поддерживает предзагруженные сообщения, по-этому после открытия чата нужно вставить скопированный из шаблона текст</Trans>
           </Text>
           <Divider bold/>
         </>
@@ -117,21 +118,21 @@ export const ChooseTemplate: FC<ChooseTemplateProps> = ({
             textColor="green"
             onPress={onSendTemplate}
           > 
-            {isTelegram ? 'Копировать сообщение и перейти в чат' : 'Отправить'}
+            {isTelegram ? t`Копировать сообщение и перейти в чат` : t`Отправить`}
         </Button>
         <Button
             icon="book-open-blank-variant"
             textColor="black"
             onPress={onSendTemplateBare}
           > 
-            Без шаблона
+            <Trans>Без шаблона</Trans>
         </Button>
         <Button
             icon="window-close"
             textColor="gray"
             onPress={__defaultProps.clear}
           > 
-            Отмена
+            <Trans>Отмена</Trans>
         </Button>
       </View>
     </Modal>

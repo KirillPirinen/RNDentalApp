@@ -2,10 +2,11 @@ import { StyleSheet, View } from 'react-native'
 import { Foundation, FontAwesome5 } from '@expo/vector-icons'
 import { Text, Menu, IconButton, Divider, Surface, MenuProps } from 'react-native-paper'
 import Badge from '../Badge'
-import formatRu from '../../utils/formatRu'
+import formatRu from '../../utils/formatLocalized'
 import { FC, ReactNode, memo, useState } from 'react'
 import Appointment from '../../db/models/Appointment'
 import { AppTheme } from '../../styles/themes'
+import { plural, t } from '@lingui/macro'
 
 type AppointmentHandler = (app: Appointment, isConfirmation?: boolean) => void
 
@@ -45,9 +46,9 @@ export const PatientAppointment: FC<PatientAppointmentProps> = ({
       <AppointmentCardRow style={{ marginTop: -20 }}>
         <FontAwesome5 name="clock" size={16} color="#A3A3A3" />
         <AppointmentCardLabel>
-         {`Длительность: `}
+         {`${t`Длительность`}: `}
           <Text style={{ fontWeight: '600' }}>
-            {`${appointment.duration} минут`}
+            {`${appointment.duration} ${t`минут`}`}
           </Text>
         </AppointmentCardLabel>
       </AppointmentCardRow>
@@ -72,7 +73,7 @@ const Teeth: FC<{ teeth: string }> = ({ teeth }) => {
     <AppointmentCardRow>
       <FontAwesome5 name="tooth" size={16} color="#A3A3A3" />
       <AppointmentCardLabel>
-        {count?.length > 1 ? 'Зубы: ' : 'Зуб: '}
+        {plural(count?.length ?? 0, { one: 'Зуб', other: 'Зубы' })}:
         <Text style={{ fontWeight: '600' }}>
           {count.join(', ')}
         </Text>
@@ -89,7 +90,7 @@ const Diagnosis: FC<{ diagnosis: string }> = ({ diagnosis }) => (
       color="#A3A3A3"
     />
     <AppointmentCardLabel>
-      {`Диагноз: `}
+      {`${t`Диагноз`}: `}
       <Text style={{ fontWeight: '600' }}>{diagnosis}</Text>
     </AppointmentCardLabel>
   </AppointmentCardRow>
@@ -103,7 +104,7 @@ const Notes: FC<{ notes: string }> = ({ notes }) => (
       color="#A3A3A3"
     />
     <AppointmentCardLabel>
-      Заметки:{' '}
+      {t`Заметки`}:{' '}
       <Text style={{ fontWeight: '600' }}>{notes}</Text>
     </AppointmentCardLabel>
   </AppointmentCardRow>
@@ -129,11 +130,11 @@ const MenuApointment: FC<MenuApointmentProps> = ({ onEditAppointment, appointmen
       />}
       {...rest}
     >
-      <Menu.Item onPress={hof(onDeleteAppointment)} title="Удалить" />
+      <Menu.Item onPress={hof(onDeleteAppointment)} title={t`Удалить`} />
       <Divider bold />
-      <Menu.Item onPress={hof(onEditAppointment)} title="Изменить время" />
+      <Menu.Item onPress={hof(onEditAppointment)} title={t`Изменить время`} />
       <Divider bold />
-      <Menu.Item onPress={hof(onEditAppointment, true)} title={!appointment.isConfirmed ? "Подтвердить прием" : "Редактировать"} />
+      <Menu.Item onPress={hof(onEditAppointment, true)} title={!appointment.isConfirmed ? t`Подтвердить прием` : t`Редактировать`} />
     </Menu>
   )
 }

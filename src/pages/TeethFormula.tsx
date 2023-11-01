@@ -14,6 +14,7 @@ import Appointment from '../db/models/Appointment'
 import Formula from '../db/models/Formula'
 import { NavigationProp } from '@react-navigation/native'
 import { useAppTheme } from '../styles/themes'
+import { Trans, t } from '@lingui/macro'
 
 type HistoryProps = {
   tooth: Tooth;
@@ -29,7 +30,7 @@ const History: FC<HistoryProps> = memo(({ tooth }) => {
 
   return Boolean(appointments.length) && (
     <View style={styles.historyWrapper}>
-      <Text variant="titleLarge" style={styles.historyTitle}>История лечения:</Text>
+      <Text variant="titleLarge" style={styles.historyTitle}><Trans>История лечения</Trans>:</Text>
       {appointments.map(appointment => <PatientAppointment key={appointment.id} appointment={appointment} theme={theme} />)}
     </View>
   )
@@ -69,25 +70,25 @@ const TeethFormula: FC<TeethFormulaProps> = ({ formula, navigation, teeth }) => 
       menu: [
       { 
         type: 'TouchableCheckbox', 
-        label: 'Временные зубы', 
+        label: t`Временные зубы`, 
         onPress: onBabyCheck,
         value: formula.hasBabyJaw
       },
       { 
         type: 'TouchableCheckbox', 
-        label: 'Постоянные зубы', 
+        label: t`Постоянные зубы`, 
         onPress: onAdultCheck,
         value: formula.hasAdultJaw
       },
       { 
         type: 'TouchableCheckbox', 
-        label: 'Показывать с историей лечения', 
+        label: t`Показывать с историей лечения`, 
         onPress: setHistory,
         value: history
       },
       { 
         type: 'TouchableCheckbox', 
-        label: 'Показывать status localis', 
+        label: t`Показывать status localis`,
         onPress: setStatusLocalis,
         value: statusLocalis
       }

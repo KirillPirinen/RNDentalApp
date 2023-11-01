@@ -16,7 +16,6 @@ const GeneralControlContext = createContext<AppDispatch>(() => undefined)
 const ModalContentContext = createContext(initialSlices.modal)
 const SettingsContext = createContext(initialSlices.settings)
 
-
 export const GeneralContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialSlices)
 

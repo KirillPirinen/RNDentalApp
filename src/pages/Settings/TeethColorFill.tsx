@@ -3,25 +3,26 @@ import { List } from 'react-native-paper';
 import { SettingsCheckbox } from './styles'
 import { useSettingUpdater } from '../../utils/custom-hooks/useSettingUpdater';
 import { NamedSetting } from '../../db/models/Settings'
+import { t } from '@lingui/macro';
 
 export const TeethColorFill = withSetting('teethColorFill')(({ setting }: { setting: NamedSetting<'teethColorFill'> }) => {
   const [values, onChange] = useSettingUpdater(setting)
 
   return (
     <List.Accordion
-        title="Отображение зубов в формуле"
+        title={t`Отображение зубов в формуле`}
         left={props => <List.Icon {...props} icon="tooth" />}
         style={{ justifyContent: 'space-between' }}
     >
       <SettingsCheckbox 
-        title="Выделять зубы с историей лечения"
-        description="История добавляется при подтверждении лечения"
+        title={t`Выделять зубы с историей лечения`}
+        description={t`История добавляется при подтверждении лечения`}
         name="history"
         onChange={onChange}
         initial={values.history}
       />
       <SettingsCheckbox 
-        title="Выделять зубы с status localis"
+        title={t`Выделять зубы с status localis`}
         name="statusLocalis"
         onChange={onChange}
         initial={values.statusLocalis}

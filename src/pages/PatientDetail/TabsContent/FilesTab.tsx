@@ -6,13 +6,13 @@ import { useCallback, useEffect, useState, memo, FC } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { SegmentedButtons, SegmentedButtonsProps, Text } from 'react-native-paper';
 import { types } from 'react-native-document-picker'
-import plural from 'plural-ru';
 import { ImagePreviewCard, ImagePreviewCardProps } from '../../../components'
 import FileViewer from 'react-native-file-viewer';
 import { useGeneralControl } from '../../../context/general-context/index';
 import * as FileSystem from 'expo-file-system';
 import { getSummaryExportText } from '../../../utils/getSummaryExportText';
 import Patient from '../../../db/models/Patient';
+import { t, plural, Trans } from '@lingui/macro';
 
 const width = Dimensions.get('window').width
 
@@ -79,13 +79,13 @@ const styles = StyleSheet.create({
 const addButtons = [
   {
     value: 'camera',
-    label: 'Камера',
+    label: t`Камера`,
     icon: () => <MaterialCommunityIcons name='camera' size={20} color="green" />,
     style: styles.button
   },
   {
     value: 'library',
-    label: 'Галлерея',
+    label: t`Галлерея`,
     icon: () => <MaterialCommunityIcons name='panorama-variant-outline' size={20} />,
     style: styles.button
   }
@@ -94,13 +94,13 @@ const addButtons = [
 const selectButtons = [
   {
     value: 'selectAll',
-    label: 'Выделить все',
+    label: t`Выделить все`,
     icon: () => <MaterialCommunityIcons name='check-all' size={20} />,
     style: styles.button
   },
   {
     value: 'cancel',
-    label: 'Отменить',
+    label: t`Отменить`,
     icon: () => <MaterialCommunityIcons name='cancel' size={20} />,
     style: styles.button
   },
@@ -110,12 +110,12 @@ const actionsButtons = [
   {
     value: 'delete',
     icon: () => <MaterialCommunityIcons name='delete-alert' size={20} />,
-    label: 'Удалить',
+    label: t`Удалить`,
     style: styles.button
   },
   {
     value: 'export',
-    label: 'Экспорт',
+    label: t`Экспорт`,
     icon: () => <MaterialCommunityIcons name='export' size={20} color="blue" />,
     style: styles.button
   },
@@ -179,7 +179,7 @@ const FilesTab: FC<FilesTabProps> = ({ patient, setCollapsed }) => {
     dispatch({
       type: actions.INFO,
       payload: { 
-        text: `На устройстве не найдено приложение для открытия типа ${type}`,
+        text: t`На устройстве не найдено приложение для открытия типа ${type}`,
         color: 'errorContainer'
       }
     })
@@ -225,7 +225,7 @@ const FilesTab: FC<FilesTabProps> = ({ patient, setCollapsed }) => {
                 dispatch({ 
                   type: actions.INFO,
                   payload: { 
-                    text: `Произошла неизвестная ошибка. Попробуйте выбрать другую директорию`,
+                    text: t`Произошла неизвестная ошибка. Попробуйте выбрать другую директорию`,
                     color: 'errorContainer'
                   }
                 })
@@ -247,7 +247,7 @@ const FilesTab: FC<FilesTabProps> = ({ patient, setCollapsed }) => {
       {buttons && (
         <>
           <View style={styles.selectActionButtonPanel}>
-            <Text variant='titleSmall' style={styles.selectedText}>{`${plural(count, 'Выделен', 'Выделено')}: ${count} ${plural(count, 'файл', 'файла', 'файлов')}`}</Text>
+            <Text variant='titleSmall' style={styles.selectedText}>{`${plural(count, { one: 'Выделен', other: 'Выделено' })}: ${plural(count, {one: '# файл', few: '# файла', other: '# файлов'})}`}</Text>
             <SegmentedButtons onValueChange={onButtonPanelPress} buttons={selectButtons} style={styles.buttonsPanel} value={''} />
           </View>
           <SegmentedButtons onValueChange={onButtonPanelPress} buttons={actionsButtons} style={styles.buttonsPanel} value={''} />
@@ -278,7 +278,7 @@ const FilesTab: FC<FilesTabProps> = ({ patient, setCollapsed }) => {
             )
           }
           )}
-          {files?.length === 0 && <Text style={{ marginTop: 12 }}>Файлов нет</Text>}
+          {files?.length === 0 && <Text style={{ marginTop: 12 }}><Trans>Файлов нет</Trans></Text>}
         </View>
       </ScrollView>
     </View>

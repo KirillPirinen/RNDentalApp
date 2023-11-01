@@ -2,8 +2,8 @@ import getDatabase from '..'
 import * as FileSystem from 'expo-file-system';
 import Patient from '../models/Patient';
 import { FileMeta } from '../models/File';
-import { ProgressResult } from '../../components/PortalContent/Progress';
 import { createManifest } from '../../utils/createManifest';
+import { ProgressResult } from '../../widgets/Portal/PortalContent/Progress';
 
 export const exportPatiensFiles = async () => {
   const database = getDatabase()

@@ -2,6 +2,7 @@ import { FC, useState } from 'react'
 import { View, StyleSheet } from "react-native"
 import { TextInput, Button } from "react-native-paper"
 import Phone from '../db/models/Phone';
+import { Trans, t } from '@lingui/macro';
 
 export type InputChangeDTO = {
   id?: string;
@@ -80,7 +81,7 @@ export const PhoneInput: FC<PhoneInputTypes> = ({ onChange, phones }) => {
           <Input
             key={id}
             id={id}
-            label={`Телефон_${index + 1}`} 
+            label={`${t`Телефон`} ${index + 1}`} 
             onChange={onChange}
             onDeletePhone={onDeletePhone}
             value={isRealPhone ? field.number : undefined}
@@ -96,7 +97,7 @@ export const PhoneInput: FC<PhoneInputTypes> = ({ onChange, phones }) => {
         onPress={onAddPhone}
         buttonColor={'green'}
       >
-        Добавить телефон
+        <Trans>Добавить телефон</Trans>
       </Button>
     </View>
   )

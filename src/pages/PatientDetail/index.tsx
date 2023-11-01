@@ -19,10 +19,11 @@ import { ChooseTemplateProps } from '../../widgets/Portal/PortalContent/ChooseTe
 import Group from '../../db/models/Group'
 import { PatientGroupList } from '../../components/PatientGroupList'
 import { PatientLabel } from '../../components/PatientLabel'
+import { Trans, t } from '@lingui/macro'
 
 const tabs: Array<Route> = [
-  { key: '0', title: 'Записи' },
-  { key: '1', title: 'Файлы' },
+  { key: '0', get title() { return t`Записи` } },
+  { key: '1', get title() { return t`Файлы` } },
 ]
 
 export type PatientDetailProps = {
@@ -71,7 +72,7 @@ const PatientDetail: FC<PatientDetailProps> = ({ navigation, patient, phones, gr
       dispatch({ 
         type: actions.INFO,
         payload: { 
-          text: 'К сожалению мы не смогли открыть приложение для звонка',
+          text: t`К сожалению мы не смогли открыть приложение для звонка`,
           color: 'errorContainer'
         }
       })
@@ -109,7 +110,7 @@ const PatientDetail: FC<PatientDetailProps> = ({ navigation, patient, phones, gr
       },
       {
         type: 'TouchableCheckbox', 
-        label: collapsed ? 'Скрыть информацию    ' : 'Показать информацию', 
+        label: collapsed ? `${t`Скрыть информацию`}    ` : t`Показать информацию`, 
         onPress: setCollapsed,
         value: collapsed
       }]
@@ -170,7 +171,7 @@ const PatientDetail: FC<PatientDetailProps> = ({ navigation, patient, phones, gr
           </View>
           <View style={[styles.patientButtons, !collapsed && { display: 'none' }]}>
             <View style={styles.formulaButtonView}>
-              <Button onPress={() => navigation.navigate('TeethFormula', { patient })}>Зубная формула</Button>
+              <Button onPress={() => navigation.navigate('TeethFormula', { patient })}><Trans>Зубная формула</Trans></Button>
             </View>
             <CallButton onPress={onCall} />
             {patient.hasWhatsapp && <WhatsappButton onPress={onSendMessage('whatsapp')} />}
@@ -187,7 +188,7 @@ const PatientDetail: FC<PatientDetailProps> = ({ navigation, patient, phones, gr
           />
         <FAB
           ref={ref} 
-          label={`Записать пациента`}
+          label={t`Записать пациента`}
           onPress={() => navigation.navigate('AddAppointment', { patient })}
         /> 
       </View>

@@ -4,6 +4,7 @@ import { Button } from 'react-native-paper'
 import { TriangleColorPicker } from 'react-native-color-picker'
 import { HsvColor, IPickerProps } from 'react-native-color-picker/dist/typeHelpers'
 import tinycolor2 from 'tinycolor2'
+import { Trans } from '@lingui/macro'
 
 export type AppColorPickerProps = Omit<IPickerProps, 'onColorSelected' | 'onColorChange'> & {
   onSelect: (hex: string) => void
@@ -46,7 +47,7 @@ export const AppColorPicker: FC<AppColorPickerProps> = ({ defaultColor, onSelect
         buttonColor={'green'}
         onPress={() => api.selectColor()}
       >
-        Выбрать цвет
+        <Trans>Выбрать цвет</Trans>
       </Button>
       {onCancel && <Button 
         style={styles.cancelColorBtn} 
@@ -55,7 +56,7 @@ export const AppColorPicker: FC<AppColorPickerProps> = ({ defaultColor, onSelect
         buttonColor={'grey'}
         onPress={onCancel}
       >
-        Отмена
+        <Trans>Отмена</Trans>
       </Button>}
     </View>
   )

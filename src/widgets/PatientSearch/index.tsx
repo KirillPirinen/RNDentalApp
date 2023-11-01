@@ -14,6 +14,7 @@ import { PatientPhones } from '../../components/PatientPhones'
 import PatientModel from '../../db/models/Patient'
 import { useAppTheme } from '../../styles/themes'
 import { usePatients } from '../../utils/custom-hooks/usePatients'
+import { Trans, t } from '@lingui/macro'
 
 const renderList = ({ result, onChoose, searchQuery: searchQueryRaw }: {
   result: Array<PatientModel>;
@@ -71,9 +72,9 @@ const renderList = ({ result, onChoose, searchQuery: searchQueryRaw }: {
       )}
       ItemSeparatorComponent={Divider}
       style={{ marginVertical: 12 }}
-      ListHeaderComponent={(!isSearching && hasSuggestions) ? <Text variant="titleMedium">Последние запланированные пациенты: </Text> : undefined}
+      ListHeaderComponent={(!isSearching && hasSuggestions) ? <Text variant="titleMedium"><Trans>Последние запланированные пациенты</Trans>: </Text> : undefined}
       ListFooterComponent={(isSearching && !result?.length) ? (
-        <EmptyList text="Пациент не найден. Хотите добавить нового?">
+        <EmptyList text={t`Пациент не найден. Хотите добавить нового?`}>
           <Button 
             icon="plus" 
             mode="outlined"
@@ -82,7 +83,7 @@ const renderList = ({ result, onChoose, searchQuery: searchQueryRaw }: {
             onPress={onChoosePatientMethod}
             style={{ marginVertical: 10 }}
           >
-            Добавить
+            <Trans>Добавить</Trans>
           </Button>
         </EmptyList>
       ) : undefined}
@@ -115,7 +116,7 @@ const PatientSearch: FC<PatientSearchProps> = ({ setChoosed, barStyle }) => {
       onChange={onSearch} 
       renderList={renderList}
       onChoose={setChoosed}
-      placeholder="Поиск пациента"
+      placeholder={t`Поиск пациента`}
       barStyle={barStyle}
     />
   )

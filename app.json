@@ -2,7 +2,7 @@
   "expo": {
     "name": "dental-app",
     "slug": "dental-app",
-    "version": "1.4.2",
+    "version": "1.5.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -12,14 +12,18 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/5bf4f142-d4e0-46b6-8b8a-103c4ed08d75"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.dental.office"
+      "bundleIdentifier": "com.dental.office",
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +34,8 @@
       "package": "com.dental.office",
       "permissions": [
         "WRITE_CONTACTS"
-      ]
+      ],
+      "runtimeVersion": "1.5.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -39,6 +44,9 @@
       "eas": {
         "projectId": "5bf4f142-d4e0-46b6-8b8a-103c4ed08d75"
       }
-    }
+    },
+    "plugins": [
+      "expo-localization"
+    ]
   }
 }

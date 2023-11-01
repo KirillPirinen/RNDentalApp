@@ -9,17 +9,16 @@ export type CounterData<N extends string> = {
 
 export type CounterProps<N extends string> = {
   initial?: number;
-  name?: N;
+  name: N;
   onChange: (dto: CounterData<N>) => void;
 }
 
- 
-// @ts-ignore
+//@ts-ignore
 export const Counter = <N extends string = 'counter'>({ onChange, initial = 0, name = 'counter' }: CounterProps<N>) => {
   const [num, setNum] = useState<number>(initial)
 
   const cb = useMemo(() => {
-    let timer: NodeJS.Timer
+    let timer: NodeJS.Timeout
 
     const onPressOut = () => clearInterval(timer)
 

@@ -3,6 +3,7 @@ import { StyleProp, StyleSheet, View, ViewStyle} from 'react-native'
 import { IconButton, Text } from 'react-native-paper'
 import Group from '../db/models/Group'
 import { useNavigation } from '@react-navigation/native'
+import { plural } from '@lingui/macro'
 
 export type PatientGroupListProps = {
   groups: Group[];
@@ -42,7 +43,10 @@ export const PatientGroupList: FC<PatientGroupListProps> = ({ groups, style }) =
   return (
     <View onLayout={onLayout} style={[{ flexDirection: 'row' }, style]}>
       <View style={wrapperStyle}>
-        <Text style={{ paddingLeft: 4, paddingTop: 6 }}>{groups.length === 1 ? 'Группа:' : 'Группы:'}</Text>
+        <Text style={{ paddingLeft: 4, paddingTop: 6 }}>{plural(groups.length, {
+          one: 'Группа',
+          other: 'Группы'
+        })}:</Text>
         {groups.map((group, i) => (
             <Text 
               key={group.id}

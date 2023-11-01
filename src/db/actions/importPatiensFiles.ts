@@ -2,9 +2,10 @@ import { Q } from '@nozbe/watermelondb'
 import getDatabase from '..'
 import * as FileSystem from 'expo-file-system';
 import File, { FileMeta } from '../models/File';
-import { ProgressResult } from '../../components/PortalContent/Progress';
 import { Manifest } from '../../utils/createManifest';
 import { getFileNameFromUri, makeDirIfNotExist } from '../../utils/fileHelpers';
+import { t } from '@lingui/macro';
+import { ProgressResult } from '../../widgets/Portal/PortalContent/Progress';
 
 export const importPatiensFiles = async () => {
   const database = getDatabase()
@@ -17,7 +18,7 @@ export const importPatiensFiles = async () => {
 
   const manifestUri = dirFiles.find(uri => uri.endsWith('manifest.json'))
 
-  if (!manifestUri) throw new Error('В папке отсутствует manifest.json')
+  if (!manifestUri) throw new Error(t`В папке отсутствует manifest.json`)
 
   const container: ProgressResult = {
     success: 0,
@@ -42,11 +43,11 @@ export const importPatiensFiles = async () => {
         try {
           const fileInstance = (await database.get<File>('files').query(Q.where('id', meta.id)).fetch())[0]
 
-          if (!fileInstance) throw new Error('Файла несуществует в БД, нужно импортировать вручную')
+          if (!fileInstance) throw new Error(t`Файла несуществует в БД, нужно импортировать вручную`)
           
           const patientFileMeta = await FileSystem.getInfoAsync(fileInstance.uri)
 
-          if (patientFileMeta.exists) throw new Error('Файл с таким именем уже существует, можно импортировать вручную')
+          if (patientFileMeta.exists) throw new Error(t`Файл с таким именем уже существует, можно импортировать вручную`)
 
           await makeDirIfNotExist(patientDir)
 
@@ -69,7 +70,7 @@ export const importPatiensFiles = async () => {
 
       container.failedValues.push({
         name,
-        reason: 'Файл отсутствует в manifest.json'
+        reason: t`Файл отсутствует в manifest.json`
       })
 
       container.total++

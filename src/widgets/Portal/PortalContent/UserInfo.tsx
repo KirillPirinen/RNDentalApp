@@ -5,6 +5,7 @@ import { TelegramButton } from '../../../components/Buttons/DeepLinks'
 import { Modal } from 'react-native-paper'
 import { ContextedPortalDefaultProps } from '..'
 import { FC } from 'react'
+import { Trans, t } from '@lingui/macro'
 
 export type UserInfoProps =  ContextedPortalDefaultProps<{
   mode: 'about' | 'migrate';
@@ -18,26 +19,28 @@ const styles = StyleSheet.create({
   },
 })
 
-
-const content: Record<UserInfoProps['mode'], JSX.Element> = {
-  about: (
+const getContent = (mode: UserInfoProps['mode']): JSX.Element => {
+  if (mode === 'about') {
+    return (
+      <>
+        <Text variant="titleLarge"><Trans>О приложении</Trans></Text>
+        <Text variant="bodyLarge" style={styles.marginTop}>
+          {t`Приложение - инструмент для стоматологов, поможет Вам хранить и отслеживать данные пациентов, фото, cнимки, зубную формулу и тд.
+  
+  Разработано на энтузиазме в свободное время с надеждой что кому-то оно будет полезно.
+  
+  Со всеми предложениями, выявленными ошибками, благодарностями и тд. можно писать в телеграмм.`}
+        </Text>
+        <TelegramButton style={styles.marginTop} onPress={() => Linking.openURL('https://t.me/KirillPirinen')} />
+      </>
+    )
+  }
+  
+  return (
     <>
-      <Text variant="titleLarge">{`О приложении`}</Text>
+      <Text variant="titleLarge"><Trans>О миграции данных</Trans></Text>
       <Text variant="bodyLarge" style={styles.marginTop}>
-        {`Приложение - инструмент для стоматологов, поможет Вам хранить и отслеживать данные пациентов, фото, cнимки, зубную формулу и тд.
-
-Разработано на энтузиазме в свободное время с надеждой что кому-то оно будет полезно.
-
-Со всеми предложениями, выявленными ошибками, благодарностями и тд. можно писать в телеграмм.`}
-      </Text>
-      <TelegramButton style={styles.marginTop} onPress={() => Linking.openURL('https://t.me/KirillPirinen')} />
-    </>
-  ),
-  migrate: (
-    <>
-      <Text variant="titleLarge">{`О миграции данных`}</Text>
-      <Text variant="bodyLarge" style={styles.marginTop}>
-        {`Для переноса данных на другой телефон нужно действовать в несколько этапов:
+        {t`Для переноса данных на другой телефон нужно действовать в несколько этапов:
         1) В списке БД выбрать желаемую и нажать "Экспортировать" - после этого выбрать папку куда сохранить БД.
          - В выбранной папке будут создано два файла с расширенями .db и .db-wal
         2) На новом устройстве установить приложение. Зайти в настройки -> БД -> Импортировать новую БД - после этого нужно выбрать 2 файла созданных на первом этапе.
@@ -50,7 +53,7 @@ const content: Record<UserInfoProps['mode'], JSX.Element> = {
         * шаги опциональные - если необходим перенос файлов пациентов
 
         `}
-        <Text theme={{ colors: { onSurface: 'red' }}}>Важно: последовательность шагов важна при импорте новых файлов. (сначала импорт и монтирование БД, потом файлы). </Text>
+        <Text theme={{ colors: { onSurface: 'red' }}}><Trans>Важно: последовательность шагов важна при импорте новых файлов. (сначала импорт и монтирование БД, потом файлы).</Trans></Text>
       </Text>
     </>
   )
@@ -74,7 +77,7 @@ export const UserInfo: FC<UserInfoProps> = ({
       contentContainerStyle={styles.modal}
     > 
       <ScrollView style={{ maxHeight: '100%'}}>
-          {content[mode]}
+          {getContent(mode)}
           <Button
             mode="contained-tonal"
             icon="hand-okay"

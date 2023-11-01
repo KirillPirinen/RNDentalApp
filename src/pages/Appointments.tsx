@@ -18,8 +18,8 @@ import Patient from '../db/models/Patient'
 import { useAppTheme } from '../styles/themes'
 import { Database } from '@nozbe/watermelondb'
 import { NamedSetting } from '../db/models/Settings'
-import { AppCalendar } from '../widgets/AppointmentsCalendar'
-import { Button, IconButton } from 'react-native-paper'
+import { Button } from 'react-native-paper'
+import { Trans, t } from '@lingui/macro'
 
 const spacer = <View style={{ height: 80 }} />
 const renderSectionHeader = ({ section: { day }}: { section: { day: string }}) => <SectionTitle>{day}</SectionTitle>
@@ -71,7 +71,7 @@ const Appointments: FC<AppointmentsProps> = ({ appointments, navigation }) => {
         labelStyle={{ fontSize: 18 }}
         style={{ padding: 0, marginTop: 5, marginBottom: 0 }}
         onPress={() => navigation.navigate('AppointmentsCalendar')}
-      >Открыть календарь</Button>
+      ><Trans>Открыть календарь</Trans></Button>
       {grouped.length ? (
         <SectionList
           sections={grouped}
@@ -84,12 +84,12 @@ const Appointments: FC<AppointmentsProps> = ({ appointments, navigation }) => {
         />
       ) : (
         <View style={styles.emptyContainer}>
-          <EmptyList text='Записей нет' style={styles.emptyList} iconName='dots-horizontal' iconStyle={styles.emptyIcon} />
+          <EmptyList text={t`Записей нет`} style={styles.emptyList} iconName='dots-horizontal' iconStyle={styles.emptyIcon} />
         </View>
       )}
       <FAB 
         ref={ref} 
-        label="Добавить запись" 
+        label={t`Добавить запись`} 
         onPress={() => navigation.navigate('AddAppointment')}
       />
     </GestureHandlerRootView>

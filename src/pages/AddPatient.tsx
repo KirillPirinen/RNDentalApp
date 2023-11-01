@@ -8,6 +8,7 @@ import { NavigationProp } from "@react-navigation/native"
 import Patient from "../db/models/Patient"
 import Phone from "../db/models/Phone"
 import { PhoneInputTypes } from "../components/PhoneInput"
+import { t } from "@lingui/macro"
 
 const defObj = {}
 const wrapper = { padding: 25, flex: 1 }
@@ -57,7 +58,7 @@ const AddPatient: FC<AddPatientProps> = ({ navigation, route: { params } }) => {
   const onSubmit = () => {
 
     if(!fullName) {
-      return setError('Имя не может быть пустым')
+      return setError(t`Имя не может быть пустым`)
     }
 
     if(isEditMode && patient.updateInstance) {
@@ -78,7 +79,7 @@ const AddPatient: FC<AddPatientProps> = ({ navigation, route: { params } }) => {
       <View style={{ marginTop: 20, marginLeft: 0 }}>
         <TextInput
           mode="outlined"
-          label="Имя"
+          label={t`Имя`}
           style={{ marginTop: 12 }}
           onChangeText={setName}
           value={fullName}
@@ -94,7 +95,7 @@ const AddPatient: FC<AddPatientProps> = ({ navigation, route: { params } }) => {
         onPress={onSubmit}
         buttonColor={isEditMode ? 'green' : undefined}
       >
-        {isEditMode ? 'Сохранить изменения' : 'Добавить пациента'}
+        {isEditMode ? t`Сохранить изменения` : t`Добавить пациента`}
       </Button>
     </ScrollView>
   )

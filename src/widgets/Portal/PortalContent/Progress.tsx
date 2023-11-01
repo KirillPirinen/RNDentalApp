@@ -3,15 +3,16 @@ import { ScrollView, StyleSheet } from 'react-native'
 import { Button, Modal, Text, ActivityIndicator } from 'react-native-paper'
 import { ContextedPortalDefaultProps } from '..'
 import actionTypes from '../../../context/general-context/action-types'
+import { Trans, t } from '@lingui/macro'
 
 const defaultTextsResolvers = {
   contactsImport: { 
-    title: `Успешно добавлено`,
-    error: `Данные контакты импортированы с ошибками`
+    title: t`Успешно добавлено`,
+    error: t`Данные контакты импортированы с ошибками`
   },
   filesExport: {
-    title:`Успешно экспортировано`,
-    error: `Файлы данных пациентов экспортированы с ошибками`
+    title: t`Успешно экспортировано`,
+    error: t`Файлы данных пациентов экспортированы с ошибками`
   },
 }
 
@@ -59,7 +60,7 @@ export const Progress: FC<ProgressProps> = ({
       })
       .catch((e: any) => {
         __defaultProps.dispatch({ type: actionTypes.INFO, payload: {
-          text: `Ошибка: ${e.message || 'unknown'}`,
+          text: `${t`Ошибка`}: ${e.message || 'unknown'}`,
           color: 'errorContainer'
         }})
       }), 500)
@@ -91,7 +92,7 @@ export const Progress: FC<ProgressProps> = ({
               </ScrollView>
             </>
           )}
-          <Button onPress={onExit}>Выйти</Button>
+          <Button onPress={onExit}><Trans>Выйти</Trans></Button>
         </>
       ): <ActivityIndicator size="large" color={__defaultProps.theme.colors.primary} />}
     </Modal>

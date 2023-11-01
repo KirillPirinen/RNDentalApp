@@ -16,6 +16,7 @@ import { defaultDissmisHandle, renderDefaultDivider } from '../utils/defaultFn'
 import Group from '../db/models/Group'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { FontAwesome } from '@expo/vector-icons';
+import { t } from '@lingui/macro'
 
 DropDownPicker.modifyTranslation('RU', {
   PLACEHOLDER: 'Выберите группу',
@@ -172,7 +173,7 @@ export const PatientsList: FC<PatientsListProps> = ({ patients, groups, navigati
           }
           <FAB
             ref={ref}
-            label="Добавить пациента"
+            label={t`Добавить пациента`}
             onPress={onChoosePatientMethod}
           />
       </View>

@@ -8,6 +8,7 @@ import { createTemplate } from '../db/actions'
 import { useToggle } from '../utils/custom-hooks/useToggle'
 import { replaceStringByIndex } from '../utils/insertString'
 import { NavigationProp } from '@react-navigation/native'
+import { t } from '@lingui/macro'
 
 export type AddTemplateProps = {
   navigation: NavigationProp<ReactNavigation.RootParamList>
@@ -67,7 +68,7 @@ const AddTemplate: FC<AddTemplateProps> = ({ navigation, route: { params } }) =>
         dispatch({ 
           type: actions.INFO,
           payload: { 
-            text: 'Вы успешно добавили новый шаблон'
+            text: t`Вы успешно добавили новый шаблон`
           }
         })
       }, 500)
@@ -81,12 +82,11 @@ const AddTemplate: FC<AddTemplateProps> = ({ navigation, route: { params } }) =>
     setName(text)
   }
 
-  
   return (
       <ScrollView keyboardShouldPersistTaps='handled'>
         <Container>
           <TextInput
-            label="Название шаблона"
+            label={t`Название шаблона`}
             mode="outlined"
             value={name}
             onChangeText={onChangeTextName}
@@ -94,7 +94,7 @@ const AddTemplate: FC<AddTemplateProps> = ({ navigation, route: { params } }) =>
           />
           <View ref={ref} onLayout={onLayout}>
             <TextInput
-              label="Текст"
+              label={t`Текст`}
               mode="outlined"
               value={text}
               onChangeText={setText}
@@ -114,21 +114,21 @@ const AddTemplate: FC<AddTemplateProps> = ({ navigation, route: { params } }) =>
                 style={styles.item}
                 titleStyle={styles.itemTitle} 
                 onPress={onInsertTag('[-date-]')} 
-                title="Дата приема" 
+                title={t`Дата приема`}
               />
               <Divider bold/>
               <Menu.Item
                 style={styles.item}
                 titleStyle={styles.itemTitle} 
                 onPress={onInsertTag('[-time-]')} 
-                title="Время приема" 
+                title={t`Время приема`}
               />
               <Divider bold/>
               <Menu.Item
                 style={styles.item}
                 titleStyle={styles.itemTitle} 
                 onPress={onInsertTag('[-name-]')} 
-                title="Имя пациента" 
+                title={t`Имя пациента`}
               />
             </Menu>
           </View>
@@ -139,7 +139,7 @@ const AddTemplate: FC<AddTemplateProps> = ({ navigation, route: { params } }) =>
             buttonColor={'green'}
             onPress={onSubmit}
           >
-            {isEdit ? 'Сохранить изменения' : 'Добавить шаблон'}
+            {isEdit ? t`Сохранить изменения` : t`Добавить шаблон`}
           </Button>
         </Container>
       </ScrollView>

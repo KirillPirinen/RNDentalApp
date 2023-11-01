@@ -4,6 +4,7 @@ import { Snackbar, SnackbarProps } from 'react-native-paper'
 import { TabsName } from '../../../router'
 import { ContextedPortalDefaultProps } from '..'
 import { AppThemeColors, useAppTheme } from '../../../styles/themes'
+import { t } from '@lingui/macro'
 
 const homeTabs = Object.values(TabsName)
 
@@ -44,7 +45,7 @@ export const Info: FC<InfoProps> = ({
         ]}
         visible={__visible}
         onDismiss={onClose || __defaultProps.clear}
-        action={action || { label: 'Cкрыть', onPress: __defaultProps.clear }}
+        action={action || { label: t`Cкрыть`, onPress: __defaultProps.clear }}
         {...rest}
       >
         {text}

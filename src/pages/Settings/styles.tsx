@@ -10,11 +10,11 @@ export type SettingsCheckboxProps<N extends string = string> = ListItemProps & {
 }
 
 type SimpleCB<T = boolean> = {
-  onChange: (val: T) => void
+  onChange: (val: T) => undefined | boolean | null | Promise<undefined | boolean | null>
 }
 
 type ComplexCB<T = boolean, N extends string = string> = {
-  onChange: (val: { name: N, value: T }) => void
+  onChange: (val: { name: N, value: T }) => undefined | boolean | null | Promise<undefined | boolean | null>
 }
 
 export const SettingsCheckbox = <T extends SettingsCheckboxProps, N extends string>(
@@ -30,17 +30,25 @@ export const SettingsCheckbox = <T extends SettingsCheckboxProps, N extends stri
   const iconChecked = radio ? 'checkbox-marked-circle' : 'checkbox-marked'
   return (
     <List.Item
-      onPress={() => {
+      onPress={async () => {
         const newValue = !_checked
         if(!radio || (newValue && radio)) {
-          setChecked(newValue)
-
+          let result: ReturnType<typeof onChange>
           if (name) {
-            (onChange as ComplexCB<boolean, N>['onChange'])({ name, value: newValue })
+            result = (onChange as ComplexCB<boolean, N>['onChange'])({ name, value: newValue })
           } else {
-            (onChange as SimpleCB['onChange'])(newValue)
+            result = (onChange as SimpleCB['onChange'])(newValue)
           }
-
+          
+          if (result instanceof Promise) {
+            const awaited = await result
+            awaited && setChecked(newValue)
+            return awaited
+          }
+    
+          result && setChecked(newValue)
+    
+          return result
         }
       }}
       right={() => <List.Icon style={styles.checkbox} icon={_checked ? iconChecked : iconBlank}/>}
@@ -64,16 +72,25 @@ export const SettingsRadioGroup = <T extends SettingsRadioGroupProps, N extends 
 }: SettingsRadioGroupProps<N> & (T['name'] extends string ? SimpleCB<string> : ComplexCB<string, N>)) => {
   const [value, setValue] = useState(initial)
 
-  const handleChange = useCallback<ComplexCB<boolean, string>['onChange']>(({ name: newValue, value }) => {
+  const handleChange = useCallback<ComplexCB<boolean, string>['onChange']>(async ({ name: newValue, value }) => {
     if (value) {
-      setValue(newValue)
+      let result: ReturnType<typeof onChange>
 
       if (name) {
-        (onChange as ComplexCB<string, N>['onChange'])({ name, value: newValue })
+        result = (onChange as ComplexCB<string, N>['onChange'])({ name, value: newValue })
       } else {
-        (onChange as SimpleCB<string>['onChange'])(newValue)
+        result = (onChange as SimpleCB<string>['onChange'])(newValue)
       }
 
+      if (result instanceof Promise) {
+        const awaited = await result
+        awaited && setValue(newValue)
+        return awaited
+      }
+
+      result && setValue(newValue)
+
+      return result
     }
   }, [onChange, setValue, name])
 

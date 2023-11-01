@@ -2,6 +2,7 @@ import { IconButton, Text, TextInput } from 'react-native-paper'
 import { StyleSheet, View } from 'react-native'
 import { FC, useEffect, useState } from 'react'
 import { useToggle } from '../../utils/custom-hooks/useToggle'
+import { Trans } from '@lingui/macro'
 
 export type ToothNotesInputProps = {
   notes: string;
@@ -24,7 +25,7 @@ export const ToothNotesInput: FC<ToothNotesInputProps> = ({ notes, onSubmit }) =
   return (
     <View style={styles.wrapper}>
       <View style={styles.heading}>
-        <Text variant="titleMedium">Заметки</Text>
+        <Text variant="titleMedium"><Trans>Заметки</Trans></Text>
         <IconButton
             onPress={toggleActive}
             icon={active ? 'cancel' : text ? "file-edit" : 'file-plus'}

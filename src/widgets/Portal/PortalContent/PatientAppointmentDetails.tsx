@@ -7,6 +7,7 @@ import { Button, PatientAppointment } from '../../../components'
 import Appointment from '../../../db/models/Appointment'
 import { modalContentsAction } from '../../../context/general-context/action-types'
 import { PatientLabel } from '../../../components/PatientLabel'
+import { Trans } from '@lingui/macro'
 
 export type PatientAppointmentDetailsProps = ContextedPortalDefaultProps<{
   patient: Patient,
@@ -49,8 +50,8 @@ export const PatientAppointmentDetails: FC<PatientAppointmentDetailsProps> = ({
         onDeleteAppointment={onConfirmDeleteAppointment}
       />
       <View style={styles.mainButtonWrapper}>
-      <Button style={styles.mainButtom} onPress={() => __defaultProps.navigation.navigate('Detail', { patient })}>Карточка</Button>
-        <Button style={styles.mainButtom} onPress={() => __defaultProps.navigation.navigate('TeethFormula', { patient })}>Зубная форумула</Button>
+      <Button style={styles.mainButtom} onPress={() => __defaultProps.navigation.navigate('Detail', { patient })}><Trans>Карточка</Trans></Button>
+        <Button style={styles.mainButtom} onPress={() => __defaultProps.navigation.navigate('TeethFormula', { patient })}><Trans>Зубная форумула</Trans></Button>
       </View>
     </Modal>
   )

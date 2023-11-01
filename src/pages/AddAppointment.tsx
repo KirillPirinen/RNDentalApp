@@ -4,7 +4,7 @@ import DatePicker from '@react-native-community/datetimepicker'
 import { Container, Patient } from '../components'
 import { Button, TextInput as Input, Text } from 'react-native-paper'
 import { NavigationProp } from '@react-navigation/native'
-import formatRu from '../utils/formatRu'
+import formatRu from '../utils/formatLocalized'
 import { createAppointment } from '../db/actions'
 import Slider from '@react-native-community/slider'
 import PatientModel from '../db/models/Patient'
@@ -14,6 +14,7 @@ import PatientSearch from '../widgets/PatientSearch'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { getAppointmentsWithCollision } from '../db/raw-queries'
 import { useGeneralControl } from '../context/general-context'
+import { Trans, t } from '@lingui/macro'
 
 const initState = { mode: null, сurrent: new Date() }
 
@@ -90,11 +91,11 @@ const AddAppointment: FC<AddAppointmentProps> = ({ navigation, route: { params }
         dispatch({ 
           type: actions.CONFIRM_COMMON, 
           payload: {
-            title: `Обнаружено ${overlappedCount.length} записей на это время.`,
-            question: 'Вы уверены что хотите записать пациента с пересечением?',
+            title: t`Обнаружено ${overlappedCount.length} записей на это время.`,
+            question: t`Вы уверены что хотите записать пациента с пересечением?`,
             buttons: [
             { 
-              children: 'Выбрать другое время', 
+              children: t`Выбрать другое время`, 
               onPress: () => {
                 dispatch({ type: actions.CLEAR })
                 setDateMeta(appointment.date ? 
@@ -103,7 +104,7 @@ const AddAppointment: FC<AddAppointmentProps> = ({ navigation, route: { params }
               }
             },
             { 
-              children: 'Подтвердить', 
+              children: t`Подтвердить`, 
               onPress: onSuccess
             }
           ]
@@ -138,7 +139,7 @@ const AddAppointment: FC<AddAppointmentProps> = ({ navigation, route: { params }
             }}
             disabled={confirmMode}
           >
-            Выбрать другого
+            <Trans>Выбрать другого</Trans>
           </Button>
           <Button 
             style={{ marginTop: 40, borderColor: buttonColor }} 
@@ -147,10 +148,10 @@ const AddAppointment: FC<AddAppointmentProps> = ({ navigation, route: { params }
             textColor={buttonColor}
             onPress={() => setDateMeta(prev => ({ ...prev, mode: 'date' }))}
           >
-            {dateMeta.date ? formatRu(dateMeta.date, 'PPpp') : 'Выбрать дату'}
+            {dateMeta.date ? formatRu(dateMeta.date, 'PPpp') : t`Выбрать дату`}
           </Button>
           <View style={styles.middleWrapper}>
-            <Text variant="titleLarge">{`Длительность приема: ${duration} минут`}</Text>
+            <Text variant="titleLarge">{t`Длительность приема: ${duration} минут`}</Text>
             <Slider
               style={styles.slider}
               onValueChange={setDuration}
@@ -167,7 +168,7 @@ const AddAppointment: FC<AddAppointmentProps> = ({ navigation, route: { params }
           <View style={styles.middleWrapper}>
             <Input
               mode="outlined"
-              label="Заметки"
+              label={t`Заметки`}
               style={styles.input}
               onChangeText={setNotes}
               value={notes}
@@ -193,7 +194,7 @@ const AddAppointment: FC<AddAppointmentProps> = ({ navigation, route: { params }
               mode="contained" 
               onPress={onSubmit}
             >
-              {isEdit ? 'Сохранить изменения' : 'Добавить прием'}
+              {isEdit ? t`Сохранить изменения` : t`Добавить прием`}
             </Button>
           </View>
         </ScrollView>

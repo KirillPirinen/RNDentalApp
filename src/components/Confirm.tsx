@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro';
 import { FC, ReactNode } from 'react';
 import { Text, Dialog, Button as PaperButton, useTheme } from 'react-native-paper'
 
@@ -42,14 +43,14 @@ export const ConfirmDelete: FC<ConfirmProps & { onDelete: () => void }> = ({ tit
         textColor={theme.colors.error}
         onPress={onDelete}
       > 
-        Удалить 
+        <Trans>Удалить</Trans> 
       </PaperButton>
       <PaperButton
         icon="window-close"
         textColor={theme.colors.backdrop}
         onPress={onClose}
       > 
-        Отмена
+        <Trans>Отмена</Trans>
       </PaperButton>
     </Confirm>
 )

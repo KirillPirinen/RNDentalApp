@@ -1,7 +1,7 @@
 import { TAG_REGEX } from '../consts'
 import Patient from '../db/models/Patient'
 import Template from '../db/models/Template'
-import formatRu from './formatRu'
+import formatRu from './formatLocalized'
 
 const reg = new RegExp(TAG_REGEX.source, TAG_REGEX.flags + 'g')
 const now = new Date()

@@ -1,5 +1,6 @@
 import Appointment from "../db/models/Appointment";
 import Patient from "../db/models/Patient";
+import { EAppLocales } from "./enum";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

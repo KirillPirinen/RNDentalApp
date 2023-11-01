@@ -14,6 +14,7 @@ import RNRestart from 'react-native-restart'
 import { deleteDB } from '../db/utils/deleteDB'
 import { useFilesPicker } from '../utils/custom-hooks/useFilesPicker'
 import { importDB } from '../db/utils/importDB'
+import { t } from '@lingui/macro'
 
 export type DatabasesListProps = {
   navigation: NavigationProp<ReactNavigation.RootParamList>
@@ -37,7 +38,7 @@ const DatabasesList: FC<DatabasesListProps> = ({ navigation }) => {
 
       setDatabases(newList)
     }).catch(e => dispatch({ type: actions.INFO , payload: { 
-      text: 'Вы еще не импортировали внешние БД.'
+      text: t`Вы еще не импортировали внешние БД.`
     }}))
   }
 
@@ -54,7 +55,7 @@ const DatabasesList: FC<DatabasesListProps> = ({ navigation }) => {
       await exportDB(dbName)
     } catch (e: any) {
       dispatch({ type: actions.INFO, payload: { 
-        text: `Ошибка экспорта': ${e.message}`,
+        text: t`Ошибка экспорта': ${e.message}`,
         color: 'errorContainer'
       }})
     }
@@ -68,12 +69,12 @@ const DatabasesList: FC<DatabasesListProps> = ({ navigation }) => {
         try {
           await deleteDB(dbName)
 
-          dispatch({ type: actions.INFO, payload: { text: `Успешно удалено` }})
+          dispatch({ type: actions.INFO, payload: { text: t`Успешно удалено` }})
 
           checkDBFiles()
         } catch (e: any) {
           dispatch({ type: actions.INFO, payload: { 
-            text: `Ошибка удаления': ${e.message}`,
+            text: t`Ошибка удаления': ${e.message}`,
             color: 'errorContainer'
           }})
         }
@@ -88,7 +89,7 @@ const DatabasesList: FC<DatabasesListProps> = ({ navigation }) => {
       checkDBFiles()
     } catch (e: any) {
       dispatch({ type: actions.INFO, payload: { 
-        text: `Ошибка импорта: ${e.message}`,
+        text: t`Ошибка импорта: ${e.message}`,
         color: 'errorContainer'
       }})
     }
@@ -97,7 +98,7 @@ const DatabasesList: FC<DatabasesListProps> = ({ navigation }) => {
   return (
     <>
     <List.Item 
-      title="Прочитать инструкцию" 
+      title={t`Прочитать инструкцию`} 
       titleStyle={{ color: 'green' }}
       onPress={() => dispatch({ type: actions.USER_INFO, payload: {
         mode: "migrate"
@@ -105,11 +106,12 @@ const DatabasesList: FC<DatabasesListProps> = ({ navigation }) => {
       left={props => <List.Icon {...props} color={'green'} icon="information-outline" />}
     />
     <List.Item 
-      title="Импортировать новую БД"
+      title={t`Импортировать новую БД`}
       onPress={onImport} 
       left={props => <List.Icon {...props} icon="database-import" />}
     />
-    <List.Section title='Доступные БД:'>
+    <List.Section title={t`Доступные БД:`}>
+
       <ScrollView>
         <List.AccordionGroup>
         {databases?.map((dbName) => {
@@ -120,7 +122,7 @@ const DatabasesList: FC<DatabasesListProps> = ({ navigation }) => {
             <List.Accordion
               id={dbName}
               key={dbName}
-              title={dbName + (isActiveDB ? ' (смонтирована)' : '')}
+              title={dbName + (isActiveDB ? ` (${t`смонтирована`})` : '')}
               left={props => {
                 return (
                   <>
@@ -132,19 +134,19 @@ const DatabasesList: FC<DatabasesListProps> = ({ navigation }) => {
               titleStyle={{ color }}
             >
               {!isActiveDB && <List.Item 
-                title="Монтировать" 
+                title={t`Монтировать`} 
                 onPress={() => onSelect(dbName)}
                 style={styles.button} 
                 left={props => <List.Icon {...props} icon="database-eye" />}
               />}
               <List.Item 
-                title="Экспортировать" 
+                title={t`Экспортировать`} 
                 onPress={() => onExport(dbName)}
                 style={styles.button}
                 left={props => <List.Icon {...props} icon="database-export" />}
               />
               {!isDefault && <List.Item 
-                title="Удалить"
+                title={t`Удалить`}
                 onPress={() => onDelete(dbName)}
                 style={styles.button}
                 left={props => <List.Icon {...props} icon="database-off" />}

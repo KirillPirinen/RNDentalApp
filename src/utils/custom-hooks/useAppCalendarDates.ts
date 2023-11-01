@@ -4,6 +4,7 @@ import { MarkedDates } from 'react-native-calendars/src/types'
 import { TimelineEventProps } from 'react-native-calendars'
 import Appointment from '../../db/models/Appointment'
 import Patient from '../../db/models/Patient'
+import { t } from '@lingui/macro'
 
 export type ExtendedTimelineEventProps = TimelineEventProps & { appointment: Appointment, patient: Patient }
 
@@ -42,8 +43,8 @@ const parseAppointments = async (appointments: Appointment[]) => {
         start: dateTime,
         end: format(addMinutes(rawDate, appointment.duration), calendarDateTimeFormat),
         //@ts-ignore
-        title: `Прием пациента: ${patient.fullName}`,
-        summary: appointment.notes ? `Заметки: ${appointment.notes}` : undefined,
+        title: t`Прием пациента: ${patient.fullName}`,
+        summary: appointment.notes ? `${t`Заметки`}: ${appointment.notes}` : undefined,
         color: getNewEventColor(prevEvent?.color),
         appointment,
         patient

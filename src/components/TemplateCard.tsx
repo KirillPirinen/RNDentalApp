@@ -4,6 +4,7 @@ import { Card, IconButton, Text } from 'react-native-paper'
 import { parseTemplate } from '../utils/parseTemplate'
 import { ButtonRowPanel } from './Buttons'
 import Template from '../db/models/Template'
+import { Trans } from '@lingui/macro'
 
 export type TemplateCardProps = {
   template: Template;
@@ -22,7 +23,7 @@ const TemplateCard: FC<TemplateCardProps> = ({ template, onDelete, onEdit }) => 
         <View style={styles.headerWrapper}>
           <View style={styles.content}>
             <Text variant="titleLarge" style={{ flexWrap: 'wrap' }}>{template.name}</Text>
-            <Text variant="titleSmall">Пример:</Text>
+            <Text variant="titleSmall"><Trans>Пример</Trans>:</Text>
             <Text variant="bodyMedium" selectable>{example || template.text}</Text>
           </View>
           <ButtonRowPanel

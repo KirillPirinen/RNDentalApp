@@ -1,9 +1,9 @@
 import { isSameDay } from 'date-fns'
-import formatRu from './formatRu'
+import format from './formatLocalized'
 import Appointment from '../db/models/Appointment'
 
 const getDayContent = (appointment: Appointment) => ({
-  day: formatRu(appointment.date, 'do MMMM, EEEE'),
+  day: format(appointment.date, 'do MMMM, EEEE'),
   data: [appointment]
 })
 

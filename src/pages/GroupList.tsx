@@ -9,6 +9,7 @@ import withObservables from '@nozbe/with-observables'
 import Group from '../db/models/Group'
 import { Database } from '@nozbe/watermelondb'
 import GroupCard from '../components/GroupCard'
+import { t } from '@lingui/macro'
 
 const ObservableGroup = withObservables(['group'], ({ group }) => ({
   group
@@ -46,7 +47,7 @@ const GroupList: FC<GroupListProps> = ({ navigation, groups }) => {
   return (
     <>
       <List.Item 
-        title="Создать группу" 
+        title={t`Создать группу`} 
         onPress={() => navigation.navigate('AddGroup')} 
         left={props => <List.Icon {...props} icon="account-multiple-plus" />}
         style={styles.addBtn}

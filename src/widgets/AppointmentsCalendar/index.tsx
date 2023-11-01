@@ -4,17 +4,14 @@ import {
   TimelineList,
   CalendarProvider,
   TimelineProps,
-  LocaleConfig,
   DateData,
 } from 'react-native-calendars';
 import { ExtendedTimelineEventProps, useAppCalendarDates } from '../../utils/custom-hooks/useAppCalendarDates';
 import Appointment from '../../db/models/Appointment';
 import { useNavigation } from '@react-navigation/native';
 import { useGeneralControl } from '../../context/general-context';
-import { ru } from './lib/locale';
-
-LocaleConfig.locales['ru'] = ru
-LocaleConfig.defaultLocale = 'ru';
+import { setCalendarLocale } from './lib/locale';
+import { appConfigSync } from '../../consts/config';
 
 export type AppCalendarProps = {
   appointments: Array<Appointment>
@@ -24,9 +21,10 @@ export type AppCalendarProps = {
 }
 
 export const AppointmentsCalendar: React.FC<AppCalendarProps> = ({ appointments, onMonthChange, onDateChanged, currentDate }) => {
+  setCalendarLocale(appConfigSync.lang)
   const navigation = useNavigation()
   const [actions, dispatch] = useGeneralControl()
-  const { markedDates, eventsByDate, isReady } = useAppCalendarDates(appointments)
+  const { markedDates, eventsByDate } = useAppCalendarDates(appointments)
 
   // @ts-ignore
   const timelineProps: Partial<TimelineProps> = useMemo(() => {

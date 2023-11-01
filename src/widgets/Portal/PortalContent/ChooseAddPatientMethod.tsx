@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { Confirm } from '../../../components/Confirm'
 import { Button } from 'react-native-paper'
 import { ContextedPortalDefaultProps } from '..'
+import { Trans, t } from '@lingui/macro'
 
 export type ChooseAddPatientMethodProps = ContextedPortalDefaultProps<{
   onAlone: () => void
@@ -15,8 +16,8 @@ export const ChooseAddPatientMethod: FC<ChooseAddPatientMethodProps> = ({
   onBulk
 }) => (
   <Confirm 
-    title="Добавить пациента из контактов устройства?" 
-    question={`Вы можете добавить несколько пациентов за раз.\nДля этого потребуется Ваше разрешение на чтение данных из контактов устройства.`} 
+    title={t`Добавить пациента из контактов устройства?`} 
+    question={t`Вы можете добавить несколько пациентов за раз.\nДля этого потребуется Ваше разрешение на чтение данных из контактов устройства.`} 
     visible={__visible}
     onClose={__defaultProps.hide}
   >
@@ -25,14 +26,14 @@ export const ChooseAddPatientMethod: FC<ChooseAddPatientMethodProps> = ({
       textColor="black"
       onPress={onBulk}
     > 
-      Да 
+      <Trans>Да</Trans> 
     </Button>
     <Button
       icon="cursor-pointer"
       textColor="black"
       onPress={onAlone}
     > 
-      Ввести данные вручную
+      <Trans>Ввести данные вручную</Trans>
     </Button>
   </Confirm>
 )

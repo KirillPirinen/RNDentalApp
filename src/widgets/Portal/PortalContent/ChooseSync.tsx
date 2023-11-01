@@ -3,6 +3,7 @@ import { Confirm } from '../../../components/Confirm'
 import { Button as PaperButton, Checkbox, Dialog } from 'react-native-paper'
 import { ContextedPortalDefaultProps } from '..'
 import { FC } from 'react'
+import { Trans, t } from '@lingui/macro'
 
 export type ChooseSyncProps = ContextedPortalDefaultProps<{
   onSync: () => void
@@ -17,26 +18,26 @@ export const ChooseSync: FC<ChooseSyncProps> = ({
   return (
       <Confirm 
         visible={__visible} 
-        title={'Обнаружены изменения в контакте.'}
-        question={'Хотите провести синхронизацию?'}
+        title={t`Обнаружены изменения в контакте.`}
+        question={t`Хотите провести синхронизацию?`}
         onClose={__defaultProps.clear}
       >
         <View>
-          <Checkbox.Item label="Больше не спрашивать" status="checked" />
+          <Checkbox.Item label={t`Больше не спрашивать`} status="checked" />
           <Dialog.Actions>
             <PaperButton
               icon="sync"
               textColor="black"
               onPress={onSync}
             >
-              Да
+              <Trans>Да</Trans>
             </PaperButton>
             <PaperButton
               icon="window-close"
               textColor="black"
               onPress={__defaultProps.clear}
             >
-              Нет
+              <Trans>Нет</Trans>
             </PaperButton>
           </Dialog.Actions>
         </View>

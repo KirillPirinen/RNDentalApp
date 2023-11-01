@@ -1,5 +1,16 @@
+import '@formatjs/intl-locale/polyfill'
+import '@formatjs/intl-pluralrules/polyfill'
+import '@formatjs/intl-pluralrules/locale-data/en'
+import '@formatjs/intl-pluralrules/locale-data/ru'
+import '@formatjs/intl-pluralrules/locale-data/zh'
+import '@formatjs/intl-pluralrules/locale-data/es'
+import '@formatjs/intl-pluralrules/locale-data/de'
+import '@formatjs/intl-pluralrules/locale-data/fr'
+import '@formatjs/intl-pluralrules/locale-data/hi'
+
 import ThemeAdapter from './src/components/ThemeAdapter'
 import Router from './src/router'
+
 import DatabaseProvider from '@nozbe/watermelondb/DatabaseProvider'
 import { dbAsync } from './src/db'
 import { LogBox } from 'react-native'
@@ -7,6 +18,9 @@ import { GeneralContextProvider } from './src/context/general-context'
 import { ContextedPortal } from './src/widgets/Portal'
 import { useLayoutEffect, useState } from 'react'
 import { Database } from '@nozbe/watermelondb'
+import { I18nProvider } from '@lingui/react'
+import { appConfigAsync, appConfigSync, appMessages } from './src/consts/config'
+import { i18n } from "@lingui/core"
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state.',
@@ -16,17 +30,22 @@ const App = () => {
   const [database, setDatabase] = useState<Database | null>(null)
 
   useLayoutEffect(() => {
+    appConfigAsync.finally(() => {
+      i18n.loadAndActivate({ locale: appConfigSync.lang, messages: appMessages[appConfigSync.lang] })
+    })
     dbAsync.then(setDatabase)
   }, [])
 
   return database && (
       <DatabaseProvider database={database}>
-        <GeneralContextProvider>
-          <ThemeAdapter>
+        <I18nProvider i18n={i18n}>
+          <GeneralContextProvider>
+            <ThemeAdapter>
               <Router />
               <ContextedPortal />
-          </ThemeAdapter>
-        </GeneralContextProvider>
+            </ThemeAdapter>
+          </GeneralContextProvider>
+        </I18nProvider>
       </DatabaseProvider>
   )
 }

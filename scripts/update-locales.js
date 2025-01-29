@@ -50,7 +50,6 @@ lingui.stdout.on('data', (data) => {
       JSON.stringify(messages, null, 2).replace(/([{[,]\s*)(\w+)(\s*:)/g, '$1\n  $2$3'),
     );
   })
-
 })
 
 lingui.stderr.on('data', (data) => {

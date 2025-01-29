@@ -28,12 +28,8 @@ export const PatientAppointmentDetails: FC<PatientAppointmentDetailsProps> = ({
     __defaultProps.navigation.navigate('AddAppointment', { patient, appointment, edit: true })
   }, [patient])
 
-  const onConfirmDeleteAppointment = useCallback((appointment: Appointment) => {
-    const onDelete = () => appointment.deleteInstance().then(__defaultProps.clear)
-    __defaultProps.dispatch({ 
-      type: modalContentsAction.CONFIRM_DELETE,
-      payload: { patient, appointment, onDelete, mode: 'appointment' }
-    })
+  const onArchive = useCallback((appointment: Appointment) => {
+    appointment.updateInstance({ isArchive: !appointment.isArchive });
   }, [])
 
   return (
@@ -47,7 +43,7 @@ export const PatientAppointmentDetails: FC<PatientAppointmentDetailsProps> = ({
         appointment={appointment} 
         theme={__defaultProps.theme} 
         onEditAppointment={onEditAppointment}
-        onDeleteAppointment={onConfirmDeleteAppointment}
+        onArchiveAppointment={onArchive}
       />
       <View style={styles.mainButtonWrapper}>
       <Button style={styles.mainButtom} onPress={() => __defaultProps.navigation.navigate('Detail', { patient })}><Trans>Карточка</Trans></Button>

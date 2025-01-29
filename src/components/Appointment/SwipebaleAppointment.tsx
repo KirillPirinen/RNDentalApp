@@ -17,6 +17,10 @@ export type SwipeableAppointmentProps = {
   onDelete: (appointment: AppointmentModel, patient: Patient) => void;
   onEdit: (appointment: AppointmentModel, patient: Patient, isEdit?: boolean) => void;
   theme: AppTheme;
+  onDeleteIcon?: React.ReactNode;
+  onConfirmIcon?: React.ReactNode;
+  needsConfimation?: boolean;
+  hightlight?: string;
 }
 
 const enhancer = withObservables(['appointment'], ({ appointment }) => ({
@@ -33,12 +37,16 @@ export const SwipeableAppointment: FC<SwipeableAppointmentProps> = enhancer(({
   onDelete,
   onEdit,
   theme,
+  onDeleteIcon,
+  onConfirmIcon,
+  needsConfimation,
+  hightlight
 }: SwipeableAppointmentProps & { patient: Patient }) => {
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const swipe = useRef<null | Swipeable>(null)
   const status = appointment.status as AppotmentStatuses
-  const needsConfirmation = appointment.needsConfimation(status)
+  const needsConfirmation = needsConfimation || appointment.needsConfimation(status)
 
   useEffect(() => {
     fadeAnim.setValue(0)
@@ -59,7 +67,7 @@ export const SwipeableAppointment: FC<SwipeableAppointmentProps> = enhancer(({
           onPress={() => onDelete(appointment, patient)} 
           style={{ backgroundColor: theme.colors.error }}
         >
-          <Ionicons name="ios-close" size={48} color="white" />
+          {onDeleteIcon || <Ionicons name="ios-close" size={48} color="white" />}
         </SwipeViewButton>
         <SwipeViewButton 
           onPress={() => {
@@ -83,11 +91,11 @@ export const SwipeableAppointment: FC<SwipeableAppointmentProps> = enhancer(({
           }}
           style={{ backgroundColor: 'green' }}
         >
-          <MaterialCommunityIcons 
+          {onConfirmIcon || <MaterialCommunityIcons 
             name="file-check-outline" 
             size={48}
             color="white"
-          />
+          />}
         </SwipeViewButton>
     )
   }
@@ -107,6 +115,7 @@ export const SwipeableAppointment: FC<SwipeableAppointmentProps> = enhancer(({
             patient={patient}
             onLongPress={() => navigation.navigate('Detail', { patient })}
             status={status}
+            hightlight={hightlight}
           >
             {needsConfirmation && <View style={styles.badgeLeft}>
               <Entypo name="arrow-bold-right" size={10} color="white" />

@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#E9F5FF',
     color: '#4294ff'
   },
+  archive: { backgroundColor: '#c79881', color: 'white' },
   default: {
     backgroundColor: '#E9F5FF',
     color: '#4294ff'

@@ -22,3 +22,10 @@ const appLocales = {
 export default (date: Date, formatStr: string) => format(date, formatStr, {
   locale: i18n.locale in appLocales ? appLocales[i18n.locale as AppLocales] : en 
 })
+
+const formattedWithAsciiSpace = new Intl.NumberFormat('ru-RU', {
+  style: 'decimal',
+  maximumFractionDigits: 0
+})
+
+export const formatPrice = formattedWithAsciiSpace.format;

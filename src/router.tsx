@@ -3,7 +3,7 @@ import CustomNavigationBar, { AppHeaderProps } from './components/AppHeader'
 import {
   Appointments, PatientDetail, AddAppointment, PatientsList,
   AddPatient, ImportContacts, Settings, AddTemplate, TemplatesList, ConfirmAppointment, 
-  DatabasesList, GroupList, AddGroup, AppointmentsCalendar
+  DatabasesList, GroupList, AddGroup, AppointmentsCalendar, AppointmentsArchive
 } from './pages'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import { Text } from 'react-native-paper'
@@ -26,6 +26,7 @@ export const TabsName = {
   patients: msg`Все пациенты`,
   groups: msg`Группы`,
   settings: msg`Настройки`,
+  archive: msg`Архив`
 }
 
 const Icons = {
@@ -33,6 +34,7 @@ const Icons = {
   patients: renderIcon('account-injury'),
   groups: renderIcon('crowd'),
   settings: renderIcon('cog-outline'),
+  archive: renderIcon('archive')
 }
 
 const Stack = createNativeStackNavigator()
@@ -44,6 +46,12 @@ const getTabs = () => [
     name={i18n._(TabsName.records)}
     component={Appointments}
     options={{ tabBarIcon: Icons.records }}
+  />,
+  <Tab.Screen
+    key={TabsName.archive.id}
+    name={i18n._(TabsName.archive)}
+    component={AppointmentsArchive}
+    options={{ tabBarIcon: Icons.archive }}
   />,
   <Tab.Screen
     key={TabsName.patients.id}

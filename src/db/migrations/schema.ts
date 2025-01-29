@@ -3,7 +3,7 @@ import { DEFAULT_SETTINGS } from '../../consts/index'
 import { insertSettings } from '../raw-queries'
 
 export default appSchema({
-  version: 3,
+  version: 5,
   tables: [
     tableSchema({
       name: 'patients',
@@ -30,6 +30,7 @@ export default appSchema({
         { name: 'date', type: 'number' },
         { name: 'is_confirmed', type: 'boolean' },
         { name: 'is_skipped', type: 'boolean' },
+        { name: 'is_archive', type: 'boolean' },
         { name: 'is_postponed', type: 'boolean' },
         { name: 'duration', type: 'number' },
         { name: 'price', type: 'number' },

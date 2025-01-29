@@ -6,6 +6,7 @@ import { APPOINTMENT_STATUS } from '../../consts'
 import AppointmentTooth from './AppointmentTooth'
 import Tooth from './Tooth'
 import Patient from './Patient'
+import { ModelStatus } from '../utils/types'
 
 export default class Appointment extends Model {
   static table = 'appointments'
@@ -22,12 +23,13 @@ export default class Appointment extends Model {
   @field('is_confirmed') isConfirmed: boolean
   @field('is_skipped') isSkipped: boolean
   @field('is_postponed') isPostponed: boolean
+  @field('is_archive') isArchive: boolean
   @field('price') price: number
   @field('duration') duration: number
   @text('diagnosis') diagnosis: string
   @text('notes') notes: string
   @text('teeth') teeth: string
-  @text('_status') _status: string
+  @text('_status') _status: ModelStatus
   @children('appointments_teeth') associatedRecords: Query<AppointmentTooth>
 
   @lazy patientTeeth = this.collections.get<Tooth>('teeth').query(

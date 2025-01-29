@@ -12,6 +12,7 @@ import DatabasesList from './DatabasesList'
 import GroupList from './GroupList'
 import AddGroup from './AddGroup'
 import AppointmentsCalendar from './AppointmentsCalendar'
+import AppointmentsArchive from './AppointmentsArchive'
 
 export {
   Appointments,
@@ -27,5 +28,6 @@ export {
   DatabasesList,
   GroupList,
   AddGroup,
-  AppointmentsCalendar
+  AppointmentsCalendar,
+  AppointmentsArchive
 }

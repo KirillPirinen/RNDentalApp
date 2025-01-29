@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useCallback, useState } from 'react'
 import { View, ScrollView, StyleSheet } from 'react-native'
 import { Container, Patient } from '../components'
 import { Button, TextInput as Input, Text } from 'react-native-paper'
@@ -23,9 +23,13 @@ const ConfirmAppointment: FC<ConfirmAppointmentProps> = ({ navigation, route: { 
 
   const [notes, setNotes] = useState(appointment?.notes)
   const [diagnosis, setDiagnosis] = useState(appointment?.diagnosis)
-  const [price, setPrice] = useState(String(appointment?.price))
+  const [price, setPrice] = useState(String(appointment?.price || ''))
   const [teeth, setTeeth] = useState(appointment?.teeth?.split(',') || [])
   const [duration, setDuration] = useState(appointment?.duration)
+
+  const onChangePrice = useCallback((text: string) => {
+    setPrice(text.replace(/[^0-9]/g, ''))
+  }, [setPrice])
 
   const onOpenSelection = () => dispatch({ 
     type: actions.CHOOSE_TEETH, 
@@ -95,7 +99,7 @@ const ConfirmAppointment: FC<ConfirmAppointmentProps> = ({ navigation, route: { 
               mode="outlined"
               label={t`Цена`}
               style={styles.input}
-              onChangeText={setPrice}
+              onChangeText={onChangePrice}
               value={price}
               keyboardType="number-pad"
             />

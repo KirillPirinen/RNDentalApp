@@ -52,9 +52,9 @@ const AddAppointment: FC<AddAppointmentProps> = ({ navigation, route: { params }
     setDateMeta((prev) => {
       const isDate = prev.mode === 'date'
       return {
-        сurrent: prev.сurrent,
+        ...prev,
         // Пикер может быть с mode === time только после установки prev.date
-        date: isDate ? date : (prev.date!.setTime(date.getTime()), date),
+        date,
         mode: isDate ? 'time' : null
       }
     })

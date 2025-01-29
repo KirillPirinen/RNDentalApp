@@ -12,7 +12,8 @@ const light = {
     error: '#DD2C00',
     errorContainer: MD3DarkTheme.colors.errorContainer,
     patientAppointment: {
-      background: '#FFFFFF'
+      background: '#FFFFFF',
+      backgroundArchive: '#F5F5F5'
     },
     appointment: {
       lasts: '#daebd3'
@@ -28,7 +29,8 @@ const dark = {
     primary: '#27A2DF',
     primaryContainer: '#93E1EE',
     patientAppointment: {
-      background: MD3DarkTheme.colors.inverseOnSurface
+      background: MD3DarkTheme.colors.inverseOnSurface,
+      backgroundArchive: '#F5F5F5'
     }
   },
 }

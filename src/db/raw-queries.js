@@ -22,8 +22,8 @@ export const appointmentsByDays = ({
   return Q.unsafeSqlQuery(`
     SELECT appointments.*, date(appointments.date / 1000, 'unixepoch') AS formatted FROM appointments 
     WHERE (_status != 'deleted')
-    AND (formatted BETWEEN ${fromDate} AND ${toDate})
-    ${unconfirmed ? `OR (appointments._status != 'deleted' AND appointments.is_confirmed = false AND formatted < ${toDate})` : ''}
+    AND appointments.is_archive = false AND (formatted BETWEEN ${fromDate} AND ${toDate})
+    ${unconfirmed ? `OR (appointments._status != 'deleted' AND appointments.is_confirmed = false AND appointments.is_archive = false AND formatted < ${toDate})` : ''}
     ORDER BY appointments.date ASC;`
   )
 }
@@ -64,6 +64,7 @@ export const getAppointmentsWithCollision = (startDate, duration, currentId) => 
     SELECT appointments.*
     FROM appointments 
     WHERE (_status != 'deleted')
+    AND appointments.is_archive = false
     AND (appointments.date < ${inputEndTimestamp} AND ${inputStartTimestamp} < (appointments.date + (appointments.duration * 60) * 1000))
     ${currentId ? `AND appointments.id != '${currentId}'` : ''}
     ORDER BY appointments.date ASC;
@@ -78,6 +79,7 @@ export const getAppointmentsByMonth = (month, year) => {
     SELECT appointments.*
     FROM appointments 
     WHERE (_status != 'deleted')
+    AND appointments.is_archive = false
     AND strftime('%m-%Y', appointments.date / 1000, 'unixepoch') = '${m}-${year}'
     ORDER BY appointments.date ASC;
   `)

@@ -7,7 +7,7 @@
     "build:apk": "eas build -p android --profile preview",
     "ios": "expo run:ios",
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "update-locales": "bun scripts/update-locales.js --clean"
+    "update-locales": "node scripts/update-locales.js --clean"
   },
   "dependencies": {
     "@formatjs/intl-locale": "^3.4.0",
@@ -15,7 +15,7 @@
     "@lingui/react": "^4.5.0",
     "@nozbe/watermelondb": "^0.26.0",
     "@react-native-async-storage/async-storage": "~1.19.0",
-    "@react-native-community/datetimepicker": "6.7.4",
+    "@react-native-community/datetimepicker": "8.2.0",
     "@react-native-community/slider": "4.4.2",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/material-bottom-tabs": "^6.2.16",

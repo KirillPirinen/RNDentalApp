@@ -2,11 +2,11 @@ import { StyleSheet, View } from 'react-native'
 import { Foundation, FontAwesome5 } from '@expo/vector-icons'
 import { Text, Menu, IconButton, Divider, Surface, MenuProps } from 'react-native-paper'
 import Badge from '../Badge'
-import formatRu from '../../utils/formatLocalized'
+import formatRu, { formatPrice } from '../../utils/formatLocalized'
 import { FC, ReactNode, memo, useState } from 'react'
 import Appointment from '../../db/models/Appointment'
 import { AppTheme } from '../../styles/themes'
-import { plural, t } from '@lingui/macro'
+import { plural, t, Trans } from '@lingui/macro'
 
 type AppointmentHandler = (app: Appointment, isConfirmation?: boolean) => void
 
@@ -14,21 +14,21 @@ export type PatientAppointmentProps = {
   appointment: Appointment;
   theme: AppTheme;
   onEditAppointment?: MenuApointmentProps['onEditAppointment'];
-  onDeleteAppointment?: MenuApointmentProps['onDeleteAppointment'],
+  onArchiveAppointment?: MenuApointmentProps['onArchiveAppointment'],
 }
 
 export const PatientAppointment: FC<PatientAppointmentProps> = ({ 
   appointment, 
   onEditAppointment, 
-  onDeleteAppointment,
+  onArchiveAppointment,
   theme: { colors }
 }) => {
-  const hasMenu = onEditAppointment && onDeleteAppointment
+  const hasMenu = onEditAppointment && onArchiveAppointment
   return (
     <Surface 
       style={[
         styles.card, 
-        { backgroundColor: colors.patientAppointment.background }
+        { backgroundColor: appointment.isArchive ? colors.patientAppointment.backgroundArchive : colors.patientAppointment.background }
       ]} 
       elevation={1}
     >
@@ -39,7 +39,7 @@ export const PatientAppointment: FC<PatientAppointmentProps> = ({
         {hasMenu && <MenuApointment 
           appointment={appointment}
           onEditAppointment={onEditAppointment}
-          onDeleteAppointment={onDeleteAppointment}
+          onArchiveAppointment={onArchiveAppointment}
           contentStyle={{ backgroundColor: colors.patientAppointment.background }}
         />}
       </View>
@@ -61,8 +61,13 @@ export const PatientAppointment: FC<PatientAppointmentProps> = ({
         <Badge style={{ width: 200 }}>
           {formatRu(appointment.date, 'PPpp')}
         </Badge>
+        {appointment.isArchive && (
+          <Badge status="archive">
+            <Trans>В архиве</Trans>
+          </Badge>
+        )}
       </AppointmentCardRow>
-      {Boolean(appointment.price) && <Badge style={styles.badgePrice} status="green">{appointment.price}</Badge>}
+      {Boolean(appointment.price) && <Badge style={styles.badgePrice} status="green">{formatPrice(appointment.price)}</Badge>}
     </Surface>
   )
 }
@@ -113,10 +118,10 @@ const Notes: FC<{ notes: string }> = ({ notes }) => (
 export type MenuApointmentProps = Partial<Omit<MenuProps, 'visible' | 'anchor' >> & {
   appointment: Appointment;
   onEditAppointment: AppointmentHandler;
-  onDeleteAppointment: AppointmentHandler;
+  onArchiveAppointment: AppointmentHandler;
 }
 
-const MenuApointment: FC<MenuApointmentProps> = ({ onEditAppointment, appointment, onDeleteAppointment, ...rest }) => {
+const MenuApointment: FC<MenuApointmentProps> = ({ onEditAppointment, appointment, onArchiveAppointment, ...rest }) => {
   const [visible, setVisible] = useState(false)
   const hof = (fn: AppointmentHandler, isConfirmation?: boolean) => () => (setVisible(false), fn(appointment, isConfirmation))
   return (
@@ -130,7 +135,7 @@ const MenuApointment: FC<MenuApointmentProps> = ({ onEditAppointment, appointmen
       />}
       {...rest}
     >
-      <Menu.Item onPress={hof(onDeleteAppointment)} title={t`Удалить`} />
+      <Menu.Item onPress={hof(onArchiveAppointment)} title={appointment.isArchive ? t`Достать из архива` : t`В архив`} />
       <Divider bold />
       <Menu.Item onPress={hof(onEditAppointment)} title={t`Изменить время`} />
       <Divider bold />

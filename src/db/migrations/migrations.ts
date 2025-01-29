@@ -1,4 +1,4 @@
-import { addColumns, createTable, schemaMigrations } from '@nozbe/watermelondb/Schema/migrations'
+import { addColumns, createTable, schemaMigrations, unsafeExecuteSql } from '@nozbe/watermelondb/Schema/migrations'
 import { addSetting } from '../utils/addSetting'
 
 export default schemaMigrations({
@@ -33,6 +33,28 @@ export default schemaMigrations({
             { name: 'patient_id', type: 'string', isIndexed: true }
           ]
         }),
+      ],
+    },
+    {
+      toVersion: 4,
+      steps: [
+        addColumns({
+          table: 'appointments',
+          columns: [
+            { name: 'is_archive', type: 'boolean' },
+          ],
+        }),
+      ],
+    },
+    {
+      toVersion: 5,
+      steps: [
+        unsafeExecuteSql(`
+          UPDATE appointments
+          SET _status = 'updated',
+              is_archive = 1
+          WHERE _status = 'deleted';  
+        `)
       ],
     },
   ]

@@ -2,7 +2,6 @@ import React, { FC, useCallback } from 'react'
 import { FlatList, FlatListProps, View } from 'react-native'
 import { useTheme, Text } from 'react-native-paper'
 import { PatientAppointment } from './Appointment/PatientAppointments'
-import { useGeneralControl } from '../context/general-context'
 import { defaultExtractor } from '../utils/defaultFn'
 import withObservables from '@nozbe/with-observables'
 import Appointment from '../db/models/Appointment'
@@ -31,7 +30,6 @@ export const PatientAppointmentList: FC<PatientAppointmentListProps> = ({
   ...rest
 }) => {
   const theme = useTheme()
-  const [actions, dispatch] = useGeneralControl()
 
   const onEditAppointment = useCallback((appointment: Appointment, isConfirmation: boolean) => {
       if(isConfirmation) {
@@ -40,12 +38,8 @@ export const PatientAppointmentList: FC<PatientAppointmentListProps> = ({
       navigation.navigate('AddAppointment', { patient, appointment, edit: true })
   }, [patient])
 
-  const onConfirmDeleteAppointment = useCallback((appointment: Appointment) => {
-    const onDelete = () => appointment.deleteInstance().then(dispatch.bind(null, { type: actions.CLEAR }))
-    dispatch({ 
-      type: actions.CONFIRM_DELETE,
-      payload: { patient, appointment, onDelete, mode: 'appointment' }
-    })
+  const onArchive = useCallback((appointment: Appointment) => {
+    appointment.updateInstance({ isArchive: !appointment.isArchive });
   }, [])
 
   const renderAppointments = ({ item }: { item: Appointment }) => {
@@ -55,7 +49,7 @@ export const PatientAppointmentList: FC<PatientAppointmentListProps> = ({
         setOpenedMenu={setOpenedMenu}
         isMenuOpen={openedMenu === item.id}
         onEditAppointment={onEditAppointment}
-        onDeleteAppointment={onConfirmDeleteAppointment}
+        onArchiveAppointment={onArchive}
         theme={theme}
       />
     )

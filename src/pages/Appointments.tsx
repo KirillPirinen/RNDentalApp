@@ -6,7 +6,6 @@ import { groupAppointments } from '../utils/groupAppointments'
 import { useMemo, useCallback, FC } from 'react'
 import { useForceUpdateByInterval } from '../utils/custom-hooks/useForceUpdate'
 import { defaultExtractor } from '../utils/defaultFn'
-import { useGeneralControl } from '../context/general-context'
 import { useFabControlsRef } from '../utils/custom-hooks/useSafeRef';
 import { appointmentsByDays } from '../db/raw-queries'
 import { switchMap } from 'rxjs/operators'
@@ -20,6 +19,7 @@ import { Database } from '@nozbe/watermelondb'
 import { NamedSetting } from '../db/models/Settings'
 import { Button } from 'react-native-paper'
 import { Trans, t } from '@lingui/macro'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 const spacer = <View style={{ height: 80 }} />
 const renderSectionHeader = ({ section: { day }}: { section: { day: string }}) => <SectionTitle>{day}</SectionTitle>
@@ -30,9 +30,6 @@ type AppointmentsProps = {
 }
 
 const Appointments: FC<AppointmentsProps> = ({ appointments, navigation }) => {
-
-  const [actions, dispatch] = useGeneralControl()
-
   const grouped = useMemo(() => groupAppointments(appointments), [appointments])
 
   useForceUpdateByInterval(10000, !appointments.length)
@@ -44,12 +41,8 @@ const Appointments: FC<AppointmentsProps> = ({ appointments, navigation }) => {
     return navigation.navigate('AddAppointment', { patient, appointment, edit: true })
   }, [])
 
-  const onConfirmDeleteAppointment = useCallback((appointment: Appointment, patient: Patient) => {
-    const onDelete = () => appointment.deleteInstance().then(dispatch.bind(null, { type: actions.CLEAR }))
-    dispatch({ 
-      type: actions.CONFIRM_DELETE,
-      payload: { patient, appointment, onDelete, mode: 'appointment' }
-    })
+  const onArchive = useCallback((appointment: Appointment) => {
+    appointment.updateInstance({ isArchive: true });
   }, [])
 
   const theme = useAppTheme()
@@ -58,9 +51,11 @@ const Appointments: FC<AppointmentsProps> = ({ appointments, navigation }) => {
     navigation={navigation}
     appointment={item}
     onEdit={onEditAppointment}
-    onDelete={onConfirmDeleteAppointment}
+    onDelete={onArchive}
     theme={theme}
-  />, [navigation, theme, onEditAppointment, onConfirmDeleteAppointment])
+    onDeleteIcon={<MaterialCommunityIcons name="archive-plus" size={48} color="white" />}
+    
+  />, [navigation, theme, onEditAppointment, onArchive])
 
   const [ref, onDrop, onDrag] = useFabControlsRef()
 

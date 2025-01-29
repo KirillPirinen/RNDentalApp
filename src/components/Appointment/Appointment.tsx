@@ -3,12 +3,14 @@ import { Text } from 'react-native-paper'
 import GrayText from '../GrayText'
 import Badge from '../Badge'
 import { addMinutes, format } from 'date-fns'
+import formatRu from '../../utils/formatLocalized'
 import { APPOINTMENT_STATUS, AppotmentStatuses } from '../../consts'
 import { Avatar } from '../Avatar'
 import Patient from '../../db/models/Patient'
 import AppointmentModel from '../../db/models/Appointment'
 import { FC, ReactNode } from 'react'
 import { useAppTheme } from '../../styles/themes'
+import { HighlightedText } from '../HighlightedText'
 
 export type AppointmentProps = {
   onLongPress: () => void;
@@ -16,21 +18,25 @@ export type AppointmentProps = {
   appointment: AppointmentModel;
   status: AppotmentStatuses;
   children?: ReactNode
+  hightlight?: string;
 }
 
-export const Appointment: FC<AppointmentProps> = ({ onLongPress, patient, appointment, status, children }) => {
-  const showEndTime = (status === APPOINTMENT_STATUS.lasts || status === APPOINTMENT_STATUS.future)
+export const Appointment: FC<AppointmentProps> = ({ onLongPress, patient, appointment, status, children, hightlight }) => {
+  const showEndTime = (status === APPOINTMENT_STATUS.lasts || status === APPOINTMENT_STATUS.future) && !appointment.isArchive
   const theme = useAppTheme()
-  const backgroundColor = status === APPOINTMENT_STATUS.lasts ? theme.colors.appointment.lasts : theme.colors.inverseOnSurface
+  const backgroundColor = appointment.isArchive ? theme.colors.patientAppointment.backgroundArchive : status === APPOINTMENT_STATUS.lasts ? theme.colors.appointment.lasts : theme.colors.inverseOnSurface;
   return (
     <TouchableHighlight onLongPress={onLongPress}>
       <View style={[styles.groupItem, { backgroundColor }]}>
         <Avatar fullName={patient.fullName} src={patient.avatar} />
         <View style={{ flex: 1 }}>
-          <Text style={styles.fullName}>{patient.fullName}</Text>
-          {Boolean(appointment.notes) && <GrayText>{appointment.notes}</GrayText>}
+          {hightlight ? <HighlightedText query={hightlight} text={patient.fullName} /> : <Text style={styles.fullName}>{patient.fullName}</Text>}
+          {Boolean(appointment.notes) && hightlight ? <HighlightedText query={hightlight} text={appointment.notes} /> : <GrayText>{appointment.notes}</GrayText>}
         </View>
         <View style={styles.badgeWrapper}>
+          {appointment.isArchive && (
+            <Badge status="archive" style={{ height: 'auto' }}>{formatRu(appointment.date, 'PP')}</Badge>
+          )}
           <Badge status={status}>{format(appointment.date, 'H:mm')}</Badge>
           {showEndTime && (
             <Badge status="green">{format(addMinutes(appointment.date, appointment.duration), 'H:mm')}</Badge>

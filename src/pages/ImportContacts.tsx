@@ -105,8 +105,7 @@ const ImportContacts: FC<ImportContactsProps> = ({ navigation }) => {
     })
   }, [isUnique])
 
-  const onChange = (query: string) => 
-    contacts.filter(contact => contact.name.toLowerCase().includes(query))
+  const onChange = (query: string) => contacts.filter(contact => contact.name.toLowerCase().includes(query.toLowerCase()));
   
   const onSubmit = () => {
     const choosed = contacts.filter(contact => (contact as AppContact).checked)

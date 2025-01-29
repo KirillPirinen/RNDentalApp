@@ -52,6 +52,7 @@ export default class Patient extends Model {
 
   // @ts-ignore
   @lazy sortedAppointments = this.appointments.extend(
+    Q.sortBy('is_archive', Q.asc),
     Q.sortBy('date', Q.desc)
   )
 

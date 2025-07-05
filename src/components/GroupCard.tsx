@@ -4,7 +4,7 @@ import { Card, Text } from 'react-native-paper'
 import { ButtonRowPanel } from './Buttons'
 import Group from '../db/models/Group'
 import { getAlphaFromColor } from '../utils/getAlphaFromColor'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export type GroupCardProps = {
   group: Group;

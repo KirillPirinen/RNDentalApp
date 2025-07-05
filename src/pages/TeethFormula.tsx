@@ -14,7 +14,8 @@ import Appointment from '../db/models/Appointment'
 import Formula from '../db/models/Formula'
 import { NavigationProp } from '@react-navigation/native'
 import { useAppTheme } from '../styles/themes'
-import { Trans, t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 
 type HistoryProps = {
   tooth: Tooth;

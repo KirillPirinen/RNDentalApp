@@ -14,7 +14,7 @@ import RNRestart from 'react-native-restart'
 import { deleteDB } from '../db/utils/deleteDB'
 import { useFilesPicker } from '../utils/custom-hooks/useFilesPicker'
 import { importDB } from '../db/utils/importDB'
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 
 export type DatabasesListProps = {
   navigation: NavigationProp<ReactNavigation.RootParamList>

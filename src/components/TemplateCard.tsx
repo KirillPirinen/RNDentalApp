@@ -4,7 +4,7 @@ import { Card, IconButton, Text } from 'react-native-paper'
 import { parseTemplate } from '../utils/parseTemplate'
 import { ButtonRowPanel } from './Buttons'
 import Template from '../db/models/Template'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export type TemplateCardProps = {
   template: Template;

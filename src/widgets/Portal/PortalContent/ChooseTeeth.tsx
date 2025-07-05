@@ -1,13 +1,15 @@
-import { FC, useCallback, useState } from 'react'
+import { FC, useCallback, useMemo, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { IconButton, Modal, Surface, Text, Button } from 'react-native-paper'
 import { Teeth } from '../../../components/Teeth/Teeth'
 import { ContextedPortalDefaultProps } from '..'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
+import Tooth from '../../../db/models/Tooth'
 
 export type ChooseTeethProps = ContextedPortalDefaultProps<{
   onSubmit: (selectedArr: string[]) => void
   teeth: string[]
+  teethModels?: Tooth[]
 }>
 
 const init: Record<string, boolean> = {}
@@ -16,8 +18,15 @@ export const ChooseTeeth: FC<ChooseTeethProps> = ({
   __visible, 
   __defaultProps,
   onSubmit,
-  teeth
+  teeth,
+  teethModels
 }) => {
+
+  const hashTeethInfo = useMemo(() => teethModels?.reduce<Record<string, Tooth>>((acc, tooth) => {
+    acc[tooth.toothNo] = tooth
+    return acc
+  }, {}), [teethModels])
+
   const [selected, setSelected] = useState(() => {
     return teeth?.filter(Boolean).reduce<Record<string, boolean>>((acc, tooth) => {
       acc[tooth] = true
@@ -61,6 +70,9 @@ export const ChooseTeeth: FC<ChooseTeethProps> = ({
         containerStyle={{ width: '100%', alignItems: 'center'}}
         selectedTooth={selected}
         onPressTooth={onPressTooth}
+        teethRecords={hashTeethInfo}
+        showStyles
+        showTreated
         multiSelect
         withBabyTeeth
         withAdultTeeth

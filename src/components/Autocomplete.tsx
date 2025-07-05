@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react'
 import { Searchbar } from 'react-native-paper'
-import { View } from 'react-native'
+import { StyleProp, View, ViewStyle } from 'react-native'
 import { useEffect } from 'react'
 import { querySanitazer } from '../utils/sanitizers'
 
@@ -12,6 +12,7 @@ const Autocomplete = <T extends { result: T['result']; searchQuery?: string; }, 
   barStyle,
   children,
   onFocus,
+  style,
   ...rest 
 }: {
   placeholder?: string
@@ -21,6 +22,7 @@ const Autocomplete = <T extends { result: T['result']; searchQuery?: string; }, 
   barStyle?: object
   children?: ReactNode
   onFocus?: () => void
+  style?: StyleProp<ViewStyle>
 } & Omit<T, 'result' | 'searchQuery'>) => {
 
   const [result, setResult] = useState<T['result']>([]);
@@ -62,7 +64,7 @@ const Autocomplete = <T extends { result: T['result']; searchQuery?: string; }, 
   const Output = renderList
 
   return (
-    <View>
+    <View style={style}>
       <Searchbar
         placeholder={placeholder}
         onChangeText={onChangeSearch}

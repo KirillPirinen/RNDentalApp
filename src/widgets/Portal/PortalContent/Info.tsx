@@ -4,7 +4,7 @@ import { Snackbar, SnackbarProps } from 'react-native-paper'
 import { TabsName } from '../../../router'
 import { ContextedPortalDefaultProps } from '..'
 import { AppThemeColors, useAppTheme } from '../../../styles/themes'
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 
 const homeTabs = Object.values(TabsName)
 

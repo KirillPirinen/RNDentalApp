@@ -11,7 +11,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import TeethFormula from './pages/TeethFormula'
 import { useGeneralControl } from './context/general-context'
 import { useAppTheme } from './styles/themes'
-import { t, msg } from '@lingui/macro'
+import { t, msg } from '@lingui/core/macro'
 import { useMemo } from 'react'
 import { i18n } from "@lingui/core"
 
@@ -80,8 +80,9 @@ function BottomTabs () {
       barStyle: {
         backgroundColor: theme.colors.primary,
         paddingTop: -2,
-        paddingBottom: 4,
-        maxHeight: 60
+        paddingBottom: 5,
+        maxHeight: 66,
+        zIndex: 10
       },
       renderLabel: ({ focused, route }: { focused: boolean; route: { name: string } }) => (
         <Text

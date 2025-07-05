@@ -8,7 +8,7 @@ import { createTemplate } from '../db/actions'
 import { useToggle } from '../utils/custom-hooks/useToggle'
 import { replaceStringByIndex } from '../utils/insertString'
 import { NavigationProp } from '@react-navigation/native'
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 
 export type AddTemplateProps = {
   navigation: NavigationProp<ReactNavigation.RootParamList>

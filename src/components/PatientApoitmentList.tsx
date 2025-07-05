@@ -7,7 +7,7 @@ import withObservables from '@nozbe/with-observables'
 import Appointment from '../db/models/Appointment'
 import Patient from '../db/models/Patient'
 import { NavigationProp } from '@react-navigation/native'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export type PatientAppointmentListProps = Omit<FlatListProps<Appointment>, 'data' | 'renderItem'> & {
   appointments: Array<Appointment>;

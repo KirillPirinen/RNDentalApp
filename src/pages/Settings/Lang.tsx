@@ -1,6 +1,6 @@
 import { SettingsRadioGroup } from './styles'
 import { List } from 'react-native-paper';
-import { t } from '@lingui/macro';
+import { t } from '@lingui/core/macro';
 import { AppLocales, appConfigSync } from '../../consts/config';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import RNRestart from 'react-native-restart'

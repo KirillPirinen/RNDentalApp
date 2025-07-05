@@ -4,7 +4,7 @@ import * as FileSystem from 'expo-file-system';
 import File, { FileMeta } from '../models/File';
 import { Manifest } from '../../utils/createManifest';
 import { getFileNameFromUri, makeDirIfNotExist } from '../../utils/fileHelpers';
-import { t } from '@lingui/macro';
+import { t } from '@lingui/core/macro';
 import { ProgressResult } from '../../widgets/Portal/PortalContent/Progress';
 
 export const importPatiensFiles = async () => {

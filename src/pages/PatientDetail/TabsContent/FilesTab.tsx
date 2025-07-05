@@ -5,14 +5,15 @@ import { useFilesPicker } from '../../../utils/custom-hooks/useFilesPicker';
 import { useCallback, useEffect, useState, memo, FC, useMemo } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { SegmentedButtons, SegmentedButtonsProps, Text } from 'react-native-paper';
-import { types } from 'react-native-document-picker'
+import { types } from '@react-native-documents/picker'
 import { ImagePreviewCard, ImagePreviewCardProps } from '../../../components'
 import FileViewer from 'react-native-file-viewer';
 import { useGeneralControl } from '../../../context/general-context/index';
 import * as FileSystem from 'expo-file-system';
 import { getSummaryExportText } from '../../../utils/getSummaryExportText';
 import Patient from '../../../db/models/Patient';
-import { t, plural, Trans } from '@lingui/macro';
+import { t, plural } from '@lingui/core/macro';
+import { Trans } from '@lingui/react/macro'
 import { i18n } from "@lingui/core"
 
 const width = Dimensions.get('window').width
@@ -142,7 +143,7 @@ const FilesTab: FC<FilesTabProps> = ({ patient, setCollapsed }) => {
   }, [i18n.locale])
 
   const pickFromLibrary = async () => {
-    const res = await pickFiles()
+    const res = await pickFiles(true)
     if (res && res.length > 0) {
       addFiles(res)
     }

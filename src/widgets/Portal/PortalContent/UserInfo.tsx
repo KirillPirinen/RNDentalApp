@@ -5,7 +5,8 @@ import { TelegramButton } from '../../../components/Buttons/DeepLinks'
 import { Modal } from 'react-native-paper'
 import { ContextedPortalDefaultProps } from '..'
 import { FC } from 'react'
-import { Trans, t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 
 export type UserInfoProps =  ContextedPortalDefaultProps<{
   mode: 'about' | 'migrate';

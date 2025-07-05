@@ -2,7 +2,8 @@ import { FC, useState } from 'react'
 import { View, StyleSheet } from "react-native"
 import { TextInput, Button } from "react-native-paper"
 import Phone from '../db/models/Phone';
-import { Trans, t } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
+import { t } from '@lingui/core/macro' 
 
 export type InputChangeDTO = {
   id?: string;

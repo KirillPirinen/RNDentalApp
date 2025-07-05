@@ -1,26 +1,26 @@
 import { FC, useMemo } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Button } from 'react-native-paper'
-import { TriangleColorPicker } from 'react-native-color-picker'
-import { HsvColor, IPickerProps } from 'react-native-color-picker/dist/typeHelpers'
-import tinycolor2 from 'tinycolor2'
-import { Trans } from '@lingui/macro'
+import ColorPicker, { Panel1, Swatches, Preview, OpacitySlider, HueSlider, ColorFormatsObject, ColorPickerRef } from 'reanimated-color-picker';
+import { Trans } from '@lingui/react/macro'
 
-export type AppColorPickerProps = Omit<IPickerProps, 'onColorSelected' | 'onColorChange'> & {
+export type AppColorPickerProps = {
   onSelect: (hex: string) => void
   onCancel?: () => void
+  defaultColor?: string;
 }
 
 export const AppColorPicker: FC<AppColorPickerProps> = ({ defaultColor, onSelect, onCancel, ...rest }) => {
+
   const api = useMemo(() => {
     let colorPreserved = defaultColor
     
-    const changeColor = (color: HsvColor) => {
-      colorPreserved = color
+    const changeColor = (color: ColorFormatsObject) => {
+      colorPreserved = color.hex
     }
 
-    const selectColor = (color?: string) => {
-      return onSelect(color ? color : `#${tinycolor2(colorPreserved).toHex()}`)
+    const selectColor = () => {
+      colorPreserved && onSelect(colorPreserved)
     }
 
     return {
@@ -32,20 +32,19 @@ export const AppColorPicker: FC<AppColorPickerProps> = ({ defaultColor, onSelect
 
   return (
     <View style={styles.full}>
-      {/* @ts-ignore */}
-      <TriangleColorPicker
-        style={styles.full}
-        onColorChange={api.changeColor}
-        onColorSelected={api.selectColor}
-        defaultColor={api.colorPreserved}
-        {...rest}
-      />
+      <ColorPicker value={defaultColor || '#ffffff'} onChangeJS={api.changeColor}>
+          <Preview />
+          <Panel1 />
+          <HueSlider />
+          <OpacitySlider />
+          <Swatches />
+        </ColorPicker>
       <Button 
         style={styles.selectColorBtn} 
         icon="select-color"
         mode="contained" 
         buttonColor={'green'}
-        onPress={() => api.selectColor()}
+        onPress={api.selectColor}
       >
         <Trans>Выбрать цвет</Trans>
       </Button>

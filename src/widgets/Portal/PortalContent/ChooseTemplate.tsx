@@ -9,7 +9,8 @@ import { setStringAsync } from 'expo-clipboard'
 import { ContextedPortalDefaultProps } from '..'
 import Patient from '../../../db/models/Patient'
 import Template from '../../../db/models/Template'
-import { Trans, t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 
 export type ChooseTemplateModes = keyof typeof Links
 

@@ -1,4 +1,4 @@
-import { t, plural } from '@lingui/macro';
+import { t, plural } from '@lingui/core/macro';
 
 export const getSummaryExportText = (fulfilledNum: number, rejectedNum: number) => {
   let res = ''

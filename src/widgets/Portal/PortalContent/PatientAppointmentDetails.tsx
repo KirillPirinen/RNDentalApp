@@ -5,9 +5,8 @@ import { ContextedPortalDefaultProps } from '..'
 import Patient from '../../../db/models/Patient'
 import { Button, PatientAppointment } from '../../../components'
 import Appointment from '../../../db/models/Appointment'
-import { modalContentsAction } from '../../../context/general-context/action-types'
 import { PatientLabel } from '../../../components/PatientLabel'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export type PatientAppointmentDetailsProps = ContextedPortalDefaultProps<{
   patient: Patient,

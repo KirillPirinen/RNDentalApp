@@ -2,7 +2,7 @@ import * as FileSystem from 'expo-file-system';
 import { appConfigSync } from '../../consts/config';
 import { getFileNameWithoutExt } from '../../utils/fileHelpers';
 import { IMPORTED_DB_PATH } from '../../consts';
-import { t } from '@lingui/macro';
+import { t } from '@lingui/core/macro';
 
 export const dbDeleteFilesExt = ['.db', '.db-wal', '.db-shm'] as const
 

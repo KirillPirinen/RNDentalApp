@@ -3,7 +3,7 @@ import { StyleProp, StyleSheet, View, ViewStyle} from 'react-native'
 import { IconButton, Text } from 'react-native-paper'
 import Group from '../db/models/Group'
 import { useNavigation } from '@react-navigation/native'
-import { plural } from '@lingui/macro'
+import { plural } from '@lingui/core/macro'
 
 export type PatientGroupListProps = {
   groups: Group[];

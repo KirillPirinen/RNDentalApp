@@ -17,7 +17,8 @@ import PatientsGroups from '../db/models/PatientsGroups'
 import randomId from '@nozbe/watermelondb/utils/common/randomId'
 import { AppColorPicker } from '../components/AppColorPicker'
 import tinycolor2 from 'tinycolor2'
-import { Trans, t } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
+import { t } from '@lingui/core/macro'
 
 const footer = <View style={{ height: 100 }} />
 

@@ -13,7 +13,9 @@
     },
     "updates": {
       "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/5bf4f142-d4e0-46b6-8b8a-103c4ed08d75"
+      "url": "https://u.expo.dev/5bf4f142-d4e0-46b6-8b8a-103c4ed08d75",
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD"
     },
     "assetBundlePatterns": [
       "**/*"

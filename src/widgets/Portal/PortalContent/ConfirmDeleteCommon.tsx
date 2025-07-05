@@ -6,7 +6,7 @@ import Patient from '../../../db/models/Patient'
 import Appointment from '../../../db/models/Appointment'
 import Template from '../../../db/models/Template'
 import Group from '../../../db/models/Group'
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 
 export type ConfirmDeleteCommonModes = keyof typeof defaultTextsResolvers
 

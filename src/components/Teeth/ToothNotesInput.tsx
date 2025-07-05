@@ -2,7 +2,7 @@ import { IconButton, Text, TextInput } from 'react-native-paper'
 import { StyleSheet, View } from 'react-native'
 import { FC, useEffect, useState } from 'react'
 import { useToggle } from '../../utils/custom-hooks/useToggle'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export type ToothNotesInputProps = {
   notes: string;

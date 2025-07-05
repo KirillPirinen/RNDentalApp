@@ -1,8 +1,8 @@
 import * as FileSystem from 'expo-file-system';
-import { DocumentPickerResponse } from 'react-native-document-picker';
+import { DocumentPickerResponse } from '@react-native-documents/picker';
 import { IMPORTED_DB_PATH } from '../../consts';
 import { getFileNameFromUri, getFileNameWithoutExt, makeDirIfNotExist } from '../../utils/fileHelpers';
-import { t } from '@lingui/macro';
+import { t } from '@lingui/core/macro';
 
 export const dbExportFilesExt = ['.db', '.db-wal'] as const
 

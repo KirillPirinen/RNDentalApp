@@ -1,7 +1,7 @@
 import React, { FC, useCallback } from 'react'
 import { StyleSheet } from 'react-native'
 import { useGeneralControl } from '../context/general-context'
-import { ScrollView } from 'react-native-gesture-handler'
+import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler'
 import { NavigationProp } from '@react-navigation/native'
 import { List } from 'react-native-paper'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
@@ -9,7 +9,7 @@ import withObservables from '@nozbe/with-observables'
 import Group from '../db/models/Group'
 import { Database } from '@nozbe/watermelondb'
 import GroupCard from '../components/GroupCard'
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 
 const ObservableGroup = withObservables(['group'], ({ group }) => ({
   group
@@ -45,7 +45,7 @@ const GroupList: FC<GroupListProps> = ({ navigation, groups }) => {
   }, [])
 
   return (
-    <>
+    <GestureHandlerRootView >
       <List.Item 
         title={t`Создать группу`} 
         onPress={() => navigation.navigate('AddGroup')} 
@@ -53,15 +53,15 @@ const GroupList: FC<GroupListProps> = ({ navigation, groups }) => {
         style={styles.addBtn}
       />
       <ScrollView style={styles.wrapper}>
-          {groups?.map(group => <ObservableGroup
-            key={group.id} 
-            group={group}
-            onDelete={onDelete}
-            onEdit={onEdit}
-            onAddPatient={onAddPatients}
-          /> )}
+        {groups?.map(group => <ObservableGroup
+          key={group.id} 
+          group={group}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          onAddPatient={onAddPatients}
+        /> )}
       </ScrollView>
-    </>
+    </GestureHandlerRootView>
   )
 }
 

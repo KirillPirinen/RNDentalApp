@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro';
+import { Trans } from '@lingui/react/macro';
 import { FC, ReactNode } from 'react';
 import { Text, Dialog, Button as PaperButton, useTheme } from 'react-native-paper'
 

@@ -3,7 +3,8 @@ import { ScrollView, StyleSheet } from 'react-native'
 import { Button, Modal, Text, ActivityIndicator } from 'react-native-paper'
 import { ContextedPortalDefaultProps } from '..'
 import actionTypes from '../../../context/general-context/action-types'
-import { Trans, t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 
 const getDefaultTextsResolvers = () => (
   {

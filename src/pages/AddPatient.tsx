@@ -8,7 +8,7 @@ import { NavigationProp } from "@react-navigation/native"
 import Patient from "../db/models/Patient"
 import Phone from "../db/models/Phone"
 import { PhoneInputTypes } from "../components/PhoneInput"
-import { t } from "@lingui/macro"
+import { t } from "@lingui/core/macro"
 
 const defObj = {}
 const wrapper = { padding: 25, flex: 1 }

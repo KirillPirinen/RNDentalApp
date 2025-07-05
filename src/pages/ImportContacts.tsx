@@ -11,7 +11,7 @@ import { useToggle } from '../utils/custom-hooks/useToggle'
 import { importContacts } from '../db/actions'
 import { NavigationProp } from '@react-navigation/native'
 import * as Contacts from 'expo-contacts'
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 
 const footer = <View style={{ height: 120 }}></View>
 const eqCompare = (prev: ItemProps, next: ItemProps) => prev.checked === next.checked

@@ -14,7 +14,8 @@ import { PatientPhones } from '../../components/PatientPhones'
 import PatientModel from '../../db/models/Patient'
 import { useAppTheme } from '../../styles/themes'
 import { usePatients } from '../../utils/custom-hooks/usePatients'
-import { Trans, t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 
 const renderList = ({ result, onChoose, searchQuery: searchQueryRaw }: {
   result: Array<PatientModel>;

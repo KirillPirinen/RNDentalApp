@@ -2,8 +2,7 @@ import { FC } from 'react'
 import { Confirm } from '../../../components/Confirm'
 import { Button } from 'react-native-paper'
 import { ContextedPortalDefaultProps } from '..'
-import { t } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
+import { Trans, t } from '@lingui/macro'
 
 export type ChooseAddPatientMethodProps = ContextedPortalDefaultProps<{
   onAlone: () => void

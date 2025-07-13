@@ -19,8 +19,7 @@ import { ChooseTemplateProps } from '../../widgets/Portal/PortalContent/ChooseTe
 import Group from '../../db/models/Group'
 import { PatientGroupList } from '../../components/PatientGroupList'
 import { PatientLabel } from '../../components/PatientLabel'
-import { t } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
+import { Trans, t } from '@lingui/macro'
 
 const tabs: Array<Route> = [
   { key: '0', get title() { return t`Записи` } },

@@ -3,8 +3,7 @@ import { Confirm } from '../../../components/Confirm'
 import { Button as PaperButton, Checkbox, Dialog } from 'react-native-paper'
 import { ContextedPortalDefaultProps } from '..'
 import { FC } from 'react'
-import { t } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
+import { Trans, t } from '@lingui/macro'
 
 export type ChooseSyncProps = ContextedPortalDefaultProps<{
   onSync: () => void

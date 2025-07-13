@@ -4,19 +4,19 @@ import { getExtension, makeDirIfNotExist } from '../fileHelpers';
 import { createFile } from '../../db/actions/index';
 import Patient from '../../db/models/Patient';
 import File from '../../db/models/File';
+import { ImagePickerAsset } from 'expo-image-picker';
+import { DocumentPickerResponse } from 'react-native-document-picker';
 import { mimeTypes } from '../../consts';
 
-type CombinedAssets = {
-  uri: string;
-  fileName?: string | null;
-}
+type CombinedAssets = ImagePickerAsset | DocumentPickerResponse
 
 export const resolveFileMeta = (file: CombinedAssets) => {
-  const cashUri = file.uri;
+  const cashUri = (file as DocumentPickerResponse).fileCopyUri || (file as ImagePickerAsset).uri
+  const name = (file as DocumentPickerResponse)?.name || (file as ImagePickerAsset)?.fileName
   const ext = getExtension(cashUri)
-  const name = file.fileName || `${Date.now()}.${ext}`;
+
   
-  return { uri: cashUri, name, ext }
+  return { uri: cashUri, name: name || `${Date.now()}.${ext}`, ext }
 }
 
 export const createAndMove = async (file: CombinedAssets, patient: Patient) => {

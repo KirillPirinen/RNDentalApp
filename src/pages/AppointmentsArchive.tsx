@@ -1,5 +1,5 @@
 import withObservables from '@nozbe/with-observables'
-import { View, StyleSheet, FlatList, SafeAreaView } from 'react-native'
+import { View, StyleSheet, FlatList } from 'react-native'
 import { FAB, SwipeableAppointment, EmptyList, Autocomplete } from '../components'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import {  useCallback, FC } from 'react'
@@ -12,7 +12,7 @@ import Appointment from '../db/models/Appointment'
 import Patient from '../db/models/Patient'
 import { useAppTheme } from '../styles/themes'
 import { Database, Q } from '@nozbe/watermelondb'
-import { t } from '@lingui/core/macro'
+import { t } from '@lingui/macro'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { querySanitazer } from '../utils/sanitizers'
 
@@ -46,6 +46,7 @@ const AppointmentsArchive: FC<AppointmentsArchiveProps> = ({ appointments, navig
   const theme = useAppTheme()
   
   const renderList = useCallback(({ result, searchQuery: searchQueryRaw }: { result: Appointment[], searchQuery: string }) => {
+    const theme = useAppTheme()
     const searchQuery = querySanitazer(searchQueryRaw)
     return (
       <FlatList
@@ -63,6 +64,7 @@ const AppointmentsArchive: FC<AppointmentsArchiveProps> = ({ appointments, navig
           />
         )}
         ItemSeparatorComponent={renderDefaultDivider}
+        style={styles.wrapper}
         ListEmptyComponent={EmptyList}
         ListFooterComponent={spacer}
         onScrollBeginDrag={onDrag}
@@ -88,7 +90,7 @@ const AppointmentsArchive: FC<AppointmentsArchiveProps> = ({ appointments, navig
 
       const patient = await appointment.patient.fetch() as unknown as Patient;
 
-      if (patient.fullName.toLowerCase().includes(normalized)) {
+      if(patient.fullName.toLowerCase().includes(normalized)) {
         acc.push(appointment)
       }
     }
@@ -99,10 +101,9 @@ const AppointmentsArchive: FC<AppointmentsArchiveProps> = ({ appointments, navig
   const [ref, onDrop, onDrag] = useFabControlsRef()
 
   return (
-    <View style={styles.wrapper}>
+    <GestureHandlerRootView style={styles.wrapper}>
       {appointments.length ? (
         <Autocomplete 
-          style={styles.wrapper}
           initState={appointments}
           renderList={renderList}
           onChange={onChange}
@@ -118,7 +119,7 @@ const AppointmentsArchive: FC<AppointmentsArchiveProps> = ({ appointments, navig
         label={t`Добавить запись`} 
         onPress={() => navigation.navigate('AddAppointment')}
       />
-    </View>
+    </GestureHandlerRootView>
   )
 }
 

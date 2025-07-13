@@ -6,8 +6,7 @@ import formatRu, { formatPrice } from '../../utils/formatLocalized'
 import { FC, ReactNode, memo, useState } from 'react'
 import Appointment from '../../db/models/Appointment'
 import { AppTheme } from '../../styles/themes'
-import { plural, t } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
+import { plural, t, Trans } from '@lingui/macro'
 
 type AppointmentHandler = (app: Appointment, isConfirmation?: boolean) => void
 

@@ -4,7 +4,7 @@ import { useSettingUpdater } from '../../utils/custom-hooks/useSettingUpdater';
 import { CONTACT_SYNC_STRATEGY } from '../../consts';
 import { List } from 'react-native-paper';
 import { NamedSetting } from '../../db/models/Settings'
-import { t } from '@lingui/core/macro';
+import { t } from '@lingui/macro';
 
 export const Sync = withSetting('sync')(({ setting }: { setting: NamedSetting<'sync'> }) => {
   const [values, onChange] = useSettingUpdater(setting)

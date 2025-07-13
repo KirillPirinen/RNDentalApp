@@ -30,7 +30,6 @@ const enhancer = withObservables(['appointment'], ({ appointment }) => ({
 
 const noop = () => <View />
 
-//@ts-expect-error
 export const SwipeableAppointment: FC<SwipeableAppointmentProps> = enhancer(({ 
   navigation, 
   appointment, 
@@ -68,7 +67,7 @@ export const SwipeableAppointment: FC<SwipeableAppointmentProps> = enhancer(({
           onPress={() => onDelete(appointment, patient)} 
           style={{ backgroundColor: theme.colors.error }}
         >
-          {onDeleteIcon || <MaterialCommunityIcons name="delete-forever" size={48} color="white" />}
+          {onDeleteIcon || <Ionicons name="ios-close" size={48} color="white" />}
         </SwipeViewButton>
         <SwipeViewButton 
           onPress={() => {
@@ -77,7 +76,7 @@ export const SwipeableAppointment: FC<SwipeableAppointmentProps> = enhancer(({
           }} 
           style={{ backgroundColor: theme.colors.backdrop }}
         >
-          <Ionicons name="create" size={48} color="white" />
+          <Ionicons name="md-create" size={28} color="white" />
         </SwipeViewButton>
       </>
     )

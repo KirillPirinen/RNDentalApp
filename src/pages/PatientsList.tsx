@@ -1,4 +1,4 @@
-import { FlatList, View, FlatListProps, StyleSheet } from 'react-native'
+import { FlatList, View, FlatListProps } from 'react-native'
 import { withDatabase } from '@nozbe/watermelondb/DatabaseProvider'
 import withObservables from '@nozbe/with-observables'
 import { Autocomplete, FAB, EmptyList, Patient } from '../components'
@@ -16,7 +16,7 @@ import { defaultDissmisHandle, renderDefaultDivider } from '../utils/defaultFn'
 import Group from '../db/models/Group'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { FontAwesome } from '@expo/vector-icons';
-import { t } from '@lingui/core/macro'
+import { t } from '@lingui/macro'
 import { appConfigSync } from '../consts/config'
 
 DropDownPicker.modifyTranslation('RU', {
@@ -30,6 +30,7 @@ DropDownPicker.modifyTranslation('RU', {
   NOTHING_TO_SHOW: ''
 })
 
+const wrapper = { marginVertical: 12 } as const
 const picker = {
   backgroundColor: 'rgb(247,243,249)',
   borderWidth: 1,
@@ -61,7 +62,7 @@ const renderList = ({ result, navigation, searchQuery: searchQueryRaw, ...rest }
           </Patient>
         )}
         ItemSeparatorComponent={renderDefaultDivider}
-        style={styles.listWrapper}
+        style={wrapper}
         ListEmptyComponent={EmptyList}
         ListFooterComponent={footer}
         {...rest}
@@ -141,7 +142,7 @@ export const PatientsList: FC<PatientsListProps> = ({ patients, groups, navigati
           setOpen(false)
           return defaultDissmisHandle()
         }} 
-        style={styles.wrapper}
+        style={{ height: '100%' }}
       >
           {isFocused && <Autocomplete
             onChange={onChange}
@@ -180,11 +181,6 @@ export const PatientsList: FC<PatientsListProps> = ({ patients, groups, navigati
       </View>
   )
 }
-
-const styles = StyleSheet.create({
-  wrapper: { height: '100%' },
-  listWrapper: { marginBottom: 66, marginTop: 12 }
-})
 
 export default withDatabase(
   withObservables([], ({ database }: { database: Database }) => ({

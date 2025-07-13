@@ -6,8 +6,7 @@ import Slider from '@react-native-community/slider'
 import { useGeneralControl } from '../context/general-context'
 import { NavigationProp } from '@react-navigation/native'
 import { useAppTheme } from '../styles/themes'
-import { t } from '@lingui/core/macro'
-import { Trans } from  '@lingui/react/macro'
+import { Trans, t } from '@lingui/macro'
 
 type ConfirmAppointmentProps = {
   navigation: NavigationProp<ReactNavigation.RootParamList>
@@ -32,14 +31,10 @@ const ConfirmAppointment: FC<ConfirmAppointmentProps> = ({ navigation, route: { 
     setPrice(text.replace(/[^0-9]/g, ''))
   }, [setPrice])
 
-  const onOpenSelection = () => {
-    patient.teeth.fetch().then(teethModels => {
-      dispatch({ 
-        type: actions.CHOOSE_TEETH, 
-        payload: { onSubmit:setTeeth, teeth, teethModels } 
-      })
-    })
-  }
+  const onOpenSelection = () => dispatch({ 
+    type: actions.CHOOSE_TEETH, 
+    payload: { onSubmit:setTeeth, teeth } 
+  })
 
   const onSubmit = () => {
     appointment?.updateInstance({ 

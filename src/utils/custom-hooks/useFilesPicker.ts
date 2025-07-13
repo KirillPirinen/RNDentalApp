@@ -1,41 +1,22 @@
-import { FileToCopy, keepLocalCopy, pick } from '@react-native-documents/picker'
+import DocumentPicker from 'react-native-document-picker'
 import { useGeneralControl } from '../../context/general-context'
-import { t } from '@lingui/core/macro'
+import { t } from '@lingui/macro'
 
 export const useFilesPicker = (mimeTypes?: string[]) => {
   const [actions, dispatch] = useGeneralControl()
 
-  const pickFiles = async (createCaches?: boolean) => {
+  const pickFiles = async () => {
     try {
-      const pickerResult = await pick({
+      const pickerResult = await DocumentPicker.pickMultiple({
         type: mimeTypes,
         presentationStyle: 'fullScreen',
-        allowMultiSelection: true
+        copyTo: 'cachesDirectory',
       })
 
-      const localCopyResult = await keepLocalCopy({
-        files: pickerResult.map(file => {
-          return {
-            uri: file.uri,
-            fileName: file.name ?? 'fallbackName'
-          }
-        }) as [FileToCopy, ...FileToCopy[]],
-        destination: 'cachesDirectory',
-      })
+      return pickerResult
 
-      if (createCaches) {
-        pickerResult.forEach((file, index) => {
-          // @ts-expect-error
-          if (localCopyResult[index]?.localUri) {
-          // @ts-expect-error
-          file.uri = localCopyResult[index]?.localUri;
-          }
-        })
-      }
-
-      return pickerResult;
     } catch (e) {
-      // if(!DocumentPicker.isCancel(e)) {
+      if(!DocumentPicker.isCancel(e)) {
         dispatch({ 
           type: actions.INFO,
           payload: { 
@@ -43,7 +24,7 @@ export const useFilesPicker = (mimeTypes?: string[]) => {
             color: 'errorContainer'
           }
         })
-      // }
+      }
     }
   }
 

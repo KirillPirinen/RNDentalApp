@@ -18,8 +18,7 @@ import { useAppTheme } from '../styles/themes'
 import { Database } from '@nozbe/watermelondb'
 import { NamedSetting } from '../db/models/Settings'
 import { Button } from 'react-native-paper'
-import { t } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
+import { Trans, t } from '@lingui/macro'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 const spacer = <View style={{ height: 80 }} />
@@ -61,11 +60,11 @@ const Appointments: FC<AppointmentsProps> = ({ appointments, navigation }) => {
   const [ref, onDrop, onDrag] = useFabControlsRef()
 
   return (
-    <View style={styles.wrapper}>
+    <GestureHandlerRootView style={styles.wrapper}>
       <Button
         icon="calendar"
         labelStyle={{ fontSize: 18 }}
-        style={{ padding: 0, marginTop: 20, marginBottom: 0 }}
+        style={{ padding: 0, marginTop: 5, marginBottom: 0 }}
         onPress={() => navigation.navigate('AppointmentsCalendar')}
       ><Trans>Открыть календарь</Trans></Button>
       {grouped.length ? (
@@ -88,7 +87,7 @@ const Appointments: FC<AppointmentsProps> = ({ appointments, navigation }) => {
         label={t`Добавить запись`} 
         onPress={() => navigation.navigate('AddAppointment')}
       />
-    </View>
+    </GestureHandlerRootView>
   )
 }
 

@@ -1,4 +1,4 @@
-import { t } from '@lingui/core/macro'
+import { t } from '@lingui/macro'
 import { FC, ReactNode } from 'react'
 import { Text, Surface, Avatar } from 'react-native-paper'
 

@@ -1,7 +1,7 @@
 import * as FileSystem from 'expo-file-system';
 import { getFileNameWithoutExt, getRootAppDirectory, isFilesExist } from '../../utils/fileHelpers';
 import { DEFAULT_DB_NAME, IMPORTED_DB_PATH } from '../../consts';
-import { t } from '@lingui/core/macro';
+import { t } from '@lingui/macro';
 
 export const dbExportFilesExt = ['.db', '.db-wal'] as const
 

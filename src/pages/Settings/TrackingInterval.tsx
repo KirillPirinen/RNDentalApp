@@ -4,7 +4,7 @@ import { List } from 'react-native-paper';
 import styles, { SettingsCheckbox } from './styles'
 import { useSettingUpdater } from '../../utils/custom-hooks/useSettingUpdater';
 import { NamedSetting } from '../../db/models/Settings'
-import { t } from '@lingui/core/macro';
+import { t } from '@lingui/macro';
 
 export const TrackingInterval = withSetting('trackingInterval')(({ setting }: { setting: NamedSetting<'trackingInterval'> }) => {
   const [values, onChange] = useSettingUpdater(setting)

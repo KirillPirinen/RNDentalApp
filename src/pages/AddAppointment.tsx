@@ -14,8 +14,7 @@ import PatientSearch from '../widgets/PatientSearch'
 import { useDatabase } from '@nozbe/watermelondb/hooks'
 import { getAppointmentsWithCollision } from '../db/raw-queries'
 import { useGeneralControl } from '../context/general-context'
-import { Trans } from '@lingui/react/macro'
-import { t } from '@lingui/core/macro'
+import { Trans, t } from '@lingui/macro'
 
 const initState = { mode: null, сurrent: new Date() }
 

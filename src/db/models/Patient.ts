@@ -13,7 +13,6 @@ import File from './File'
 import { PhoneDTO } from '../../pages/AddPatient'
 import PatientsGroup from './PatientsGroups'
 import Group from './Group'
-import Tooth from './Tooth'
 
 export default class Patient extends Model {
 
@@ -47,7 +46,7 @@ export default class Patient extends Model {
     Q.sortBy('created_at', Q.desc)
   )
 
-  @lazy teeth = this.collections.get<Tooth>('teeth').query(
+  @lazy teeth = this.collections.get('teeth').query(
     Q.on('formulas', 'patient_id', this.id)
   )
 

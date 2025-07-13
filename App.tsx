@@ -40,12 +40,14 @@ const App = () => {
   return database && (
       <DatabaseProvider database={database}>
         <I18nProvider i18n={i18n}>
+          <GestureHandlerRootView>
             <GeneralContextProvider>
               <ThemeAdapter>
                 <Router />
                 <ContextedPortal />
               </ThemeAdapter>
             </GeneralContextProvider>
+          </GestureHandlerRootView>
           </I18nProvider>
       </DatabaseProvider>
   )

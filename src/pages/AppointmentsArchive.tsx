@@ -99,7 +99,7 @@ const AppointmentsArchive: FC<AppointmentsArchiveProps> = ({ appointments, navig
   const [ref, onDrop, onDrag] = useFabControlsRef()
 
   return (
-    <GestureHandlerRootView style={styles.wrapper}>
+    <View style={styles.wrapper}>
       {appointments.length ? (
         <Autocomplete 
           style={styles.wrapper}
@@ -118,7 +118,7 @@ const AppointmentsArchive: FC<AppointmentsArchiveProps> = ({ appointments, navig
         label={t`Добавить запись`} 
         onPress={() => navigation.navigate('AddAppointment')}
       />
-    </GestureHandlerRootView>
+    </View>
   )
 }
 

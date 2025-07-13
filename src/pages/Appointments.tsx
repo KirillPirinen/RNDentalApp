@@ -61,7 +61,7 @@ const Appointments: FC<AppointmentsProps> = ({ appointments, navigation }) => {
   const [ref, onDrop, onDrag] = useFabControlsRef()
 
   return (
-    <View style={styles.wrapper}>
+    <GestureHandlerRootView style={styles.wrapper}>
       <Button
         icon="calendar"
         labelStyle={{ fontSize: 18 }}
@@ -88,7 +88,7 @@ const Appointments: FC<AppointmentsProps> = ({ appointments, navigation }) => {
         label={t`Добавить запись`} 
         onPress={() => navigation.navigate('AddAppointment')}
       />
-    </View>
+    </GestureHandlerRootView>
   )
 }
 

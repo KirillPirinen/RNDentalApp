@@ -28,19 +28,19 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 27,
+				"line" : 28,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 46,
+				"line" : 47,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 73,
+				"line" : 74,
 				"parent" : 0
 			},
 			{
@@ -52,13 +52,13 @@
 			{
 				"command" : 3,
 				"file" : 0,
-				"line" : 78,
+				"line" : 79,
 				"parent" : 0
 			},
 			{
 				"command" : 4,
 				"file" : 0,
-				"line" : 34,
+				"line" : 35,
 				"parent" : 0
 			}
 		]
@@ -94,6 +94,10 @@
 				{
 					"backtrace" : 4,
 					"fragment" : "-Wno-gnu-zero-variadic-macro-arguments"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "-Wno-dollar-in-identifier-extension"
 				},
 				{
 					"backtrace" : 5,

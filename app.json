@@ -2,7 +2,7 @@
   "expo": {
     "name": "dental-app",
     "slug": "dental-app",
-    "version": "1.6.1",
+    "version": "1.7.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -37,7 +37,7 @@
       "permissions": [
         "WRITE_CONTACTS"
       ],
-      "runtimeVersion": "1.6.1"
+      "runtimeVersion": "1.7.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"

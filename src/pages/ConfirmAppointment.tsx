@@ -31,10 +31,14 @@ const ConfirmAppointment: FC<ConfirmAppointmentProps> = ({ navigation, route: { 
     setPrice(text.replace(/[^0-9]/g, ''))
   }, [setPrice])
 
-  const onOpenSelection = () => dispatch({ 
-    type: actions.CHOOSE_TEETH, 
-    payload: { onSubmit:setTeeth, teeth } 
-  })
+  const onOpenSelection = () => {
+    patient.teeth.fetch().then(teethModels => {
+      dispatch({ 
+        type: actions.CHOOSE_TEETH, 
+        payload: { onSubmit:setTeeth, teeth, teethModels } 
+      })
+    })
+  }
 
   const onSubmit = () => {
     appointment?.updateInstance({ 

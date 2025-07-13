@@ -1,6 +1,6 @@
 {
   "name": "dental-app",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "scripts": {
     "android": "expo run:android",
     "dev": "expo start --dev-client",

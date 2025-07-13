@@ -1,13 +1,15 @@
-import { FC, useCallback, useState } from 'react'
+import { FC, useCallback, useMemo, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { IconButton, Modal, Surface, Text, Button } from 'react-native-paper'
 import { Teeth } from '../../../components/Teeth/Teeth'
 import { ContextedPortalDefaultProps } from '..'
 import { Trans } from '@lingui/macro'
+import Tooth from '../../../db/models/Tooth'
 
 export type ChooseTeethProps = ContextedPortalDefaultProps<{
   onSubmit: (selectedArr: string[]) => void
   teeth: string[]
+  teethModels?: Tooth[]
 }>
 
 const init: Record<string, boolean> = {}
@@ -16,7 +18,8 @@ export const ChooseTeeth: FC<ChooseTeethProps> = ({
   __visible, 
   __defaultProps,
   onSubmit,
-  teeth
+  teeth,
+  teethModels
 }) => {
   const [selected, setSelected] = useState(() => {
     return teeth?.filter(Boolean).reduce<Record<string, boolean>>((acc, tooth) => {
@@ -24,6 +27,11 @@ export const ChooseTeeth: FC<ChooseTeethProps> = ({
       return acc
     }, {}) || init
   })
+
+  const hashTeethInfo = useMemo(() => teethModels?.reduce<Record<string, Tooth>>((acc, tooth) => {
+    acc[tooth.toothNo] = tooth
+    return acc
+  }, {}), [teethModels])
 
   const onPressTooth = useCallback((toothNo: string) => {
     setSelected(prev => ({...prev, [toothNo]: !prev[toothNo]}))
@@ -64,6 +72,9 @@ export const ChooseTeeth: FC<ChooseTeethProps> = ({
         multiSelect
         withBabyTeeth
         withAdultTeeth
+        teethRecords={hashTeethInfo}
+        showStyles
+        showTreated
       />
       <Surface style={styles.tooltip}>
         {Boolean(selectedArr.length) && <Text><Trans>Вы выбрали</Trans>: <Text style={styles.bold}>{selectedArr.join(', ')}</Text></Text>}

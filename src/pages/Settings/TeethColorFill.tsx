@@ -19,13 +19,13 @@ export const TeethColorFill = withSetting('teethColorFill')(({ setting }: { sett
         description={t`История добавляется при подтверждении лечения`}
         name="history"
         onChange={onChange}
-        initial={values.history}
+        value={values.history}
       />
       <SettingsCheckbox 
         title={t`Выделять зубы с status localis`}
         name="statusLocalis"
         onChange={onChange}
-        initial={values.statusLocalis}
+        value={values.statusLocalis}
       />
     </List.Accordion>
   )

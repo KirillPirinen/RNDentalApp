@@ -24,7 +24,7 @@ const buttons = [
     value: toothStates.caries,
     label: 'С',
     style: [styles.button, { backgroundColor: '#ffbb44' } as const],
-    showSelectedCheck: true
+    showSelectedCheck: true,
   },
   {
     value: toothStates.pulpitis,
